@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语时态综合练习测试</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff9966, #ff5e62, #1a2a6c);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            color: #1a2a6c;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #ff5e62;
+            font-size: 1.2rem;
+            font-weight: 500;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .instructions {
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            border-left: 4px solid #1a2a6c;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+            font-size: 1.05rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .instructions h3 {
+            color: #1a2a6c;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .tenses-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .tense-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border-top: 4px solid;
+        }
+        
+        .tense-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .tense-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tense-card h4 i {
+            margin-right: 8px;
+            font-size: 1.3rem;
+        }
+        
+        .tense-card ul {
+            padding-left: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .tense-card li {
+            margin-bottom: 5px;
+        }
+        
+        .present-simple {
+            border-top-color: #4CAF50;
+        }
+        
+        .present-continuous {
+            border-top-color: #2196F3;
+        }
+        
+        .present-perfect {
+            border-top-color: #FF9800;
+        }
+        
+        .present-perfect-continuous {
+            border-top-color: #E91E63;
+        }
+        
+        .quiz-container {
+            margin-top: 30px;
+        }
+        
+        .question {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+        
+        .question:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+        
+        .question-number {
+            background: #1a2a6c;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .options {
+            margin-bottom: 15px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .option:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .option input {
+            margin-right: 12px;
+            margin-top: 3px;
+            cursor: pointer;
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .explanation {
+            background: #f0f8ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+            border-left: 4px solid #1a2a6c;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .correct-answer {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .correct-answer i {
+            margin-right: 8px;
+        }
+        
+        .explanation-text {
+            color: #2c3e50;
+            line-height: 1.5;
+        }
+        
+        .submit-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .results {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            display: none;
+            background: linear-gradient(135deg, #e0f7fa, #bbdefb);
+        }
+        
+        .score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a2a6c;
+            margin: 10px 0;
+        }
+        
+        .message {
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .tenses-summary {
+                grid-template-columns: 1fr;
+            }
+            
+            .question {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>英语时态综合练习测试</h1>
+            <p class="subtitle">掌握一般现在时、现在进行时、现在完成时和现在完成进行时</p>
+        </header>
+        
+        <div class="instructions">
+            <h3>测试说明</h3>
+            <ul>
+                <li>本测试包含20道关于四种英语时态的选择题</li>
+                <li>每道题只有一个正确答案</li>
+                <li>选择答案后，系统会立即显示正确答案和详细解析</li>
+                <li>完成所有题目后，点击"提交测试"按钮查看最终得分</li>
+            </ul>
+        </div>
+        
+        <div class="tenses-summary">
+            <div class="tense-card present-simple">
+                <h4><i>📘</i> 一般现在时</h4>
+                <ul>
+                    <li>表示经常性、习惯性动作</li>
+                    <li>表示客观事实、普遍真理</li>
+                    <li>表示时间表、固定安排</li>
+                </ul>
+            </div>
+            <div class="tense-card present-continuous">
+                <h4><i>🖋️</i> 现在进行时</h4>
+                <ul>
+                    <li>表示说话时正在发生的动作</li>
+                    <li>表示已安排好的近期计划</li>
+                </ul>
+            </div>
+            <div class="tense-card present-perfect">
+                <h4><i>✅</i> 现在完成时</h4>
+                <ul>
+                    <li>动作从过去持续到现在</li>
+                    <li>过去动作对现在有影响</li>
+                    <li>表示过去发生过的经历</li>
+                </ul>
+            </div>
+            <div class="tense-card present-perfect-continuous">
+                <h4><i>⏳</i> 现在完成进行时</h4>
+                <ul>
+                    <li>从过去某时开始持续到现在</li>
+                    <li>动作反复发生</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="quiz-container" id="quiz">
+            <!-- 问题1 -->
+            <div class="question">
+                <div class="question-number">1</div>
+                <div class="question-text">Every morning, Tom ______ coffee before work.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" value="A">
+                        <label>A) drinks</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="B">
+                        <label>B) is drinking</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="C">
+                        <label>C) has drunk</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="D">
+                        <label>D) has been drinking</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation1">
+                    <div class="correct-answer"><i>✓</i> 正确答案: A) drinks</div>
+                    <div class="explanation-text">
+                        描述习惯性动作（每天喝咖啡），用一般现在时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题2 -->
+            <div class="question">
+                <div class="question-number">2</div>
+                <div class="question-text">The sun ______ in the east.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" value="A">
+                        <label>A) rises</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="B">
+                        <label>B) is rising</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="C">
+                        <label>C) has risen</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="D">
+                        <label>D) has been rising</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation2">
+                    <div class="correct-answer"><i>✓</i> 正确答案: A) rises</div>
+                    <div class="explanation-text">
+                        描述客观事实（太阳东升），用一般现在时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题3 -->
+            <div class="question">
+                <div class="question-number">3</div>
+                <div class="question-text">Our flight ______ at 9:00 PM sharp.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" value="A">
+                        <label>A) departs</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="B">
+                        <label>B) is departing</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="C">
+                        <label>C) has departed</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="D">
+                        <label>D) has been departing</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation3">
+                    <div class="correct-answer"><i>✓</i> 正确答案: A) departs</div>
+                    <div class="explanation-text">
+                        表示时间表或固定安排（航班时刻），用一般现在时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题4 -->
+            <div class="question">
+                <div class="question-number">4</div>
+                <div class="question-text">She ______ a book right now.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" value="A">
+                        <label>A) reads</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="B">
+                        <label>B) is reading</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="C">
+                        <label>C) has read</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="D">
+                        <label>D) has been reading</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation4">
+                    <div class="correct-answer"><i>✓</i> 正确答案: B) is reading</div>
+                    <div class="explanation-text">
+                        表示说话时正在发生的动作（此刻正在读书），用现在进行时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题5 -->
+            <div class="question">
+                <div class="question-number">5</div>
+                <div class="question-text">I ______ my boss tomorrow morning.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q5" value="A">
+                        <label>A) meet</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="B">
+                        <label>B) am meeting</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="C">
+                        <label>C) have met</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="D">
+                        <label>D) have been meeting</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation5">
+                    <div class="correct-answer"><i>✓</i> 正确答案: B) am meeting</div>
+                    <div class="explanation-text">
+                        表示已安排好的近期将要发生的计划或行动，用现在进行时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题6 -->
+            <div class="question">
+                <div class="question-number">6</div>
+                <div class="question-text">He ______ here for ten years.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q6" value="A">
+                        <label>A) lives</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="B">
+                        <label>B) is living</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="C">
+                        <label>C) has lived</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="D">
+                        <label>D) has been living</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation6">
+                    <div class="correct-answer"><i>✓</i> 正确答案: C) has lived</div>
+                    <div class="explanation-text">
+                        表示动作从过去持续到现在（常和 for 连用），用现在完成时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题7 -->
+            <div class="question">
+                <div class="question-number">7</div>
+                <div class="question-text">I ______ my keys. I can't find them anywhere.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q7" value="A">
+                        <label>A) lose</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="B">
+                        <label>B) am losing</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="C">
+                        <label>C) have lost</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="D">
+                        <label>D) have been losing</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation7">
+                    <div class="correct-answer"><i>✓</i> 正确答案: C) have lost</div>
+                    <div class="explanation-text">
+                        表示发生在过去但对现在有影响的动作（钥匙丢了，现在找不到）。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题8 -->
+            <div class="question">
+                <div class="question-number">8</div>
+                <div class="question-text">They ______ for three hours. They must be exhausted.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q8" value="A">
+                        <label>A) study</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="B">
+                        <label>B) are studying</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="C">
+                        <label>C) have studied</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="D">
+                        <label>D) have been studying</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation8">
+                    <div class="correct-answer"><i>✓</i> 正确答案: D) have been studying</div>
+                    <div class="explanation-text">
+                        表示从过去某时开始一直持续到现在的动作，强调动作的持续性，用现在完成进行时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题9 -->
+            <div class="question">
+                <div class="question-number">9</div>
+                <div class="question-text">Water ______ at 100 degrees Celsius.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q9" value="A">
+                        <label>A) boils</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q9" value="B">
+                        <label>B) is boiling</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q9" value="C">
+                        <label>C) has boiled</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q9" value="D">
+                        <label>D) has been boiling</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation9">
+                    <div class="correct-answer"><i>✓</i> 正确答案: A) boils</div>
+                    <div class="explanation-text">
+                        描述客观事实、普遍真理（水的沸点），用一般现在时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题10 -->
+            <div class="question">
+                <div class="question-number">10</div>
+                <div class="question-text">Look! It ______ outside. Take an umbrella.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q10" value="A">
+                        <label>A) rains</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q10" value="B">
+                        <label>B) is raining</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q10" value="C">
+                        <label>C) has rained</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q10" value="D">
+                        <label>D) has been raining</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation10">
+                    <div class="correct-answer"><i>✓</i> 正确答案: B) is raining</div>
+                    <div class="explanation-text">
+                        表示说话时正在发生的动作（此刻正在下雨），用现在进行时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题11 -->
+            <div class="question">
+                <div class="question-number">11</div>
+                <div class="question-text">Sarah ______ to Japan twice in her life.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q11" value="A">
+                        <label>A) travels</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q11" value="B">
+                        <label>B) is traveling</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q11" value="C">
+                        <label>C) has traveled</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q11" value="D">
+                        <label>D) has been traveling</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation11">
+                    <div class="correct-answer"><i>✓</i> 正确答案: C) has traveled</div>
+                    <div class="explanation-text">
+                        表示过去发生过的经历（未说明具体时间），用现在完成时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题12 -->
+            <div class="question">
+                <div class="question-number">12</div>
+                <div class="question-text">The children ______ in the garden since morning.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q12" value="A">
+                        <label>A) play</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q12" value="B">
+                        <label>B) are playing</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q12" value="C">
+                        <label>C) have played</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q12" value="D">
+                        <label>D) have been playing</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation12">
+                    <div class="correct-answer"><i>✓</i> 正确答案: D) have been playing</div>
+                    <div class="explanation-text">
+                        表示从过去某时开始持续到现在的动作（强调持续性），用现在完成进行时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题13 -->
+            <div class="question">
+                <div class="question-number">13</div>
+                <div class="question-text">Cats usually ______ milk.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q13" value="A">
+                        <label>A) like</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q13" value="B">
+                        <label>B) are liking</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q13" value="C">
+                        <label>C) have liked</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q13" value="D">
+                        <label>D) have been liking</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation13">
+                    <div class="correct-answer"><i>✓</i> 正确答案: A) like</div>
+                    <div class="explanation-text">
+                        表示一般性或习惯性的行为（猫通常喜欢牛奶），用一般现在时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题14 -->
+            <div class="question">
+                <div class="question-number">14</div>
+                <div class="question-text">We ______ for the bus for over an hour. Where is it?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q14" value="A">
+                        <label>A) wait</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q14" value="B">
+                        <label>B) are waiting</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q14" value="C">
+                        <label>C) have waited</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q14" value="D">
+                        <label>D) have been waiting</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation14">
+                    <div class="correct-answer"><i>✓</i> 正确答案: D) have been waiting</div>
+                    <div class="explanation-text">
+                        表示从过去开始一直持续到现在的动作（强调持续性和当前状态），用现在完成进行时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题15 -->
+            <div class="question">
+                <div class="question-number">15</div>
+                <div class="question-text">I ______ this movie before. It's really good.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q15" value="A">
+                        <label>A) see</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q15" value="B">
+                        <label>B) am seeing</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q15" value="C">
+                        <label>C) have seen</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q15" value="D">
+                        <label>D) have been seeing</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation15">
+                    <div class="correct-answer"><i>✓</i> 正确答案: C) have seen</div>
+                    <div class="explanation-text">
+                        表示过去的经历（看过这部电影），对现在有影响（知道它很好），用现在完成时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题16 -->
+            <div class="question">
+                <div class="question-number">16</div>
+                <div class="question-text">Listen! Someone ______ at the door.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q16" value="A">
+                        <label>A) knocks</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" value="B">
+                        <label>B) is knocking</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" value="C">
+                        <label>C) has knocked</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" value="D">
+                        <label>D) has been knocking</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation16">
+                    <div class="correct-answer"><i>✓</i> 正确答案: B) is knocking</div>
+                    <div class="explanation-text">
+                        表示说话时正在发生的动作（此刻有人在敲门），用现在进行时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题17 -->
+            <div class="question">
+                <div class="question-number">17</div>
+                <div class="question-text">She ______ French since she was six years old.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q17" value="A">
+                        <label>A) learns</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" value="B">
+                        <label>B) is learning</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" value="C">
+                        <label>C) has learned</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" value="D">
+                        <label>D) has been learning</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation17">
+                    <div class="correct-answer"><i>✓</i> 正确答案: D) has been learning</div>
+                    <div class="explanation-text">
+                        表示从过去开始一直持续到现在的动作（学习法语），强调持续性，用现在完成进行时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题18 -->
+            <div class="question">
+                <div class="question-number">18</div>
+                <div class="question-text">The museum ______ at 10 AM every day.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q18" value="A">
+                        <label>A) opens</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" value="B">
+                        <label>B) is opening</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" value="C">
+                        <label>C) has opened</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" value="D">
+                        <label>D) has been opening</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation18">
+                    <div class="correct-answer"><i>✓</i> 正确答案: A) opens</div>
+                    <div class="explanation-text">
+                        表示固定安排或时间表（博物馆每天的开放时间），用一般现在时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题19 -->
+            <div class="question">
+                <div class="question-number">19</div>
+                <div class="question-text">I ______ for this company since 2010.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q19" value="A">
+                        <label>A) work</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" value="B">
+                        <label>B) am working</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" value="C">
+                        <label>C) have worked</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" value="D">
+                        <label>D) have been working</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation19">
+                    <div class="correct-answer"><i>✓</i> 正确答案: C) have worked</div>
+                    <div class="explanation-text">
+                        表示动作从过去持续到现在（常和 since 连用），用现在完成时。
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 问题20 -->
+            <div class="question">
+                <div class="question-number">20</div>
+                <div class="question-text">They ______ dinner at a fancy restaurant tonight.</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q20" value="A">
+                        <label>A) have</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q20" value="B">
+                        <label>B) are having</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q20" value="C">
+                        <label>C) have had</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q20" value="D">
+                        <label>D) have been having</label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation20">
+                    <div class="correct-answer"><i>✓</i> 正确答案: B) are having</div>
+                    <div class="explanation-text">
+                        表示已安排好的近期将要发生的计划（今晚在餐厅吃饭），用现在进行时。
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="submit-btn" id="submit-btn">提交测试</button>
+        
+        <div class="results" id="results">
+            <h2>测试结果</h2>
+            <div class="score" id="score">0/20</div>
+            <div class="message" id="message"></div>
+        </div>
+        
+        <footer>
+            <p>英语时态综合练习测试 &copy; 2023 | 掌握四种基本英语时态</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加选项选择事件
+            const options = document.querySelectorAll('.option input');
+            options.forEach(option => {
+                option.addEventListener('change', function() {
+                    const question = this.closest('.question');
+                    const explanation = question.querySelector('.explanation');
+                    explanation.style.display = 'block';
+                    
+                    // 滚动到解释部分
+                    explanation.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            });
+            
+            // 提交按钮事件
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.addEventListener('click', function() {
+                const results = document.getElementById('results');
+                results.style.display = 'block';
+                
+                // 计算得分
+                let score = 0;
+                const questions = document.querySelectorAll('.question');
+                
+                questions.forEach((question, index) => {
+                    const selectedOption = question.querySelector('input:checked');
+                    if (selectedOption) {
+                        const questionNum = index + 1;
+                        const correctAnswer = getCorrectAnswer(questionNum);
+                        
+                        if (selectedOption.value === correctAnswer) {
+                            score++;
+                        }
+                    }
+                });
+                
+                document.getElementById('score').textContent = score + '/20';
+                
+                let message;
+                if (score >= 18) {
+                    message = "太棒了！你对这四种时态掌握得非常出色！";
+                } else if (score >= 15) {
+                    message = "做得很好！你对时态有很好的理解，但还有提升空间。";
+                } else if (score >= 10) {
+                    message = "不错！继续努力，多练习会更好！";
+                } else {
+                    message = "需要更多练习。回顾一下答案解析，再试一次吧！";
+                }
+                
+                document.getElementById('message').textContent = message;
+                
+                // 滚动到结果
+                results.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // 获取正确答案的函数
+            function getCorrectAnswer(questionNum) {
+                const correctAnswers = {
+                    1: 'A',
+                    2: 'A',
+                    3: 'A',
+                    4: 'B',
+                    5: 'B',
+                    6: 'C',
+                    7: 'C',
+                    8: 'D',
+                    9: 'A',
+                    10: 'B',
+                    11: 'C',
+                    12: 'D',
+                    13: 'A',
+                    14: 'D',
+                    15: 'C',
+                    16: 'B',
+                    17: 'D',
+                    18: 'A',
+                    19: 'C',
+                    20: 'B'
+                };
+                
+                return correctAnswers[questionNum];
+            }
+        });
+    </script>
+</body>
+</html>
