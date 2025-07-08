@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Reading with Music</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            padding: 20px;
+            padding-bottom: 100px; /* Space for music player */
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4a69bd;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .font-control {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        .font-control:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+        
+        .font-control:active {
+            transform: translateY(1px);
+        }
+        
+        .size-indicator {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #1a2a6c;
+            border: 2px solid #4a69bd;
+        }
+        
+        .content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            transition: font-size 0.3s ease;
+        }
+        
+        .paragraph {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .paragraph:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .paragraph-letter {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: #e74c3c;
+            color: white;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 42, 108, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            border-top: 3px solid #e74c3c;
+        }
+        
+        .player-title {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+        
+        .player-title i {
+            color: #e74c3c;
+        }
+        
+        .player-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .player-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .player-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+        
+        .player-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .progress-container {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #e74c3c;
+            width: 30%;
+            border-radius: 4px;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(231, 76, 60, 0.2), transparent);
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 10px;
+            }
+            
+            .font-control {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+            }
+            
+            .size-indicator {
+                padding: 10px 20px;
+            }
+            
+            .paragraph {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .paragraph-letter {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 0.9rem;
+            }
+            
+            .music-player {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .player-controls {
+                order: -1; /* Move controls to top */
+            }
+            
+            .player-title {
+                font-size: 1rem;
+                text-align: center;
+            }
+            
+            .progress-container {
+                width: 90%;
+            }
+            
+            .player-btn {
+                width: 45px;
+                height: 45px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                padding-bottom: 120px; /* More space for player on mobile */
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                font-size: 1rem;
+            }
+            
+            .player-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Speed Reading</h1>
+            <div class="subtitle">What is speed reading, and why do we need it?</div>
+        </div>
+        
+        <div class="controls">
+            <button class="font-control" id="decreaseFont" title="Decrease Font Size">
+                <i class="fas fa-font"></i>
+            </button>
+            <div class="size-indicator">Font Size: <span id="sizeValue">16px</span></div>
+            <button class="font-control" id="increaseFont" title="Increase Font Size">
+                <i class="fas fa-text-height"></i>
+            </button>
+        </div>
+        
+        <div class="content" id="content">
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                Speed reading is not just about reading fast. It is also about how much information you can remember when you have finished reading. The World Championship Speed-Reading Competition says that its top competitors average between <span class="highlight">1,000 and 2,000 words a minute</span>. But they must remember at least <span class="highlight">50 percent</span> of this in order to qualify for the competition.
+            </div>
+            
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                Nowadays, speed reading has become an <span class="highlight">essential skill</span> in any environment where people have to master a large volume of information. Professional workers need reading skills to help them get through many documents every day, while students under pressure to deal with assignments may feel they have to read more and read faster all the time.
+            </div>
+            
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                Although there are various methods to increase reading speed, the trick is deciding what information you want first. For example, if you only want a <span class="highlight">rough outline</span> of an issue, then you can skim the material quickly and extract the key facts. However, if you need to understand every detail in a document, then you must read it slowly enough to understand this.
+            </div>
+            
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                Even when you know how to ignore irrelevant detail, there are other improvements you can make to your reading style which will increase your speed. For example, most people can read much faster if they <span class="highlight">read silently</span>. Reading each word aloud takes time for the information to make a complete circuit in your brain before being pronounced. Some researchers believe that as long as the first and last letters are in place, the brain can still understand the arrangement of the other letters in the word because it logically puts each piece into place.
+            </div>
+            
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                <span class="highlight">Chunking</span> is another important method. Most people learn to read either letter by letter or word by word. As you improve, this changes. You will probably find that you are fixing your eyes on a block of words, then moving your eyes to the next block of words, and so on. You are reading blocks of words at a time, not individual words one by one. You may also notice that you do not always go from one block to the next: sometimes you may move back to a previous block if you are unsure about something.
+            </div>
+            
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                A skilled reader will read a lot of words in each block. He or she will only look at each block for an instant and will then move on. Only rarely will the reader's eyes skip back to a previous block of words. This reduces the amount of work that the reader's eyes have to do. It also increases the volume of information that can be taken in over a given period of time.
+            </div>
+            
+            <div class="paragraph">
+                <span class="paragraph-letter">G</span>
+                On the other hand, a slow reader will spend a lot of time reading small blocks of words. He or she will skip back often, losing the flow and structure of the text, and muddling their overall understanding of the subject. This irregular eye movement quickly makes the reader tired. Poor readers tend to dislike reading because they feel it is difficult to concentrate and comprehend written information.
+            </div>
+            
+            <div class="paragraph">
+                <span class="paragraph-letter">H</span>
+                The best tip anyone can have to improve their reading speed is to <span class="highlight">practise</span>. In order to do this effectively, a person must be engaged in the material and want to know more. If you find yourself constantly having to re-read the same paragraph, you may want to switch to reading material that grabs your attention. If you enjoy what you are reading, you will make quicker progress.
+            </div>
+        </div>
+    </div>
+    
+    <div class="music-player">
+        <div class="player-title">
+            <i class="fas fa-music"></i> Concentration Music for Reading
+        </div>
+        
+        <div class="player-controls">
+            <button class="player-btn" id="playBtn" title="Play">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="player-btn" id="pauseBtn" title="Pause">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button class="player-btn" id="stopBtn" title="Stop">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer">
+        <source src="https://raw.githubusercontent.com/wangzhrm/Lucy/main/20250708_181124.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <script>
+        // Font size controls
+        const content = document.getElementById('content');
+        const decreaseFont = document.getElementById('decreaseFont');
+        const increaseFont = document.getElementById('increaseFont');
+        const sizeValue = document.getElementById('sizeValue');
+        
+        let fontSize = 16;
+        
+        decreaseFont.addEventListener('click', () => {
+            if (fontSize > 12) {
+                fontSize--;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        increaseFont.addEventListener('click', () => {
+            if (fontSize < 24) {
+                fontSize++;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        // Music player functionality
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const progress = document.getElementById('progress');
+        const currentTime = document.getElementById('currentTime');
+        const duration = document.getElementById('duration');
+        
+        // Play button
+        playBtn.addEventListener('click', () => {
+            audio.play();
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        });
+        
+        // Pause button
+        pauseBtn.addEventListener('click', () => {
+            audio.pause();
+            pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        });
+        
+        // Stop button
+        stopBtn.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            stopBtn.innerHTML = '<i class="fas fa-stop"></i>';
+            progress.style.width = '0%';
+            currentTime.textContent = '0:00';
+        });
+        
+        // Update progress bar
+        audio.addEventListener('timeupdate', () => {
+            // Calculate progress percentage
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            
+            // Update time displays
+            currentTime.textContent = formatTime(audio.currentTime);
+            if (!isNaN(audio.duration)) {
+                duration.textContent = formatTime(audio.duration);
+            }
+        });
+        
+        // Format time from seconds to MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+        // Update duration when metadata is loaded
+        audio.addEventListener('loadedmetadata', () => {
+            duration.textContent = formatTime(audio.duration);
+        });
+        
+        // Click on progress bar to seek
+        const progressBar = document.querySelector('.progress-bar');
+        progressBar.addEventListener('click', (e) => {
+            const width = progressBar.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            
+            audio.currentTime = (clickX / width) * duration;
+        });
+    </script>
+</body>
+</html>
