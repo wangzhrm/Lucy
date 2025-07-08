@@ -10,1051 +10,227 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            color: #333;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #212529;
+            background: #f8f9fa;
+            padding: 0;
         }
         
         .banner-container {
-            background: white;
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
+            max-width: 800px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
         
         .banner {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            border-radius: 10px;
-        }
-        
-        header {
-            background: linear-gradient(to right, #2c3e50, #4a6491);
-            color: white;
-            padding: 20px 30px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .main-title {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            color: #fff;
-            font-weight: 600;
-        }
-        
-        .content {
-            padding: 25px;
-            min-height: 70vh;
-        }
-        
-        .quiz-section {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 15px;
-        }
-        
-        .quiz-btn {
-            background: linear-gradient(to right, #9b59b6, #8e44ad);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .quiz-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-        
-        .controls {
-            display: none;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            gap: 15px;
-        }
-        
-        .edit-mode .controls {
-            display: flex;
-        }
-        
-        .btn {
-            padding: 12px 20px;
-            border: none;
+            width: 100%;
+            height: 120px; /* Reduced height */
+            background-image: url('https://tonysew.wordpress.com/wp-content/uploads/2025/07/65f184bef6ff0c132cc9c1e0482569f5.png');
+            background-size: cover;
+            background-position: center;
             border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(to right, #3498db, #2980b9);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(to right, #2ecc71, #27ae60);
-            color: white;
-        }
-        
-        .btn-tertiary {
-            background: linear-gradient(to right, #9b59b6, #8e44ad);
-            color: white;
-        }
-        
-        .btn-sm {
-            padding: 8px 12px;
-            font-size: 0.9rem;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .section {
-            background: white;
-            border-radius: 10px;
-            margin-bottom: 25px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s ease;
-        }
-        
-        .section-header {
-            background: linear-gradient(to right, #f5f7fa, #e4e7eb);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #d1d8e0;
-        }
-        
-        .section-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #2c3e50;
-            cursor: default;
-            flex-grow: 1;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
             position: relative;
         }
         
-        .edit-mode .section-title {
-            cursor: text;
-            background: #f8f9fa;
-            border: 1px dashed #3498db;
-        }
-        
-        .subsection {
-            padding: 15px 20px;
-            border-bottom: 1px solid #f0f0f0;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .subsection:last-child {
-            border-bottom: none;
-        }
-        
-        .subsection-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #e0e0e0;
-        }
-        
-        .subsection-title {
-            font-size: 1.2rem;
-            font-weight: 500;
-            color: #34495e;
-            cursor: default;
-            flex-grow: 1;
-            padding: 6px 10px 6px 15px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .edit-mode .subsection-title {
-            cursor: text;
-            background: #f8f9fa;
-            border: 1px dashed #2ecc71;
-        }
-        
-        .link-input {
-            display: none;
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-top: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .edit-mode .link-input {
-            display: block;
-        }
-        
-        /* Resource styling with light background and indentation */
-        .resource {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            margin: 8px 0;
-            border-radius: 6px;
-            background: #f8f9fa;
-            transition: all 0.3s ease;
-        }
-        
-        .resource-name {
-            font-size: 1rem;
-            color: #2c3e50;
-            cursor: default;
-            flex-grow: 1;
-            padding: 6px 10px 6px 30px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .edit-mode .resource-name {
-            cursor: text;
-            background: #ffffff;
-            border: 1px dashed #9b59b6;
-        }
-        
-        .resource-link {
-            display: none;
-            width: 100%;
-            padding: 6px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            margin-top: 8px;
-            font-size: 0.9rem;
-        }
-        
-        .edit-mode .resource-link {
-            display: block;
-        }
-        
-        .add-resource-btn {
-            display: none;
-            margin-top: 10px;
-            width: 100%;
-        }
-        
-        .edit-mode .add-resource-btn {
-            display: block;
-        }
-        
-        .lock-btn {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #f5f5f5; /* Very light gray in locked state */
-            color: #aaa;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-            z-index: 100;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        
-        .lock-btn:hover {
-            background: #e0e0e0;
-            transform: scale(1.1);
-            color: #888;
-        }
-        
-        .edit-mode .lock-btn {
-            background: rgba(26, 42, 108, 0.7); /* Blue in unlocked state */
-            color: rgba(255, 255, 255, 0.9);
-        }
-        
-        .edit-mode .lock-btn:hover {
-            background: rgba(26, 42, 108, 0.9);
-            color: white;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: #7f8c8d;
-            font-size: 1.2rem;
-        }
-        
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-        
-        .edit-mode .empty-state {
-            display: none;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            border-top: 1px solid #eee;
-        }
-        
-        .section-controls {
-            display: none;
-            gap: 10px;
-            margin-left: 10px;
-        }
-        
-        .edit-mode .section-controls {
-            display: flex;
-        }
-        
-        .section-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: #3498db;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .section-btn:hover {
-            transform: scale(1.1);
-        }
-        
-        .delete-btn {
-            background: #e74c3c;
-        }
-        
-        .add-btn {
-            background: #2ecc71;
-        }
-        
-        .highlight {
-            animation: highlight 1.5s ease;
-        }
-        
-        @keyframes highlight {
-            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(52, 152, 219, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
-        }
-        
-        .confirmation-dialog {
-            display: none;
-            position: fixed;
+        .banner-overlay {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
             align-items: center;
             justify-content: center;
         }
         
-        .dialog-content {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            width: 90%;
-            max-width: 500px;
+        .banner-title {
+            color: white;
+            font-size: 2rem;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            padding: 0 20px;
         }
         
-        .dialog-title {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #2c3e50;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
         }
         
-        .dialog-message {
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-            color: #7f8c8d;
+        .date-section {
+            margin-bottom: 40px;
         }
         
-        .dialog-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-        
-        .dialog-btn {
-            padding: 10px 25px;
-            border: none;
-            border-radius: 8px;
+        .date-header {
+            background-color: #e7f5ff;
+            color: #1864ab;
+            padding: 15px 20px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .confirm-btn {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .cancel-btn {
-            background: #3498db;
-            color: white;
-        }
-        
-        .dialog-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-        
-        .selected-section {
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.5) !important;
-            border-color: #3498db !important;
-        }
-        
-        .selected-subsection {
-            box-shadow: 0 0 0 2px rgba(46, 204, 113, 0.5) !important;
-            border: 1px solid #2ecc71 !important;
-        }
-        
-        .resource-controls {
-            display: none;
-            gap: 5px;
-        }
-        
-        .edit-mode .resource-controls {
+            font-size: 1.3rem;
+            border-left: 5px solid #1864ab;
+            margin-bottom: 15px;
+            border-radius: 0 6px 6px 0;
             display: flex;
-        }
-        
-        /* Link icon styling */
-        .link-icon {
-            position: absolute;
-            left: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #3498db;
-            cursor: pointer;
-            font-size: 0.9rem;
-            opacity: 0.7;
-            transition: all 0.3s ease;
-        }
-        
-        .link-icon:hover {
-            opacity: 1;
-            transform: translateY(-50%) scale(1.2);
-        }
-        
-        .edit-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(46, 204, 113, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 100;
-            display: none;
             align-items: center;
-            gap: 8px;
         }
         
-        .edit-mode .edit-indicator {
-            display: flex;
+        .date-header i {
+            margin-right: 10px;
         }
         
-        .section-title .link-icon {
-            left: -5px;
+        .document-list {
+            list-style-type: none;
+            padding: 0;
         }
         
-        .subsection-title .link-icon {
-            left: -5px;
-        }
-        
-        .date-picker-container {
-            display: none;
-            position: absolute;
-            top: 50px;
-            left: 0;
-            z-index: 100;
-            background: white;
+        .document-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: white;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            padding: 10px;
-        }
-        
-        .edit-mode .date-picker-container {
-            display: block;
-        }
-        
-        .calendar-icon {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #3498db;
-            cursor: pointer;
-            font-size: 1.2rem;
-            opacity: 0.7;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
         }
         
-        .calendar-icon:hover {
-            opacity: 1;
-            transform: translateY(-50%) scale(1.2);
+        .document-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .document-item a {
+            text-decoration: none;
+            color: #4361ee;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .document-item a:hover {
+            color: #3a0ca3;
+        }
+        
+        .document-item i {
+            margin-right: 12px;
+            font-size: 1.3rem;
+            color: #4cc9f0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        @media (max-width: 768px) {
+            .banner {
+                height: 100px;
+            }
+            
+            .banner-title {
+                font-size: 1.6rem;
+            }
+            
+            .date-header {
+                font-size: 1.1rem;
+                padding: 12px 15px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .document-item {
+                padding: 12px;
+            }
+            
+            .document-item a {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .banner {
+                height: 80px;
+            }
+            
+            .banner-title {
+                font-size: 1.3rem;
+            }
+            
+            .date-header {
+                font-size: 1rem;
+                padding: 10px 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="edit-indicator">
-        <i class="fas fa-edit"></i> EDIT MODE
+    <div class="banner-container">
+        <div class="banner">
+            <div class="banner-overlay">
+                <h1 class="banner-title">Lucy's Learning Path</h1>
+            </div>
+        </div>
     </div>
     
     <div class="container">
-        <div class="banner-container">
-            <img src="https://tonysew.wordpress.com/wp-content/uploads/2025/07/65f184bef6ff0c132cc9c1e0482569f5.png" alt="Learning Banner" class="banner">
-        </div>
-        
-        <header>
-            <h1 class="main-title">Lucy's Learning Tracker</h1>
-        </header>
-        
-        <div class="content">
-            <div class="quiz-section">
-                <button id="vocabQuizBtn" class="quiz-btn">
-                    <i class="fas fa-book"></i> Vocab Quiz
-                </button>
-            </div>
+        <div class="date-sections">
             
-            <div class="controls">
-                <button id="addSectionBtn" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Add New Section
-                </button>
-            </div>
-            
-            <div id="sectionsContainer">
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <h3>No learning activities yet</h3>
-                    <p>Enter edit mode and add your first section</p>
-                </div>
-            </div>
-        </div>
-        
-        <footer>
-            <p>Click the lock icon to toggle edit mode | All data is stored locally in your browser</p>
-        </footer>
-    </div>
-    
-    <button id="lockBtn" class="lock-btn">
-        <i class="fas fa-lock"></i>
-    </button>
-    
-    <div id="confirmationDialog" class="confirmation-dialog">
-        <div class="dialog-content">
-            <h2 class="dialog-title">Confirm Deletion</h2>
-            <p class="dialog-message" id="dialogMessage">Are you sure you want to delete this item? This action cannot be undone.</p>
-            <div class="dialog-buttons">
-                <button id="confirmDelete" class="dialog-btn confirm-btn">Delete</button>
-                <button id="cancelDelete" class="dialog-btn cancel-btn">Cancel</button>
-            </div>
+                            <div class="date-section">
+                                <h3 class="date-header">July 8, 2025</h3>
+                                <ul class="document-list">
+                        
+                                <li class="document-item">
+                                    <a href="https://wangzhrm.github.io/Lucy/speedreading.html" target="_blank">
+                                        <i class="fas fa-file-alt"></i> 阅读材料和音频
+                                    </a>
+                                </li>
+                            
+                                <li class="document-item">
+                                    <a href="https://tonysew.wordpress.com/wp-content/uploads/2025/07/0708e995bfe99abee58fa5-2.png" target="_blank">
+                                        <i class="fas fa-file-alt"></i> 长难句分析
+                                    </a>
+                                </li>
+                            
+                                </ul>
+                            </div>
+                        
+                            <div class="date-section">
+                                <h3 class="date-header">July 7, 2025</h3>
+                                <ul class="document-list">
+                        
+                                <li class="document-item">
+                                    <a href="https://wangzhrm.github.io/Lucy/0707practice.html" target="_blank">
+                                        <i class="fas fa-file-alt"></i> 现在的四种时态quiz
+                                    </a>
+                                </li>
+                            
+                                <li class="document-item">
+                                    <a href="https://tonysew.wordpress.com/wp-content/uploads/2025/07/lucy0707e8afbee5a082e58685e5aeb9e680bbe7bb93.docx" target="_blank">
+                                        <i class="fas fa-file-alt"></i> 词汇、现在的四种时态、长难句分析
+                                    </a>
+                                </li>
+                            
+                                </ul>
+                            </div>
+                        
         </div>
     </div>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const lockBtn = document.getElementById('lockBtn');
-            const addSectionBtn = document.getElementById('addSectionBtn');
-            const sectionsContainer = document.getElementById('sectionsContainer');
-            const confirmationDialog = document.getElementById('confirmationDialog');
-            const dialogMessage = document.getElementById('dialogMessage');
-            const confirmDeleteBtn = document.getElementById('confirmDelete');
-            const cancelDeleteBtn = document.getElementById('cancelDelete');
-            const vocabQuizBtn = document.getElementById('vocabQuizBtn');
-            
-            let editMode = false;
-            let selectedSection = null;
-            let selectedSubsection = null;
-            let itemToDelete = null;
-            let resourceIdCounter = 0;
-            
-            // Open Vocab Quiz
-            vocabQuizBtn.addEventListener('click', function() {
-                window.open('https://wangzhrm.github.io/IELTS/quiz', '_blank');
-            });
-            
-            // Toggle edit mode
-            lockBtn.addEventListener('click', function() {
-                editMode = !editMode;
-                document.body.classList.toggle('edit-mode', editMode);
-                lockBtn.innerHTML = editMode ? 
-                    '<i class="fas fa-unlock"></i>' : 
-                    '<i class="fas fa-lock"></i>';
-                
-                // Update contenteditable for all elements
-                updateContentEditable();
-                
-                // Update link icons
-                updateLinkIcons();
-                
-                // Show welcome message if first time entering edit mode
-                if (editMode && sectionsContainer.querySelector('.empty-state')) {
-                    sectionsContainer.innerHTML = '';
-                }
-            });
-            
-            // Update contenteditable state for all elements
-            function updateContentEditable() {
-                const sectionTitles = document.querySelectorAll('.section-title');
-                sectionTitles.forEach(title => {
-                    title.contentEditable = editMode;
-                });
-                
-                const subsectionTitles = document.querySelectorAll('.subsection-title');
-                subsectionTitles.forEach(title => {
-                    title.contentEditable = editMode;
-                });
-                
-                const resourceNames = document.querySelectorAll('.resource-name');
-                resourceNames.forEach(name => {
-                    name.contentEditable = editMode;
-                });
-            }
-            
-            // Update link icons based on mode
-            function updateLinkIcons() {
-                // Remove all link icons
-                document.querySelectorAll('.link-icon').forEach(icon => icon.remove());
-                
-                if (!editMode) {
-                    // Add link icons for subsections
-                    document.querySelectorAll('.subsection').forEach(subsection => {
-                        const linkInput = subsection.querySelector('.link-input');
-                        const link = linkInput.value.trim();
-                        const titleElement = subsection.querySelector('.subsection-title');
-                        
-                        if (link) {
-                            const icon = document.createElement('a');
-                            icon.href = link;
-                            icon.target = '_blank';
-                            icon.className = 'link-icon';
-                            icon.innerHTML = '<i class="fas fa-external-link-alt"></i>';
-                            titleElement.appendChild(icon);
-                        }
-                    });
-                    
-                    // Add link icons for resources
-                    document.querySelectorAll('.resource').forEach(resource => {
-                        const linkInput = resource.querySelector('.resource-link');
-                        const link = linkInput.value.trim();
-                        const nameElement = resource.querySelector('.resource-name');
-                        
-                        if (link) {
-                            const icon = document.createElement('a');
-                            icon.href = link;
-                            icon.target = '_blank';
-                            icon.className = 'link-icon';
-                            icon.innerHTML = '<i class="fas fa-external-link-alt"></i>';
-                            nameElement.appendChild(icon);
-                        }
-                    });
-                }
-            }
-            
-            // Add new section with current date
-            addSectionBtn.addEventListener('click', function() {
-                const date = new Date();
-                const dateString = date.toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
-                
-                const sectionId = 'section-' + Date.now();
-                
-                const sectionHTML = `
-                    <div class="section" id="${sectionId}">
-                        <div class="section-header">
-                            <div class="section-title" contenteditable="${editMode}">${dateString}</div>
-                            <i class="fas fa-calendar-alt calendar-icon"></i>
-                            <div class="section-controls">
-                                <button class="section-btn add-btn add-subsection-btn" title="Add subsection">
-                                    <i class="fas fa-folder-plus"></i>
-                                </button>
-                                <button class="section-btn delete-btn delete-section" title="Delete section">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="subsections"></div>
-                    </div>
-                `;
-                
-                // Remove empty state if it exists
-                const emptyState = sectionsContainer.querySelector('.empty-state');
-                if (emptyState) {
-                    emptyState.remove();
-                }
-                
-                sectionsContainer.insertAdjacentHTML('beforeend', sectionHTML);
-                
-                // Select the new section
-                selectedSection = document.getElementById(sectionId);
-                selectedSection.classList.add('highlight');
-                
-                // Add event listeners for the new section
-                const sectionElement = document.getElementById(sectionId);
-                
-                // Calendar icon functionality
-                const calendarIcon = sectionElement.querySelector('.calendar-icon');
-                calendarIcon.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    openDatePicker(sectionElement.querySelector('.section-title'));
-                });
-                
-                // Delete section with confirmation
-                sectionElement.querySelector('.delete-section').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    showConfirmationDialog(
-                        "Are you sure you want to delete this entire section? This will also delete all subsections and resources.",
-                        sectionElement
-                    );
-                });
-                
-                // Add subsection to this section
-                sectionElement.querySelector('.add-subsection-btn').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    addSubsectionToSection(sectionElement);
-                });
-                
-                // Click to select section
-                sectionElement.addEventListener('click', function() {
-                    selectSection(sectionElement);
-                });
-                
-                // Remove highlight after animation
-                setTimeout(() => {
-                    if (selectedSection) selectedSection.classList.remove('highlight');
-                }, 1500);
-            });
-            
-            // Open date picker for section title
-            function openDatePicker(titleElement) {
-                // Create date picker container
-                const datePickerContainer = document.createElement('div');
-                datePickerContainer.className = 'date-picker-container';
-                
-                // Create date picker input
-                const dateInput = document.createElement('input');
-                dateInput.type = 'date';
-                dateInput.className = 'date-picker';
-                
-                // Position date picker
-                const rect = titleElement.getBoundingClientRect();
-                datePickerContainer.style.left = rect.left + 'px';
-                datePickerContainer.style.top = (rect.bottom + 5) + 'px';
-                
-                // Add to DOM
-                datePickerContainer.appendChild(dateInput);
-                document.body.appendChild(datePickerContainer);
-                
-                // Focus and show picker
-                dateInput.focus();
-                
-                // Handle date change
-                dateInput.addEventListener('change', function() {
-                    const selectedDate = new Date(dateInput.value);
-                    if (!isNaN(selectedDate)) {
-                        const dateString = selectedDate.toLocaleDateString('en-US', { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                        });
-                        titleElement.textContent = dateString;
-                    }
-                    
-                    // Remove date picker
-                    document.body.removeChild(datePickerContainer);
-                });
-                
-                // Close picker when clicking outside
-                document.addEventListener('click', function closePicker(e) {
-                    if (!datePickerContainer.contains(e.target) && e.target !== titleElement) {
-                        document.body.removeChild(datePickerContainer);
-                        document.removeEventListener('click', closePicker);
-                    }
-                });
-            }
-            
-            // Add new subsection to a section
-            function addSubsectionToSection(sectionElement) {
-                const subsectionsContainer = sectionElement.querySelector('.subsections');
-                const subsectionId = 'subsection-' + Date.now();
-                
-                const subsectionHTML = `
-                    <div class="subsection" id="${subsectionId}">
-                        <div class="subsection-header">
-                            <div class="subsection-title" contenteditable="${editMode}">New Subsection</div>
-                            <div class="section-controls">
-                                <button class="section-btn delete-btn delete-subsection" title="Delete subsection">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <input type="text" class="link-input" placeholder="Subsection link...">
-                        <div class="resources"></div>
-                        <button class="add-resource-btn btn btn-tertiary btn-sm">
-                            <i class="fas fa-plus"></i> Add Resource
-                        </button>
-                    </div>
-                `;
-                
-                subsectionsContainer.insertAdjacentHTML('beforeend', subsectionHTML);
-                
-                // Add event listeners for the new subsection
-                const newSubsection = document.getElementById(subsectionId);
-                
-                // Delete subsection with confirmation
-                newSubsection.querySelector('.delete-subsection').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    showConfirmationDialog(
-                        "Are you sure you want to delete this subsection? This will also delete all resources in it.",
-                        newSubsection
-                    );
-                });
-                
-                // Add resource to this subsection
-                newSubsection.querySelector('.add-resource-btn').addEventListener('click', function() {
-                    addResourceToSubsection(newSubsection);
-                });
-                
-                // Click to select subsection
-                newSubsection.addEventListener('click', function(e) {
-                    if (!e.target.closest('.section-controls')) {
-                        selectSubsection(newSubsection);
-                    }
-                });
-                
-                // Select the new subsection
-                selectSubsection(newSubsection);
-                newSubsection.classList.add('highlight');
-                
-                // Remove highlight after animation
-                setTimeout(() => {
-                    if (newSubsection) newSubsection.classList.remove('highlight');
-                }, 1500);
-            }
-            
-            // Add new resource to a subsection
-            function addResourceToSubsection(subsectionElement) {
-                const resourcesContainer = subsectionElement.querySelector('.resources');
-                const resourceId = 'resource-' + Date.now() + '-' + (resourceIdCounter++);
-                
-                const resourceHTML = `
-                    <div class="resource" id="${resourceId}">
-                        <div class="resource-name" contenteditable="${editMode}">New Resource</div>
-                        <input type="text" class="resource-link" placeholder="Resource link...">
-                        <div class="resource-controls">
-                            <button class="section-btn delete-btn delete-resource" title="Delete resource">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                resourcesContainer.insertAdjacentHTML('beforeend', resourceHTML);
-                
-                // Add delete event listener for the resource
-                const resourceElement = document.getElementById(resourceId);
-                resourceElement.querySelector('.delete-resource').addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    showConfirmationDialog(
-                        "Are you sure you want to delete this resource?",
-                        resourceElement
-                    );
-                });
-                
-                // Highlight the new resource
-                resourceElement.classList.add('highlight');
-                
-                // Remove highlight after animation
-                setTimeout(() => {
-                    resourceElement.classList.remove('highlight');
-                }, 1500);
-            }
-            
-            // Show confirmation dialog
-            function showConfirmationDialog(message, element) {
-                dialogMessage.textContent = message;
-                itemToDelete = element;
-                confirmationDialog.style.display = 'flex';
-            }
-            
-            // Hide confirmation dialog
-            function hideConfirmationDialog() {
-                confirmationDialog.style.display = 'none';
-                itemToDelete = null;
-            }
-            
-            // Confirm deletion
-            confirmDeleteBtn.addEventListener('click', function() {
-                if (itemToDelete) {
-                    itemToDelete.remove();
-                    
-                    // Show empty state if no sections left
-                    if (!sectionsContainer.querySelector('.section')) {
-                        sectionsContainer.innerHTML = `
-                            <div class="empty-state">
-                                <i class="fas fa-inbox"></i>
-                                <h3>No learning activities yet</h3>
-                                <p>Enter edit mode and add your first section</p>
-                            </div>
-                        `;
-                    }
-                }
-                hideConfirmationDialog();
-            });
-            
-            // Cancel deletion
-            cancelDeleteBtn.addEventListener('click', hideConfirmationDialog);
-            
-            // Select a section
-            function selectSection(section) {
-                // Remove selection from other sections
-                document.querySelectorAll('.section').forEach(s => {
-                    s.classList.remove('selected-section');
-                });
-                
-                // Highlight selected section
-                section.classList.add('selected-section');
-                selectedSection = section;
-                selectedSubsection = null;
-            }
-            
-            // Select a subsection
-            function selectSubsection(subsection) {
-                // Remove selection from other subsections
-                document.querySelectorAll('.subsection').forEach(s => {
-                    s.classList.remove('selected-subsection');
-                });
-                
-                // Highlight selected subsection
-                subsection.classList.add('selected-subsection');
-                selectedSubsection = subsection;
-            }
-            
-            // Close dialog when clicking outside
-            confirmationDialog.addEventListener('click', function(e) {
-                if (e.target === confirmationDialog) {
-                    hideConfirmationDialog();
-                }
-            });
-            
-            // Sample data to demonstrate functionality
-            setTimeout(() => {
-                if (sectionsContainer.querySelector('.empty-state')) {
-                    lockBtn.click();
-                    addSectionBtn.click();
-                    
-                    // Add a subsection to the new section
-                    const sectionElement = document.querySelector('.section');
-                    addSubsectionToSection(sectionElement);
-                    
-                    // Add sample resources
-                    const sampleResources = [
-                        {name: "IELTS Writing Practice", link: "#"},
-                        {name: "Vocabulary Flashcards", link: "#"},
-                        {name: "Reading Comprehension", link: "#"}
-                    ];
-                    
-                    const resourcesContainer = selectedSubsection.querySelector('.resources');
-                    
-                    sampleResources.forEach((resource, index) => {
-                        const resourceId = 'resource-' + Date.now() + '-' + index;
-                        const resourceHTML = `
-                            <div class="resource" id="${resourceId}">
-                                <div class="resource-name" contenteditable="${editMode}">${resource.name}</div>
-                                <input type="text" class="resource-link" value="${resource.link}">
-                                <div class="resource-controls">
-                                    <button class="section-btn delete-btn delete-resource" title="Delete resource">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                        
-                        resourcesContainer.insertAdjacentHTML('beforeend', resourceHTML);
-                        
-                        // Add delete event listener
-                        document.getElementById(resourceId).querySelector('.delete-resource').addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            showConfirmationDialog(
-                                "Are you sure you want to delete this resource?",
-                                document.getElementById(resourceId)
-                            );
-                        });
-                    });
-                    
-                    lockBtn.click();
-                }
-            }, 500);
-        });
-    </script>
+    <div class="footer">
+        <p>Created with Document Sharing Platform | 2025</p>
+    </div>
 </body>
 </html>
