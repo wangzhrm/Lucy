@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic novels</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            padding: 20px;
+            padding-bottom: 100px; /* Space for music player */
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4a69bd;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .font-control {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        .font-control:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+        
+        .font-control:active {
+            transform: translateY(1px);
+        }
+        
+        .size-indicator {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #1a2a6c;
+            border: 2px solid #4a69bd;
+        }
+        
+        .content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            transition: font-size 0.3s ease;
+        }
+        
+        .paragraph {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .paragraph:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .paragraph-letter {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: #e74c3c;
+            color: white;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #1e3c72;
+        }
+        
+        .tab.active {
+            background: #e74c3c;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Translation display */
+        .translation-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e74c3c;
+            color: #333;
+        }
+        
+        .translation-display div {
+            margin-bottom: 5px;
+        }
+        
+        /* Word styling for study mode */
+        .word {
+            cursor: pointer;
+            text-decoration: underline dotted #e74c3c;
+        }
+        
+        .word:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        .word.active {
+            background: rgba(231, 76, 60, 0.2);
+        }
+        
+        /* Music player */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 42, 108, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            border-top: 3px solid #e74c3c;
+        }
+        
+        .player-title {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+        
+        .player-title i {
+            color: #e74c3c;
+        }
+        
+        .player-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .player-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .player-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+        
+        .player-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .progress-container {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #e74c3c;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(231, 76, 60, 0.2), transparent);
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 10px;
+            }
+            
+            .font-control {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+            }
+            
+            .size-indicator {
+                padding: 10px 20px;
+            }
+            
+            .paragraph {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .paragraph-letter {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 0.9rem;
+            }
+            
+            .music-player {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .player-controls {
+                order: -1;
+            }
+            
+            .player-title {
+                font-size: 1rem;
+                text-align: center;
+            }
+            
+            .progress-container {
+                width: 90%;
+            }
+            
+            .player-btn {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+                margin: 5px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                padding-bottom: 120px; /* More space for player on mobile */
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                font-size: 1rem;
+            }
+            
+            .player-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Graphic novels</h1>
+            <div class="subtitle">People who think grpahic novels are just comics with a different name should think again</div>
+        </div>
+        
+        <!-- Tabs for reading and study modes -->
+        <div class="tabs">
+            <button class="tab active" data-tab="reading">Reading Mode</button>
+            <button class="tab" data-tab="study">Study Mode</button>
+        </div>
+        
+        <!-- Translation display -->
+        <div id="translation-display" class="translation-display" style="display: none;">
+            <div><strong>Word:</strong> <span class="word-display"></span></div>
+            <div><strong>Meaning:</strong> <span class="meaning-display"></span></div>
+        </div>
+        
+        <!-- Reading Mode -->
+        <div id="reading-tab" class="tab-content active">
+            <div class="controls">
+                <button class="font-control" id="decreaseFont" title="Decrease Font Size">
+                    <i class="fas fa-font"></i>
+                </button>
+                <div class="size-indicator">Font Size: <span id="sizeValue">16px</span></div>
+                <button class="font-control" id="increaseFont" title="Increase Font Size">
+                    <i class="fas fa-text-height"></i>
+                </button>
+            </div>
+            
+            <div class="content" id="content">
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                A 
+Graphic novels, as the name suggests, are books written and illustrated in the style of a comic book. The term graphic novel was first used in 1978 by author and artist Will Eisner to distinguish a comic novel he had written and illustrated from newspaper comic strips. He described graphic novels as consisting of ‘sequential art’ – a series of illustrations which, when viewed in order, tell a story.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                B 
+Although today’s graphic novels are a recent phenomenon, this basic way of telling stories has been used in various forms for centuries. Early cave drawings, hieroglyphics and medieval tapestries are examples of this. The term graphic novel is now generally used to describe any book in a comic format that resembles a novel in length and narrative development.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                C 
+Many adults feel that graphic novels are not the type of reading material that will help young people become good readers. They believe that graphic novels are somehow a bad influence that prevent ‘real’ reading. In other words, they think that they are not ‘real’ books.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                D 
+However, many quality graphic novels are now being seen as a method of storytelling on the same level as novels, films or audio books. From originally appealing to a small following of enthusiasts, they are now being accepted by librarians and teachers as proper literature for children and young adults. The main advantages are that they promote literacy, and attract and motivate young people to read.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                E 
+How do we know this? In the last few years, teachers and school libraries have reported outstanding success getting children to read with graphic novels. Many have mentioned the motivational factor of the graphic novel. This has been especially true with children who are usually reluctant to read, especially boys. The colourful pictures attract them, and then encourage them to find out what the story is about. Providing young people of all abilities with a wide range of reading materials, including graphic novels, can help them become lifelong readers.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                F 
+Furthermore, one of the main benefits of a graphic novel is that it can help students who are learning a foreign language, and who are having problems improving their reading skills. This is because the pictures provide clues to the meaning of the words. Language learners are therefore more motivated by graphic novels, and will acquire new vocabulary more quickly.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">G</span>
+                G 
+Many teachers have reported great success when they have used graphic novels with their students, especially in the areas of English, social studies and art. They have discovered that, just like traditional forms of literature, they can be useful tools for helping students examine aspects of history, science, literature and art.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">H</span>
+                H 
+The idea that graphic novels are too simple to be regarded as serious reading is no longer valid. The excellent graphic novels available today demand many of the same skills that are needed to understand traditional works of fiction. Often they actually contain more sophisticated vocabulary than traditional books. Reading them can help students develop the skills that are necessary to read more challenging works.
+
+            </div>
+                
+            </div>
+        </div>
+        
+        <!-- Study Mode -->
+        <div id="study-tab" class="tab-content">
+            <div class="controls">
+                <button class="font-control" id="studyDecreaseFont" title="Decrease Font Size">
+                    <i class="fas fa-font"></i>
+                </button>
+                <div class="size-indicator">Font Size: <span id="studySizeValue">16px</span></div>
+                <button class="font-control" id="studyIncreaseFont" title="Increase Font Size">
+                    <i class="fas fa-text-height"></i>
+                </button>
+            </div>
+            
+            <div class="content" id="study-content">
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                <span class="word" data-word="A">A</span> 
+<span class="word" data-word="Graphic">Graphic</span> <span class="word" data-word="novels,">novels,</span> <span class="word" data-word="as">as</span> <span class="word" data-word="the">the</span> <span class="word" data-word="name">name</span> <span class="word" data-word="suggests,">suggests,</span> <span class="word" data-word="are">are</span> <span class="word" data-word="books">books</span> <span class="word" data-word="written">written</span> <span class="word" data-word="and">and</span> <span class="word" data-word="illustrated">illustrated</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="style">style</span> <span class="word" data-word="of">of</span> <span class="word" data-word="a">a</span> <span class="word" data-word="comic">comic</span> <span class="word" data-word="book.">book.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="term">term</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novel">novel</span> <span class="word" data-word="was">was</span> <span class="word" data-word="first">first</span> <span class="word" data-word="used">used</span> <span class="word" data-word="in">in</span> 1978 <span class="word" data-word="by">by</span> <span class="word" data-word="author">author</span> <span class="word" data-word="and">and</span> <span class="word" data-word="artist">artist</span> <span class="word" data-word="Will">Will</span> <span class="word" data-word="Eisner">Eisner</span> <span class="word" data-word="to">to</span> <span class="word" data-word="distinguish">distinguish</span> <span class="word" data-word="a">a</span> <span class="word" data-word="comic">comic</span> <span class="word" data-word="novel">novel</span> <span class="word" data-word="he">he</span> <span class="word" data-word="had">had</span> <span class="word" data-word="written">written</span> <span class="word" data-word="and">and</span> <span class="word" data-word="illustrated">illustrated</span> <span class="word" data-word="from">from</span> <span class="word" data-word="newspaper">newspaper</span> <span class="word" data-word="comic">comic</span> <span class="word" data-word="strips.">strips.</span> <span class="word" data-word="He">He</span> <span class="word" data-word="described">described</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels">novels</span> <span class="word" data-word="as">as</span> <span class="word" data-word="consisting">consisting</span> <span class="word" data-word="of">of</span> <span class="word" data-word="‘sequential">‘sequential</span> <span class="word" data-word="art’">art’</span> – <span class="word" data-word="a">a</span> <span class="word" data-word="series">series</span> <span class="word" data-word="of">of</span> <span class="word" data-word="illustrations">illustrations</span> <span class="word" data-word="which,">which,</span> <span class="word" data-word="when">when</span> <span class="word" data-word="viewed">viewed</span> <span class="word" data-word="in">in</span> <span class="word" data-word="order,">order,</span> <span class="word" data-word="tell">tell</span> <span class="word" data-word="a">a</span> <span class="word" data-word="story.">story.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                <span class="word" data-word="B">B</span> 
+<span class="word" data-word="Although">Although</span> <span class="word" data-word="today’s">today’s</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels">novels</span> <span class="word" data-word="are">are</span> <span class="word" data-word="a">a</span> <span class="word" data-word="recent">recent</span> <span class="word" data-word="phenomenon,">phenomenon,</span> <span class="word" data-word="this">this</span> <span class="word" data-word="basic">basic</span> <span class="word" data-word="way">way</span> <span class="word" data-word="of">of</span> <span class="word" data-word="telling">telling</span> <span class="word" data-word="stories">stories</span> <span class="word" data-word="has">has</span> <span class="word" data-word="been">been</span> <span class="word" data-word="used">used</span> <span class="word" data-word="in">in</span> <span class="word" data-word="various">various</span> <span class="word" data-word="forms">forms</span> <span class="word" data-word="for">for</span> <span class="word" data-word="centuries.">centuries.</span> <span class="word" data-word="Early">Early</span> <span class="word" data-word="cave">cave</span> <span class="word" data-word="drawings,">drawings,</span> <span class="word" data-word="hieroglyphics">hieroglyphics</span> <span class="word" data-word="and">and</span> <span class="word" data-word="medieval">medieval</span> <span class="word" data-word="tapestries">tapestries</span> <span class="word" data-word="are">are</span> <span class="word" data-word="examples">examples</span> <span class="word" data-word="of">of</span> <span class="word" data-word="this.">this.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="term">term</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novel">novel</span> <span class="word" data-word="is">is</span> <span class="word" data-word="now">now</span> <span class="word" data-word="generally">generally</span> <span class="word" data-word="used">used</span> <span class="word" data-word="to">to</span> <span class="word" data-word="describe">describe</span> <span class="word" data-word="any">any</span> <span class="word" data-word="book">book</span> <span class="word" data-word="in">in</span> <span class="word" data-word="a">a</span> <span class="word" data-word="comic">comic</span> <span class="word" data-word="format">format</span> <span class="word" data-word="that">that</span> <span class="word" data-word="resembles">resembles</span> <span class="word" data-word="a">a</span> <span class="word" data-word="novel">novel</span> <span class="word" data-word="in">in</span> <span class="word" data-word="length">length</span> <span class="word" data-word="and">and</span> <span class="word" data-word="narrative">narrative</span> <span class="word" data-word="development.">development.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                <span class="word" data-word="C">C</span> 
+<span class="word" data-word="Many">Many</span> <span class="word" data-word="adults">adults</span> <span class="word" data-word="feel">feel</span> <span class="word" data-word="that">that</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels">novels</span> <span class="word" data-word="are">are</span> <span class="word" data-word="not">not</span> <span class="word" data-word="the">the</span> <span class="word" data-word="type">type</span> <span class="word" data-word="of">of</span> <span class="word" data-word="reading">reading</span> <span class="word" data-word="material">material</span> <span class="word" data-word="that">that</span> <span class="word" data-word="will">will</span> <span class="word" data-word="help">help</span> <span class="word" data-word="young">young</span> <span class="word" data-word="people">people</span> <span class="word" data-word="become">become</span> <span class="word" data-word="good">good</span> <span class="word" data-word="readers.">readers.</span> <span class="word" data-word="They">They</span> <span class="word" data-word="believe">believe</span> <span class="word" data-word="that">that</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels">novels</span> <span class="word" data-word="are">are</span> <span class="word" data-word="somehow">somehow</span> <span class="word" data-word="a">a</span> <span class="word" data-word="bad">bad</span> <span class="word" data-word="influence">influence</span> <span class="word" data-word="that">that</span> <span class="word" data-word="prevent">prevent</span> <span class="word" data-word="‘real’">‘real’</span> <span class="word" data-word="reading.">reading.</span> <span class="word" data-word="In">In</span> <span class="word" data-word="other">other</span> <span class="word" data-word="words,">words,</span> <span class="word" data-word="they">they</span> <span class="word" data-word="think">think</span> <span class="word" data-word="that">that</span> <span class="word" data-word="they">they</span> <span class="word" data-word="are">are</span> <span class="word" data-word="not">not</span> <span class="word" data-word="‘real’">‘real’</span> <span class="word" data-word="books.">books.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                <span class="word" data-word="D">D</span> 
+<span class="word" data-word="However,">However,</span> <span class="word" data-word="many">many</span> <span class="word" data-word="quality">quality</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels">novels</span> <span class="word" data-word="are">are</span> <span class="word" data-word="now">now</span> <span class="word" data-word="being">being</span> <span class="word" data-word="seen">seen</span> <span class="word" data-word="as">as</span> <span class="word" data-word="a">a</span> <span class="word" data-word="method">method</span> <span class="word" data-word="of">of</span> <span class="word" data-word="storytelling">storytelling</span> <span class="word" data-word="on">on</span> <span class="word" data-word="the">the</span> <span class="word" data-word="same">same</span> <span class="word" data-word="level">level</span> <span class="word" data-word="as">as</span> <span class="word" data-word="novels,">novels,</span> <span class="word" data-word="films">films</span> <span class="word" data-word="or">or</span> <span class="word" data-word="audio">audio</span> <span class="word" data-word="books.">books.</span> <span class="word" data-word="From">From</span> <span class="word" data-word="originally">originally</span> <span class="word" data-word="appealing">appealing</span> <span class="word" data-word="to">to</span> <span class="word" data-word="a">a</span> <span class="word" data-word="small">small</span> <span class="word" data-word="following">following</span> <span class="word" data-word="of">of</span> <span class="word" data-word="enthusiasts,">enthusiasts,</span> <span class="word" data-word="they">they</span> <span class="word" data-word="are">are</span> <span class="word" data-word="now">now</span> <span class="word" data-word="being">being</span> <span class="word" data-word="accepted">accepted</span> <span class="word" data-word="by">by</span> <span class="word" data-word="librarians">librarians</span> <span class="word" data-word="and">and</span> <span class="word" data-word="teachers">teachers</span> <span class="word" data-word="as">as</span> <span class="word" data-word="proper">proper</span> <span class="word" data-word="literature">literature</span> <span class="word" data-word="for">for</span> <span class="word" data-word="children">children</span> <span class="word" data-word="and">and</span> <span class="word" data-word="young">young</span> <span class="word" data-word="adults.">adults.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="main">main</span> <span class="word" data-word="advantages">advantages</span> <span class="word" data-word="are">are</span> <span class="word" data-word="that">that</span> <span class="word" data-word="they">they</span> <span class="word" data-word="promote">promote</span> <span class="word" data-word="literacy,">literacy,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="attract">attract</span> <span class="word" data-word="and">and</span> <span class="word" data-word="motivate">motivate</span> <span class="word" data-word="young">young</span> <span class="word" data-word="people">people</span> <span class="word" data-word="to">to</span> <span class="word" data-word="read.">read.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                <span class="word" data-word="E">E</span> 
+<span class="word" data-word="How">How</span> <span class="word" data-word="do">do</span> <span class="word" data-word="we">we</span> <span class="word" data-word="know">know</span> <span class="word" data-word="this?">this?</span> <span class="word" data-word="In">In</span> <span class="word" data-word="the">the</span> <span class="word" data-word="last">last</span> <span class="word" data-word="few">few</span> <span class="word" data-word="years,">years,</span> <span class="word" data-word="teachers">teachers</span> <span class="word" data-word="and">and</span> <span class="word" data-word="school">school</span> <span class="word" data-word="libraries">libraries</span> <span class="word" data-word="have">have</span> <span class="word" data-word="reported">reported</span> <span class="word" data-word="outstanding">outstanding</span> <span class="word" data-word="success">success</span> <span class="word" data-word="getting">getting</span> <span class="word" data-word="children">children</span> <span class="word" data-word="to">to</span> <span class="word" data-word="read">read</span> <span class="word" data-word="with">with</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels.">novels.</span> <span class="word" data-word="Many">Many</span> <span class="word" data-word="have">have</span> <span class="word" data-word="mentioned">mentioned</span> <span class="word" data-word="the">the</span> <span class="word" data-word="motivational">motivational</span> <span class="word" data-word="factor">factor</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novel.">novel.</span> <span class="word" data-word="This">This</span> <span class="word" data-word="has">has</span> <span class="word" data-word="been">been</span> <span class="word" data-word="especially">especially</span> <span class="word" data-word="true">true</span> <span class="word" data-word="with">with</span> <span class="word" data-word="children">children</span> <span class="word" data-word="who">who</span> <span class="word" data-word="are">are</span> <span class="word" data-word="usually">usually</span> <span class="word" data-word="reluctant">reluctant</span> <span class="word" data-word="to">to</span> <span class="word" data-word="read,">read,</span> <span class="word" data-word="especially">especially</span> <span class="word" data-word="boys.">boys.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="colourful">colourful</span> <span class="word" data-word="pictures">pictures</span> <span class="word" data-word="attract">attract</span> <span class="word" data-word="them,">them,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="then">then</span> <span class="word" data-word="encourage">encourage</span> <span class="word" data-word="them">them</span> <span class="word" data-word="to">to</span> <span class="word" data-word="find">find</span> <span class="word" data-word="out">out</span> <span class="word" data-word="what">what</span> <span class="word" data-word="the">the</span> <span class="word" data-word="story">story</span> <span class="word" data-word="is">is</span> <span class="word" data-word="about.">about.</span> <span class="word" data-word="Providing">Providing</span> <span class="word" data-word="young">young</span> <span class="word" data-word="people">people</span> <span class="word" data-word="of">of</span> <span class="word" data-word="all">all</span> <span class="word" data-word="abilities">abilities</span> <span class="word" data-word="with">with</span> <span class="word" data-word="a">a</span> <span class="word" data-word="wide">wide</span> <span class="word" data-word="range">range</span> <span class="word" data-word="of">of</span> <span class="word" data-word="reading">reading</span> <span class="word" data-word="materials,">materials,</span> <span class="word" data-word="including">including</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels,">novels,</span> <span class="word" data-word="can">can</span> <span class="word" data-word="help">help</span> <span class="word" data-word="them">them</span> <span class="word" data-word="become">become</span> <span class="word" data-word="lifelong">lifelong</span> <span class="word" data-word="readers.">readers.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                <span class="word" data-word="F">F</span> 
+<span class="word" data-word="Furthermore,">Furthermore,</span> <span class="word" data-word="one">one</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="main">main</span> <span class="word" data-word="benefits">benefits</span> <span class="word" data-word="of">of</span> <span class="word" data-word="a">a</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novel">novel</span> <span class="word" data-word="is">is</span> <span class="word" data-word="that">that</span> <span class="word" data-word="it">it</span> <span class="word" data-word="can">can</span> <span class="word" data-word="help">help</span> <span class="word" data-word="students">students</span> <span class="word" data-word="who">who</span> <span class="word" data-word="are">are</span> <span class="word" data-word="learning">learning</span> <span class="word" data-word="a">a</span> <span class="word" data-word="foreign">foreign</span> <span class="word" data-word="language,">language,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="who">who</span> <span class="word" data-word="are">are</span> <span class="word" data-word="having">having</span> <span class="word" data-word="problems">problems</span> <span class="word" data-word="improving">improving</span> <span class="word" data-word="their">their</span> <span class="word" data-word="reading">reading</span> <span class="word" data-word="skills.">skills.</span> <span class="word" data-word="This">This</span> <span class="word" data-word="is">is</span> <span class="word" data-word="because">because</span> <span class="word" data-word="the">the</span> <span class="word" data-word="pictures">pictures</span> <span class="word" data-word="provide">provide</span> <span class="word" data-word="clues">clues</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="meaning">meaning</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="words.">words.</span> <span class="word" data-word="Language">Language</span> <span class="word" data-word="learners">learners</span> <span class="word" data-word="are">are</span> <span class="word" data-word="therefore">therefore</span> <span class="word" data-word="more">more</span> <span class="word" data-word="motivated">motivated</span> <span class="word" data-word="by">by</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels,">novels,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="will">will</span> <span class="word" data-word="acquire">acquire</span> <span class="word" data-word="new">new</span> <span class="word" data-word="vocabulary">vocabulary</span> <span class="word" data-word="more">more</span> <span class="word" data-word="quickly.">quickly.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">G</span>
+                <span class="word" data-word="G">G</span> 
+<span class="word" data-word="Many">Many</span> <span class="word" data-word="teachers">teachers</span> <span class="word" data-word="have">have</span> <span class="word" data-word="reported">reported</span> <span class="word" data-word="great">great</span> <span class="word" data-word="success">success</span> <span class="word" data-word="when">when</span> <span class="word" data-word="they">they</span> <span class="word" data-word="have">have</span> <span class="word" data-word="used">used</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels">novels</span> <span class="word" data-word="with">with</span> <span class="word" data-word="their">their</span> <span class="word" data-word="students,">students,</span> <span class="word" data-word="especially">especially</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="areas">areas</span> <span class="word" data-word="of">of</span> <span class="word" data-word="English,">English,</span> <span class="word" data-word="social">social</span> <span class="word" data-word="studies">studies</span> <span class="word" data-word="and">and</span> <span class="word" data-word="art.">art.</span> <span class="word" data-word="They">They</span> <span class="word" data-word="have">have</span> <span class="word" data-word="discovered">discovered</span> <span class="word" data-word="that,">that,</span> <span class="word" data-word="just">just</span> <span class="word" data-word="like">like</span> <span class="word" data-word="traditional">traditional</span> <span class="word" data-word="forms">forms</span> <span class="word" data-word="of">of</span> <span class="word" data-word="literature,">literature,</span> <span class="word" data-word="they">they</span> <span class="word" data-word="can">can</span> <span class="word" data-word="be">be</span> <span class="word" data-word="useful">useful</span> <span class="word" data-word="tools">tools</span> <span class="word" data-word="for">for</span> <span class="word" data-word="helping">helping</span> <span class="word" data-word="students">students</span> <span class="word" data-word="examine">examine</span> <span class="word" data-word="aspects">aspects</span> <span class="word" data-word="of">of</span> <span class="word" data-word="history,">history,</span> <span class="word" data-word="science,">science,</span> <span class="word" data-word="literature">literature</span> <span class="word" data-word="and">and</span> <span class="word" data-word="art.">art.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">H</span>
+                <span class="word" data-word="H">H</span> 
+<span class="word" data-word="The">The</span> <span class="word" data-word="idea">idea</span> <span class="word" data-word="that">that</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels">novels</span> <span class="word" data-word="are">are</span> <span class="word" data-word="too">too</span> <span class="word" data-word="simple">simple</span> <span class="word" data-word="to">to</span> <span class="word" data-word="be">be</span> <span class="word" data-word="regarded">regarded</span> <span class="word" data-word="as">as</span> <span class="word" data-word="serious">serious</span> <span class="word" data-word="reading">reading</span> <span class="word" data-word="is">is</span> <span class="word" data-word="no">no</span> <span class="word" data-word="longer">longer</span> <span class="word" data-word="valid.">valid.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="excellent">excellent</span> <span class="word" data-word="graphic">graphic</span> <span class="word" data-word="novels">novels</span> <span class="word" data-word="available">available</span> <span class="word" data-word="today">today</span> <span class="word" data-word="demand">demand</span> <span class="word" data-word="many">many</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="same">same</span> <span class="word" data-word="skills">skills</span> <span class="word" data-word="that">that</span> <span class="word" data-word="are">are</span> <span class="word" data-word="needed">needed</span> <span class="word" data-word="to">to</span> <span class="word" data-word="understand">understand</span> <span class="word" data-word="traditional">traditional</span> <span class="word" data-word="works">works</span> <span class="word" data-word="of">of</span> <span class="word" data-word="fiction.">fiction.</span> <span class="word" data-word="Often">Often</span> <span class="word" data-word="they">they</span> <span class="word" data-word="actually">actually</span> <span class="word" data-word="contain">contain</span> <span class="word" data-word="more">more</span> <span class="word" data-word="sophisticated">sophisticated</span> <span class="word" data-word="vocabulary">vocabulary</span> <span class="word" data-word="than">than</span> <span class="word" data-word="traditional">traditional</span> <span class="word" data-word="books.">books.</span> <span class="word" data-word="Reading">Reading</span> <span class="word" data-word="them">them</span> <span class="word" data-word="can">can</span> <span class="word" data-word="help">help</span> <span class="word" data-word="students">students</span> <span class="word" data-word="develop">develop</span> <span class="word" data-word="the">the</span> <span class="word" data-word="skills">skills</span> <span class="word" data-word="that">that</span> <span class="word" data-word="are">are</span> <span class="word" data-word="necessary">necessary</span> <span class="word" data-word="to">to</span> <span class="word" data-word="read">read</span> <span class="word" data-word="more">more</span> <span class="word" data-word="challenging">challenging</span> <span class="word" data-word="works.">works.</span>
+
+            </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="player-title">
+            <i class="fas fa-music"></i> Graphic novels
+        </div>
+        
+        <div class="player-controls">
+            <button class="player-btn" id="playBtn" title="Play">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="player-btn" id="pauseBtn" title="Pause">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button class="player-btn" id="stopBtn" title="Stop">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer">
+        <source src="https://github.com/wangzhrm/Lucy/raw/refs/heads/main/20250710_173923.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <script>
+        // Font size controls for reading mode
+        const content = document.getElementById('content');
+        const decreaseFont = document.getElementById('decreaseFont');
+        const increaseFont = document.getElementById('increaseFont');
+        const sizeValue = document.getElementById('sizeValue');
+        
+        let fontSize = 16;
+        
+        decreaseFont.addEventListener('click', () => {
+            if (fontSize > 12) {
+                fontSize--;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        increaseFont.addEventListener('click', () => {
+            if (fontSize < 24) {
+                fontSize++;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        // Font size controls for study mode
+        const studyContent = document.getElementById('study-content');
+        const studyDecreaseFont = document.getElementById('studyDecreaseFont');
+        const studyIncreaseFont = document.getElementById('studyIncreaseFont');
+        const studySizeValue = document.getElementById('studySizeValue');
+        let studyFontSize = 16;
+        
+        studyDecreaseFont.addEventListener('click', () => {
+            if (studyFontSize > 12) {
+                studyFontSize--;
+                studyContent.style.fontSize = studyFontSize + 'px';
+                studySizeValue.textContent = studyFontSize + 'px';
+            }
+        });
+        
+        studyIncreaseFont.addEventListener('click', () => {
+            if (studyFontSize < 24) {
+                studyFontSize++;
+                studyContent.style.fontSize = studyFontSize + 'px';
+                studySizeValue.textContent = studyFontSize + 'px';
+            }
+        });
+        
+        // Music player functionality
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const progressBar = document.getElementById('progressBar');
+        
+        // Set initial state
+        audio.volume = 0.5;
+        
+        // Play button
+        playBtn.addEventListener('click', () => {
+            audio.play();
+        });
+        
+        // Pause button
+        pauseBtn.addEventListener('click', () => {
+            audio.pause();
+        });
+        
+        // Stop button
+        stopBtn.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            progress.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        });
+        
+        // Update progress bar
+        audio.addEventListener('timeupdate', () => {
+            // Calculate progress percentage
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            
+            // Update time displays
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+            if (!isNaN(audio.duration)) {
+                durationEl.textContent = formatTime(audio.duration);
+            }
+        });
+        
+        // Format time from seconds to MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+        // Update duration when metadata is loaded
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+        
+        // Click on progress bar to seek
+        progressBar.addEventListener('click', (e) => {
+            const width = progressBar.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            
+            audio.currentTime = (clickX / width) * duration;
+        });
+        
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to this tab
+                tab.classList.add('active');
+                const tabName = tab.getAttribute('data-tab');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+                
+                // Show/hide translation display
+                const translationDisplay = document.getElementById('translation-display');
+                translationDisplay.style.display = tabName === 'study' ? 'block' : 'none';
+            });
+        });
+        
+        // Word translation functionality
+        const translationDisplay = document.getElementById('translation-display');
+        const wordDisplay = document.querySelector('.word-display');
+        const meaningDisplay = document.querySelector('.meaning-display');
+        const translationCache = {};
+        
+        document.getElementById('study-content')?.addEventListener('click', function(e) {
+            if (e.target.classList.contains('word')) {
+                const word = e.target.dataset.word;
+                
+                // Remove active class from all words
+                document.querySelectorAll('.word.active').forEach(w => w.classList.remove('active'));
+                
+                // Add active to this word
+                e.target.classList.add('active');
+                
+                // Display the word
+                wordDisplay.textContent = word;
+                meaningDisplay.textContent = 'Loading...';
+                
+                // Check cache first
+                if (translationCache[word]) {
+                    meaningDisplay.textContent = translationCache[word];
+                    return;
+                }
+                
+                // Fetch translation using MyMemory API
+                fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|zh`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.responseData && data.responseData.translatedText) {
+                            const translation = data.responseData.translatedText;
+                            
+                            // Cache the translation
+                            translationCache[word] = translation;
+                            
+                            // Display the translation
+                            meaningDisplay.textContent = translation;
+                        } else {
+                            meaningDisplay.textContent = 'Translation not available';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Translation error:', error);
+                        meaningDisplay.textContent = 'Translation error';
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
