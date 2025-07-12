@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex Sentence Builder</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            border-radius: 10px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, #3498db, #9b59b6, #e74c3c);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .tab-btn {
+            padding: 15px 30px;
+            background: #ecf0f1;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .tab-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #3498db, #9b59b6);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tab-btn:hover::before {
+            opacity: 1;
+        }
+        
+        .tab-btn.active {
+            background: #2c3e50;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            padding: 25px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            margin-bottom: 30px;
+            border: 1px solid #eaeaea;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .clause-info {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #3498db;
+        }
+        
+        .clause-info h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .clause-info h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .clause-info ul {
+            padding-left: 25px;
+            margin: 15px 0;
+        }
+        
+        .clause-info li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .clause-info li::before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        
+        .exercise {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .exercise:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .exercise::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, #3498db, #9b59b6);
+        }
+        
+        .exercise h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .instruction {
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .instruction i {
+            margin-right: 10px;
+        }
+        
+        .simple-sentences {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 3px solid #3498db;
+        }
+        
+        .simple-sentences p {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .answer-section {
+            margin-top: 20px;
+        }
+        
+        .answer-btn {
+            background: linear-gradient(45deg, #3498db, #2c3e50);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .answer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+        }
+        
+        .answer {
+            display: none;
+            background: #eaf7ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #27ae60;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .answer.show {
+            display: block;
+        }
+        
+        .answer h5 {
+            color: #27ae60;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .complex-sentence {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .teacher-tips {
+            background: linear-gradient(to right, #fef9e7, #fcf3cf);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 5px solid #f1c40f;
+            position: relative;
+        }
+        
+        .teacher-tips h3 {
+            color: #d35400;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .teacher-tips h3 i {
+            margin-right: 10px;
+        }
+        
+        .teacher-tips ul {
+            padding-left: 25px;
+        }
+        
+        .teacher-tips li {
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .teacher-tips li::before {
+            content: "★";
+            color: #f39c12;
+            position: absolute;
+            left: -25px;
+            top: 2px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: white;
+            font-size: 1rem;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab-btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 15px auto;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Complex Sentence Builder</h1>
+            <p class="subtitle">Master the art of combining simple sentences into complex structures with different clause types</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('adverbial')">Adverbial Clauses</button>
+            <button class="tab-btn" onclick="openTab('relative')">Relative Clauses</button>
+            <button class="tab-btn" onclick="openTab('noun')">Noun Clauses</button>
+            <button class="tab-btn" onclick="openTab('mixed')">Mixed Clauses</button>
+        </div>
+        
+        <!-- Adverbial Clauses Tab -->
+        <div id="adverbial" class="tab-content active">
+            <div class="clause-info">
+                <h3><i class="fas fa-adjust"></i> Adverbial Clauses</h3>
+                <p>Adverbial clauses function as adverbs, modifying verbs, adjectives, or other adverbs. They provide information about time, place, condition, cause, purpose, or concession.</p>
+                <ul>
+                    <li>Begin with subordinating conjunctions: <strong>because, when, although, if, after, before, since, while, until, unless</strong></li>
+                    <li>Answer questions like: When? Why? How? Under what conditions?</li>
+                    <li>Example: <em>"We stayed inside because it was raining."</em></li>
+                </ul>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 1: Cause and Effect</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using an adverbial clause:</p>
+                <div class="simple-sentences">
+                    <p>1. It was raining heavily.</p>
+                    <p>2. The soccer match was canceled.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans1')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans1">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">Because it was raining heavily, the soccer match was canceled.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 2: Time Relationship</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using an adverbial clause:</p>
+                <div class="simple-sentences">
+                    <p>1. I finish my homework.</p>
+                    <p>2. I will watch television.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans2')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans2">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">After I finish my homework, I will watch television.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 3: Contrast</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using an adverbial clause:</p>
+                <div class="simple-sentences">
+                    <p>1. The test was difficult.</p>
+                    <p>2. She managed to get a perfect score.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans3')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans3">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">Although the test was difficult, she managed to get a perfect score.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Relative Clauses Tab -->
+        <div id="relative" class="tab-content">
+            <div class="clause-info">
+                <h3><i class="fas fa-adjust"></i> Relative Clauses (Adjective Clauses)</h3>
+                <p>Relative clauses function as adjectives, modifying nouns or pronouns. They provide additional information about a noun in the main clause.</p>
+                <ul>
+                    <li>Begin with relative pronouns: <strong>who, whom, whose, that, which</strong></li>
+                    <li>Can be restrictive (essential) or non-restrictive (additional information)</li>
+                    <li>Example: <em>"The book that has a blue cover is mine."</em></li>
+                </ul>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 1: Identifying People</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using a relative clause:</p>
+                <div class="simple-sentences">
+                    <p>1. The man is a famous scientist.</p>
+                    <p>2. He lives next door to us.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans4')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans4">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">The man who lives next door to us is a famous scientist.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 2: Describing Objects</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using a relative clause:</p>
+                <div class="simple-sentences">
+                    <p>1. The car broke down yesterday.</p>
+                    <p>2. It belongs to my neighbor.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans5')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans5">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">The car that belongs to my neighbor broke down yesterday.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 3: Possession</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using a relative clause:</p>
+                <div class="simple-sentences">
+                    <p>1. The student won the scholarship.</p>
+                    <p>2. Her research impressed the committee.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans6')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans6">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">The student whose research impressed the committee won the scholarship.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Noun Clauses Tab -->
+        <div id="noun" class="tab-content">
+            <div class="clause-info">
+                <h3><i class="fas fa-adjust"></i> Noun Clauses</h3>
+                <p>Noun clauses function as nouns within a sentence. They can serve as subjects, objects, or complements.</p>
+                <ul>
+                    <li>Begin with: <strong>that, what, whatever, who, whom, whoever, whomever, when, where, whether, why, how</strong></li>
+                    <li>Answer the question "What?" in relation to the verb</li>
+                    <li>Example: <em>"I know that she is coming tomorrow."</em></li>
+                </ul>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 1: Reported Information</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using a noun clause:</p>
+                <div class="simple-sentences">
+                    <p>1. She will arrive tomorrow.</p>
+                    <p>2. I know this fact.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans7')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans7">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">I know that she will arrive tomorrow.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 2: Subject Position</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using a noun clause:</p>
+                <div class="simple-sentences">
+                    <p>1. Where did she go?</p>
+                    <p>2. This remains a mystery.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans8')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans8">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">Where she went remains a mystery.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 3: Question Clauses</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using a noun clause:</p>
+                <div class="simple-sentences">
+                    <p>1. Will they come to the party?</p>
+                    <p>2. I don't know this.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans9')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans9">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">I don't know whether they will come to the party.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mixed Clauses Tab -->
+        <div id="mixed" class="tab-content">
+            <div class="clause-info">
+                <h3><i class="fas fa-adjust"></i> Mixed Clauses Challenge</h3>
+                <p>These exercises combine different types of clauses in one sentence. Challenge yourself to create sophisticated complex sentences.</p>
+                <ul>
+                    <li>Combine adverbial, relative, and noun clauses</li>
+                    <li>Use multiple clauses to express complex relationships</li>
+                    <li>Example: <em>"Although the book that I recommended was expensive, I believe that it's worth the price."</em></li>
+                </ul>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 1: Time and Description</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using multiple clauses:</p>
+                <div class="simple-sentences">
+                    <p>1. She finished the project.</p>
+                    <p>2. The project was challenging.</p>
+                    <p>3. She received praise from her manager.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans10')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans10">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">After she finished the project, which was challenging, she received praise from her manager.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 2: Reason and Identification</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using multiple clauses:</p>
+                <div class="simple-sentences">
+                    <p>1. The student missed the deadline.</p>
+                    <p>2. His computer crashed.</p>
+                    <p>3. He is usually very punctual.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans11')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans11">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">The student, who is usually very punctual, missed the deadline because his computer crashed.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise">
+                <h4>Exercise 3: Multiple Relationships</h4>
+                <p class="instruction"><i class="fas fa-arrow-circle-right"></i> Combine these simple sentences into one complex sentence using multiple clauses:</p>
+                <div class="simple-sentences">
+                    <p>1. I will buy the dress.</p>
+                    <p>2. It fits me perfectly.</p>
+                    <p>3. It goes on sale tomorrow.</p>
+                    <p>4. I'm not sure about this.</p>
+                </div>
+                <div class="answer-section">
+                    <button class="answer-btn" onclick="toggleAnswer('ans12')"><i class="fas fa-lightbulb"></i> Show Answer</button>
+                    <div class="answer" id="ans12">
+                        <h5>Complex Sentence:</h5>
+                        <p class="complex-sentence">I'm not sure whether I will buy the dress that fits me perfectly, although it goes on sale tomorrow.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="teacher-tips">
+            <h3><i class="fas fa-chalkboard-teacher"></i> Teaching Tips</h3>
+            <ul>
+                <li><strong>Start with single clauses:</strong> Begin with exercises focusing on one clause type before combining multiple types.</li>
+                <li><strong>Highlight clause markers:</strong> Have students identify and circle subordinating conjunctions and relative pronouns.</li>
+                <li><strong>Sentence diagramming:</strong> Use visual representations to show how clauses connect to main sentences.</li>
+                <li><strong>Real-world examples:</strong> Bring in examples from literature and news articles to show complex sentences in context.</li>
+                <li><strong>Multiple solutions:</strong> Discuss how some sentences can be combined in more than one way.</li>
+                <li><strong>Peer review:</strong> Have students exchange sentences and identify clause types in each other's work.</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>Complex Sentence Builder &copy; 2023 | Grammar Teaching Resource</p>
+        </footer>
+    </div>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <script>
+        // Function to open tabs
+        function openTab(tabId) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show the selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to the clicked button
+            event.currentTarget.classList.add('active');
+        }
+        
+        // Function to toggle answer visibility
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            answer.classList.toggle('show');
+            
+            // Change button text
+            const button = event.currentTarget;
+            if (answer.classList.contains('show')) {
+                button.innerHTML = '<i class="fas fa-eye-slash"></i> Hide Answer';
+            } else {
+                button.innerHTML = '<i class="fas fa-lightbulb"></i> Show Answer';
+            }
+        }
+    </script>
+</body>
+</html>
