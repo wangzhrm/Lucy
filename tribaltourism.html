@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>l tourism</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            padding: 20px;
+            padding-bottom: 100px; /* Space for music player */
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4a69bd;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .font-control {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        .font-control:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+        
+        .font-control:active {
+            transform: translateY(1px);
+        }
+        
+        .size-indicator {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #1a2a6c;
+            border: 2px solid #4a69bd;
+        }
+        
+        .content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            transition: font-size 0.3s ease;
+        }
+        
+        .paragraph {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .paragraph:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .paragraph-letter {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: #e74c3c;
+            color: white;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #1e3c72;
+        }
+        
+        .tab.active {
+            background: #e74c3c;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Translation display */
+        .translation-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e74c3c;
+            color: #333;
+        }
+        
+        .translation-display div {
+            margin-bottom: 5px;
+        }
+        
+        /* Word styling for study mode */
+        .word {
+            cursor: pointer;
+            text-decoration: underline dotted #e74c3c;
+        }
+        
+        .word:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        .word.active {
+            background: rgba(231, 76, 60, 0.2);
+        }
+        
+        /* Music player */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 42, 108, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            border-top: 3px solid #e74c3c;
+        }
+        
+        .player-title {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+        
+        .player-title i {
+            color: #e74c3c;
+        }
+        
+        .player-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .player-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .player-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+        
+        .player-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .progress-container {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #e74c3c;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(231, 76, 60, 0.2), transparent);
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 10px;
+            }
+            
+            .font-control {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+            }
+            
+            .size-indicator {
+                padding: 10px 20px;
+            }
+            
+            .paragraph {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .paragraph-letter {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 0.9rem;
+            }
+            
+            .music-player {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .player-controls {
+                order: -1;
+            }
+            
+            .player-title {
+                font-size: 1rem;
+                text-align: center;
+            }
+            
+            .progress-container {
+                width: 90%;
+            }
+            
+            .player-btn {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+                margin: 5px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                padding-bottom: 120px; /* More space for player on mobile */
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                font-size: 1rem;
+            }
+            
+            .player-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>l tourism</h1>
+            <div class="subtitle">Tribal tourism is becoming more popular. But at what cost to the locals?</div>
+        </div>
+        
+        <!-- Tabs for reading and study modes -->
+        <div class="tabs">
+            <button class="tab active" data-tab="reading">Reading Mode</button>
+            <button class="tab" data-tab="study">Study Mode</button>
+        </div>
+        
+        <!-- Translation display -->
+        <div id="translation-display" class="translation-display" style="display: none;">
+            <div><strong>Word:</strong> <span class="word-display"></span></div>
+            <div><strong>Meaning:</strong> <span class="meaning-display"></span></div>
+        </div>
+        
+        <!-- Reading Mode -->
+        <div id="reading-tab" class="tab-content active">
+            <div class="controls">
+                <button class="font-control" id="decreaseFont" title="Decrease Font Size">
+                    <i class="fas fa-font"></i>
+                </button>
+                <div class="size-indicator">Font Size: <span id="sizeValue">16px</span></div>
+                <button class="font-control" id="increaseFont" title="Increase Font Size">
+                    <i class="fas fa-text-height"></i>
+                </button>
+            </div>
+            
+            <div class="content" id="content">
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                Tribal tourism is a relatively new type of tourism. It involves travellers going to remote destinations, staying with local people and learning about their culture and way of life. They stay in local accommodation, share facilities with local people, and join in with meals and celebrations. At the moment, less than one percent of holidays are tribal tourism holidays, but this is set to change.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                Tribal tourism is often compared with foreign exchange visits. However, a foreign exchange involves staying with people who often share the same values. Tribal tourism takes visitors to places where the lifestyle is very different from that in their home location. Those who have been on a tribal holiday explain that experiencing this lifestyle is the main attraction. They say that it offers them the chance to live in a way they never have before.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                Not everyone is convinced that tribal tourism is a good thing, and opinions are divided. The argument is about whether or not it helps the local population, or whether it exploits them. The main problem is that, because tribal tourism is relatively new, the long-term effects on local populations have not been studied in much detail. Where studies have been carried out, the effects have been found to be negative.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                Travel writer Ian Coleman recalls a recent trip to Guatemala, where he saw an example of this. ‘There is a village with a statue of a man called Maximon, who has a special spiritual meaning for the local tribe,’ he explains. ‘The statue is kept indoors, and once a year the locals bring him out and carry him around the village. However, visitors now pay money for them to bring the statue out and carry it around, while they take photographs. As a result, Maximon has lost his original meaning, and is now just another tourist attraction.’
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                So, is it possible to experience an exotic culture without harming it in some way? ‘With a bit of thought, we can maximise the positive impacts and minimise the negative,’ says travel company director Hilary Waterhouse. ‘Remember that you are there not only to experience a different culture, but to help it in some way. Tourists bring money to the community, which the community can invest in local projects. However, this does not mean you can act the way you might do back home. The most important thing is to show respect, learn about, and be aware of, local customs and traditions. Always remember you’re a guest.’
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                Dawn Baker, manager of travel company Footprints, runs tours to tribal areas in Peru. ‘Good companies specialising in tribal tours are very careful about who they allow on their tours,’ she says. ‘They won’t take anyone they feel is unsuitable.’ Baker offers reading recommendations so that visitors can read about the country and its cultures. ‘The rewards of a trip to this country are priceless, and the more you know in advance, the more priceless they are.’
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">G</span>
+                Tribal tourism travellers are often surprised at how basic their facilities are when they get there. ‘It’s not for everyone, but for me it was all part of the experience,’ says Jamie White, who has recently returned from a trip to Borneo. ‘We stayed in the same huts that everyone was living in, with no running water and no electricity. It was basic, but it was an ethical way to travel. Being comfortable means you use more local resources and so have more of an environmental impact.’
+
+            </div>
+                
+            </div>
+        </div>
+        
+        <!-- Study Mode -->
+        <div id="study-tab" class="tab-content">
+            <div class="controls">
+                <button class="font-control" id="studyDecreaseFont" title="Decrease Font Size">
+                    <i class="fas fa-font"></i>
+                </button>
+                <div class="size-indicator">Font Size: <span id="studySizeValue">16px</span></div>
+                <button class="font-control" id="studyIncreaseFont" title="Increase Font Size">
+                    <i class="fas fa-text-height"></i>
+                </button>
+            </div>
+            
+            <div class="content" id="study-content">
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                <span class="word" data-word="Tribal">Tribal</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="is">is</span> <span class="word" data-word="a">a</span> <span class="word" data-word="relatively">relatively</span> <span class="word" data-word="new">new</span> <span class="word" data-word="type">type</span> <span class="word" data-word="of">of</span> <span class="word" data-word="tourism.">tourism.</span> <span class="word" data-word="It">It</span> <span class="word" data-word="involves">involves</span> <span class="word" data-word="travellers">travellers</span> <span class="word" data-word="going">going</span> <span class="word" data-word="to">to</span> <span class="word" data-word="remote">remote</span> <span class="word" data-word="destinations,">destinations,</span> <span class="word" data-word="staying">staying</span> <span class="word" data-word="with">with</span> <span class="word" data-word="local">local</span> <span class="word" data-word="people">people</span> <span class="word" data-word="and">and</span> <span class="word" data-word="learning">learning</span> <span class="word" data-word="about">about</span> <span class="word" data-word="their">their</span> <span class="word" data-word="culture">culture</span> <span class="word" data-word="and">and</span> <span class="word" data-word="way">way</span> <span class="word" data-word="of">of</span> <span class="word" data-word="life.">life.</span> <span class="word" data-word="They">They</span> <span class="word" data-word="stay">stay</span> <span class="word" data-word="in">in</span> <span class="word" data-word="local">local</span> <span class="word" data-word="accommodation,">accommodation,</span> <span class="word" data-word="share">share</span> <span class="word" data-word="facilities">facilities</span> <span class="word" data-word="with">with</span> <span class="word" data-word="local">local</span> <span class="word" data-word="people,">people,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="join">join</span> <span class="word" data-word="in">in</span> <span class="word" data-word="with">with</span> <span class="word" data-word="meals">meals</span> <span class="word" data-word="and">and</span> <span class="word" data-word="celebrations.">celebrations.</span> <span class="word" data-word="At">At</span> <span class="word" data-word="the">the</span> <span class="word" data-word="moment,">moment,</span> <span class="word" data-word="less">less</span> <span class="word" data-word="than">than</span> <span class="word" data-word="one">one</span> <span class="word" data-word="percent">percent</span> <span class="word" data-word="of">of</span> <span class="word" data-word="holidays">holidays</span> <span class="word" data-word="are">are</span> <span class="word" data-word="tribal">tribal</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="holidays,">holidays,</span> <span class="word" data-word="but">but</span> <span class="word" data-word="this">this</span> <span class="word" data-word="is">is</span> <span class="word" data-word="set">set</span> <span class="word" data-word="to">to</span> <span class="word" data-word="change.">change.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                <span class="word" data-word="Tribal">Tribal</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="is">is</span> <span class="word" data-word="often">often</span> <span class="word" data-word="compared">compared</span> <span class="word" data-word="with">with</span> <span class="word" data-word="foreign">foreign</span> <span class="word" data-word="exchange">exchange</span> <span class="word" data-word="visits.">visits.</span> <span class="word" data-word="However,">However,</span> <span class="word" data-word="a">a</span> <span class="word" data-word="foreign">foreign</span> <span class="word" data-word="exchange">exchange</span> <span class="word" data-word="involves">involves</span> <span class="word" data-word="staying">staying</span> <span class="word" data-word="with">with</span> <span class="word" data-word="people">people</span> <span class="word" data-word="who">who</span> <span class="word" data-word="often">often</span> <span class="word" data-word="share">share</span> <span class="word" data-word="the">the</span> <span class="word" data-word="same">same</span> <span class="word" data-word="values.">values.</span> <span class="word" data-word="Tribal">Tribal</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="takes">takes</span> <span class="word" data-word="visitors">visitors</span> <span class="word" data-word="to">to</span> <span class="word" data-word="places">places</span> <span class="word" data-word="where">where</span> <span class="word" data-word="the">the</span> <span class="word" data-word="lifestyle">lifestyle</span> <span class="word" data-word="is">is</span> <span class="word" data-word="very">very</span> <span class="word" data-word="different">different</span> <span class="word" data-word="from">from</span> <span class="word" data-word="that">that</span> <span class="word" data-word="in">in</span> <span class="word" data-word="their">their</span> <span class="word" data-word="home">home</span> <span class="word" data-word="location.">location.</span> <span class="word" data-word="Those">Those</span> <span class="word" data-word="who">who</span> <span class="word" data-word="have">have</span> <span class="word" data-word="been">been</span> <span class="word" data-word="on">on</span> <span class="word" data-word="a">a</span> <span class="word" data-word="tribal">tribal</span> <span class="word" data-word="holiday">holiday</span> <span class="word" data-word="explain">explain</span> <span class="word" data-word="that">that</span> <span class="word" data-word="experiencing">experiencing</span> <span class="word" data-word="this">this</span> <span class="word" data-word="lifestyle">lifestyle</span> <span class="word" data-word="is">is</span> <span class="word" data-word="the">the</span> <span class="word" data-word="main">main</span> <span class="word" data-word="attraction.">attraction.</span> <span class="word" data-word="They">They</span> <span class="word" data-word="say">say</span> <span class="word" data-word="that">that</span> <span class="word" data-word="it">it</span> <span class="word" data-word="offers">offers</span> <span class="word" data-word="them">them</span> <span class="word" data-word="the">the</span> <span class="word" data-word="chance">chance</span> <span class="word" data-word="to">to</span> <span class="word" data-word="live">live</span> <span class="word" data-word="in">in</span> <span class="word" data-word="a">a</span> <span class="word" data-word="way">way</span> <span class="word" data-word="they">they</span> <span class="word" data-word="never">never</span> <span class="word" data-word="have">have</span> <span class="word" data-word="before.">before.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                <span class="word" data-word="Not">Not</span> <span class="word" data-word="everyone">everyone</span> <span class="word" data-word="is">is</span> <span class="word" data-word="convinced">convinced</span> <span class="word" data-word="that">that</span> <span class="word" data-word="tribal">tribal</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="is">is</span> <span class="word" data-word="a">a</span> <span class="word" data-word="good">good</span> <span class="word" data-word="thing,">thing,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="opinions">opinions</span> <span class="word" data-word="are">are</span> <span class="word" data-word="divided.">divided.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="argument">argument</span> <span class="word" data-word="is">is</span> <span class="word" data-word="about">about</span> <span class="word" data-word="whether">whether</span> <span class="word" data-word="or">or</span> <span class="word" data-word="not">not</span> <span class="word" data-word="it">it</span> <span class="word" data-word="helps">helps</span> <span class="word" data-word="the">the</span> <span class="word" data-word="local">local</span> <span class="word" data-word="population,">population,</span> <span class="word" data-word="or">or</span> <span class="word" data-word="whether">whether</span> <span class="word" data-word="it">it</span> <span class="word" data-word="exploits">exploits</span> <span class="word" data-word="them.">them.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="main">main</span> <span class="word" data-word="problem">problem</span> <span class="word" data-word="is">is</span> <span class="word" data-word="that,">that,</span> <span class="word" data-word="because">because</span> <span class="word" data-word="tribal">tribal</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="is">is</span> <span class="word" data-word="relatively">relatively</span> <span class="word" data-word="new,">new,</span> <span class="word" data-word="the">the</span> <span class="word" data-word="long-term">long-term</span> <span class="word" data-word="effects">effects</span> <span class="word" data-word="on">on</span> <span class="word" data-word="local">local</span> <span class="word" data-word="populations">populations</span> <span class="word" data-word="have">have</span> <span class="word" data-word="not">not</span> <span class="word" data-word="been">been</span> <span class="word" data-word="studied">studied</span> <span class="word" data-word="in">in</span> <span class="word" data-word="much">much</span> <span class="word" data-word="detail.">detail.</span> <span class="word" data-word="Where">Where</span> <span class="word" data-word="studies">studies</span> <span class="word" data-word="have">have</span> <span class="word" data-word="been">been</span> <span class="word" data-word="carried">carried</span> <span class="word" data-word="out,">out,</span> <span class="word" data-word="the">the</span> <span class="word" data-word="effects">effects</span> <span class="word" data-word="have">have</span> <span class="word" data-word="been">been</span> <span class="word" data-word="found">found</span> <span class="word" data-word="to">to</span> <span class="word" data-word="be">be</span> <span class="word" data-word="negative.">negative.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                <span class="word" data-word="Travel">Travel</span> <span class="word" data-word="writer">writer</span> <span class="word" data-word="Ian">Ian</span> <span class="word" data-word="Coleman">Coleman</span> <span class="word" data-word="recalls">recalls</span> <span class="word" data-word="a">a</span> <span class="word" data-word="recent">recent</span> <span class="word" data-word="trip">trip</span> <span class="word" data-word="to">to</span> <span class="word" data-word="Guatemala,">Guatemala,</span> <span class="word" data-word="where">where</span> <span class="word" data-word="he">he</span> <span class="word" data-word="saw">saw</span> <span class="word" data-word="an">an</span> <span class="word" data-word="example">example</span> <span class="word" data-word="of">of</span> <span class="word" data-word="this.">this.</span> <span class="word" data-word="‘There">‘There</span> <span class="word" data-word="is">is</span> <span class="word" data-word="a">a</span> <span class="word" data-word="village">village</span> <span class="word" data-word="with">with</span> <span class="word" data-word="a">a</span> <span class="word" data-word="statue">statue</span> <span class="word" data-word="of">of</span> <span class="word" data-word="a">a</span> <span class="word" data-word="man">man</span> <span class="word" data-word="called">called</span> <span class="word" data-word="Maximon,">Maximon,</span> <span class="word" data-word="who">who</span> <span class="word" data-word="has">has</span> <span class="word" data-word="a">a</span> <span class="word" data-word="special">special</span> <span class="word" data-word="spiritual">spiritual</span> <span class="word" data-word="meaning">meaning</span> <span class="word" data-word="for">for</span> <span class="word" data-word="the">the</span> <span class="word" data-word="local">local</span> <span class="word" data-word="tribe,’">tribe,’</span> <span class="word" data-word="he">he</span> <span class="word" data-word="explains.">explains.</span> <span class="word" data-word="‘The">‘The</span> <span class="word" data-word="statue">statue</span> <span class="word" data-word="is">is</span> <span class="word" data-word="kept">kept</span> <span class="word" data-word="indoors,">indoors,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="once">once</span> <span class="word" data-word="a">a</span> <span class="word" data-word="year">year</span> <span class="word" data-word="the">the</span> <span class="word" data-word="locals">locals</span> <span class="word" data-word="bring">bring</span> <span class="word" data-word="him">him</span> <span class="word" data-word="out">out</span> <span class="word" data-word="and">and</span> <span class="word" data-word="carry">carry</span> <span class="word" data-word="him">him</span> <span class="word" data-word="around">around</span> <span class="word" data-word="the">the</span> <span class="word" data-word="village.">village.</span> <span class="word" data-word="However,">However,</span> <span class="word" data-word="visitors">visitors</span> <span class="word" data-word="now">now</span> <span class="word" data-word="pay">pay</span> <span class="word" data-word="money">money</span> <span class="word" data-word="for">for</span> <span class="word" data-word="them">them</span> <span class="word" data-word="to">to</span> <span class="word" data-word="bring">bring</span> <span class="word" data-word="the">the</span> <span class="word" data-word="statue">statue</span> <span class="word" data-word="out">out</span> <span class="word" data-word="and">and</span> <span class="word" data-word="carry">carry</span> <span class="word" data-word="it">it</span> <span class="word" data-word="around,">around,</span> <span class="word" data-word="while">while</span> <span class="word" data-word="they">they</span> <span class="word" data-word="take">take</span> <span class="word" data-word="photographs.">photographs.</span> <span class="word" data-word="As">As</span> <span class="word" data-word="a">a</span> <span class="word" data-word="result,">result,</span> <span class="word" data-word="Maximon">Maximon</span> <span class="word" data-word="has">has</span> <span class="word" data-word="lost">lost</span> <span class="word" data-word="his">his</span> <span class="word" data-word="original">original</span> <span class="word" data-word="meaning,">meaning,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="is">is</span> <span class="word" data-word="now">now</span> <span class="word" data-word="just">just</span> <span class="word" data-word="another">another</span> <span class="word" data-word="tourist">tourist</span> <span class="word" data-word="attraction.’">attraction.’</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                <span class="word" data-word="So,">So,</span> <span class="word" data-word="is">is</span> <span class="word" data-word="it">it</span> <span class="word" data-word="possible">possible</span> <span class="word" data-word="to">to</span> <span class="word" data-word="experience">experience</span> <span class="word" data-word="an">an</span> <span class="word" data-word="exotic">exotic</span> <span class="word" data-word="culture">culture</span> <span class="word" data-word="without">without</span> <span class="word" data-word="harming">harming</span> <span class="word" data-word="it">it</span> <span class="word" data-word="in">in</span> <span class="word" data-word="some">some</span> <span class="word" data-word="way?">way?</span> <span class="word" data-word="‘With">‘With</span> <span class="word" data-word="a">a</span> <span class="word" data-word="bit">bit</span> <span class="word" data-word="of">of</span> <span class="word" data-word="thought,">thought,</span> <span class="word" data-word="we">we</span> <span class="word" data-word="can">can</span> <span class="word" data-word="maximise">maximise</span> <span class="word" data-word="the">the</span> <span class="word" data-word="positive">positive</span> <span class="word" data-word="impacts">impacts</span> <span class="word" data-word="and">and</span> <span class="word" data-word="minimise">minimise</span> <span class="word" data-word="the">the</span> <span class="word" data-word="negative,’">negative,’</span> <span class="word" data-word="says">says</span> <span class="word" data-word="travel">travel</span> <span class="word" data-word="company">company</span> <span class="word" data-word="director">director</span> <span class="word" data-word="Hilary">Hilary</span> <span class="word" data-word="Waterhouse.">Waterhouse.</span> <span class="word" data-word="‘Remember">‘Remember</span> <span class="word" data-word="that">that</span> <span class="word" data-word="you">you</span> <span class="word" data-word="are">are</span> <span class="word" data-word="there">there</span> <span class="word" data-word="not">not</span> <span class="word" data-word="only">only</span> <span class="word" data-word="to">to</span> <span class="word" data-word="experience">experience</span> <span class="word" data-word="a">a</span> <span class="word" data-word="different">different</span> <span class="word" data-word="culture,">culture,</span> <span class="word" data-word="but">but</span> <span class="word" data-word="to">to</span> <span class="word" data-word="help">help</span> <span class="word" data-word="it">it</span> <span class="word" data-word="in">in</span> <span class="word" data-word="some">some</span> <span class="word" data-word="way.">way.</span> <span class="word" data-word="Tourists">Tourists</span> <span class="word" data-word="bring">bring</span> <span class="word" data-word="money">money</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="community,">community,</span> <span class="word" data-word="which">which</span> <span class="word" data-word="the">the</span> <span class="word" data-word="community">community</span> <span class="word" data-word="can">can</span> <span class="word" data-word="invest">invest</span> <span class="word" data-word="in">in</span> <span class="word" data-word="local">local</span> <span class="word" data-word="projects.">projects.</span> <span class="word" data-word="However,">However,</span> <span class="word" data-word="this">this</span> <span class="word" data-word="does">does</span> <span class="word" data-word="not">not</span> <span class="word" data-word="mean">mean</span> <span class="word" data-word="you">you</span> <span class="word" data-word="can">can</span> <span class="word" data-word="act">act</span> <span class="word" data-word="the">the</span> <span class="word" data-word="way">way</span> <span class="word" data-word="you">you</span> <span class="word" data-word="might">might</span> <span class="word" data-word="do">do</span> <span class="word" data-word="back">back</span> <span class="word" data-word="home.">home.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="most">most</span> <span class="word" data-word="important">important</span> <span class="word" data-word="thing">thing</span> <span class="word" data-word="is">is</span> <span class="word" data-word="to">to</span> <span class="word" data-word="show">show</span> <span class="word" data-word="respect,">respect,</span> <span class="word" data-word="learn">learn</span> <span class="word" data-word="about,">about,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="be">be</span> <span class="word" data-word="aware">aware</span> <span class="word" data-word="of,">of,</span> <span class="word" data-word="local">local</span> <span class="word" data-word="customs">customs</span> <span class="word" data-word="and">and</span> <span class="word" data-word="traditions.">traditions.</span> <span class="word" data-word="Always">Always</span> <span class="word" data-word="remember">remember</span> <span class="word" data-word="you’re">you’re</span> <span class="word" data-word="a">a</span> <span class="word" data-word="guest.’">guest.’</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                <span class="word" data-word="Dawn">Dawn</span> <span class="word" data-word="Baker,">Baker,</span> <span class="word" data-word="manager">manager</span> <span class="word" data-word="of">of</span> <span class="word" data-word="travel">travel</span> <span class="word" data-word="company">company</span> <span class="word" data-word="Footprints,">Footprints,</span> <span class="word" data-word="runs">runs</span> <span class="word" data-word="tours">tours</span> <span class="word" data-word="to">to</span> <span class="word" data-word="tribal">tribal</span> <span class="word" data-word="areas">areas</span> <span class="word" data-word="in">in</span> <span class="word" data-word="Peru.">Peru.</span> <span class="word" data-word="‘Good">‘Good</span> <span class="word" data-word="companies">companies</span> <span class="word" data-word="specialising">specialising</span> <span class="word" data-word="in">in</span> <span class="word" data-word="tribal">tribal</span> <span class="word" data-word="tours">tours</span> <span class="word" data-word="are">are</span> <span class="word" data-word="very">very</span> <span class="word" data-word="careful">careful</span> <span class="word" data-word="about">about</span> <span class="word" data-word="who">who</span> <span class="word" data-word="they">they</span> <span class="word" data-word="allow">allow</span> <span class="word" data-word="on">on</span> <span class="word" data-word="their">their</span> <span class="word" data-word="tours,’">tours,’</span> <span class="word" data-word="she">she</span> <span class="word" data-word="says.">says.</span> <span class="word" data-word="‘They">‘They</span> <span class="word" data-word="won’t">won’t</span> <span class="word" data-word="take">take</span> <span class="word" data-word="anyone">anyone</span> <span class="word" data-word="they">they</span> <span class="word" data-word="feel">feel</span> <span class="word" data-word="is">is</span> <span class="word" data-word="unsuitable.’">unsuitable.’</span> <span class="word" data-word="Baker">Baker</span> <span class="word" data-word="offers">offers</span> <span class="word" data-word="reading">reading</span> <span class="word" data-word="recommendations">recommendations</span> <span class="word" data-word="so">so</span> <span class="word" data-word="that">that</span> <span class="word" data-word="visitors">visitors</span> <span class="word" data-word="can">can</span> <span class="word" data-word="read">read</span> <span class="word" data-word="about">about</span> <span class="word" data-word="the">the</span> <span class="word" data-word="country">country</span> <span class="word" data-word="and">and</span> <span class="word" data-word="its">its</span> <span class="word" data-word="cultures.">cultures.</span> <span class="word" data-word="‘The">‘The</span> <span class="word" data-word="rewards">rewards</span> <span class="word" data-word="of">of</span> <span class="word" data-word="a">a</span> <span class="word" data-word="trip">trip</span> <span class="word" data-word="to">to</span> <span class="word" data-word="this">this</span> <span class="word" data-word="country">country</span> <span class="word" data-word="are">are</span> <span class="word" data-word="priceless,">priceless,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="the">the</span> <span class="word" data-word="more">more</span> <span class="word" data-word="you">you</span> <span class="word" data-word="know">know</span> <span class="word" data-word="in">in</span> <span class="word" data-word="advance,">advance,</span> <span class="word" data-word="the">the</span> <span class="word" data-word="more">more</span> <span class="word" data-word="priceless">priceless</span> <span class="word" data-word="they">they</span> <span class="word" data-word="are.’">are.’</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">G</span>
+                <span class="word" data-word="Tribal">Tribal</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="travellers">travellers</span> <span class="word" data-word="are">are</span> <span class="word" data-word="often">often</span> <span class="word" data-word="surprised">surprised</span> <span class="word" data-word="at">at</span> <span class="word" data-word="how">how</span> <span class="word" data-word="basic">basic</span> <span class="word" data-word="their">their</span> <span class="word" data-word="facilities">facilities</span> <span class="word" data-word="are">are</span> <span class="word" data-word="when">when</span> <span class="word" data-word="they">they</span> <span class="word" data-word="get">get</span> <span class="word" data-word="there.">there.</span> <span class="word" data-word="‘It’s">‘It’s</span> <span class="word" data-word="not">not</span> <span class="word" data-word="for">for</span> <span class="word" data-word="everyone,">everyone,</span> <span class="word" data-word="but">but</span> <span class="word" data-word="for">for</span> <span class="word" data-word="me">me</span> <span class="word" data-word="it">it</span> <span class="word" data-word="was">was</span> <span class="word" data-word="all">all</span> <span class="word" data-word="part">part</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="experience,’">experience,’</span> <span class="word" data-word="says">says</span> <span class="word" data-word="Jamie">Jamie</span> <span class="word" data-word="White,">White,</span> <span class="word" data-word="who">who</span> <span class="word" data-word="has">has</span> <span class="word" data-word="recently">recently</span> <span class="word" data-word="returned">returned</span> <span class="word" data-word="from">from</span> <span class="word" data-word="a">a</span> <span class="word" data-word="trip">trip</span> <span class="word" data-word="to">to</span> <span class="word" data-word="Borneo.">Borneo.</span> <span class="word" data-word="‘We">‘We</span> <span class="word" data-word="stayed">stayed</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="same">same</span> <span class="word" data-word="huts">huts</span> <span class="word" data-word="that">that</span> <span class="word" data-word="everyone">everyone</span> <span class="word" data-word="was">was</span> <span class="word" data-word="living">living</span> <span class="word" data-word="in,">in,</span> <span class="word" data-word="with">with</span> <span class="word" data-word="no">no</span> <span class="word" data-word="running">running</span> <span class="word" data-word="water">water</span> <span class="word" data-word="and">and</span> <span class="word" data-word="no">no</span> <span class="word" data-word="electricity.">electricity.</span> <span class="word" data-word="It">It</span> <span class="word" data-word="was">was</span> <span class="word" data-word="basic,">basic,</span> <span class="word" data-word="but">but</span> <span class="word" data-word="it">it</span> <span class="word" data-word="was">was</span> <span class="word" data-word="an">an</span> <span class="word" data-word="ethical">ethical</span> <span class="word" data-word="way">way</span> <span class="word" data-word="to">to</span> <span class="word" data-word="travel.">travel.</span> <span class="word" data-word="Being">Being</span> <span class="word" data-word="comfortable">comfortable</span> <span class="word" data-word="means">means</span> <span class="word" data-word="you">you</span> <span class="word" data-word="use">use</span> <span class="word" data-word="more">more</span> <span class="word" data-word="local">local</span> <span class="word" data-word="resources">resources</span> <span class="word" data-word="and">and</span> <span class="word" data-word="so">so</span> <span class="word" data-word="have">have</span> <span class="word" data-word="more">more</span> <span class="word" data-word="of">of</span> <span class="word" data-word="an">an</span> <span class="word" data-word="environmental">environmental</span> <span class="word" data-word="impact.’">impact.’</span>
+
+            </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="player-title">
+            <i class="fas fa-music"></i> Tribal tourism
+        </div>
+        
+        <div class="player-controls">
+            <button class="player-btn" id="playBtn" title="Play">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="player-btn" id="pauseBtn" title="Pause">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button class="player-btn" id="stopBtn" title="Stop">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer">
+        <source src="https://github.com/wangzhrm/Lucy/raw/refs/heads/main/20250712_082052.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <script>
+        // Font size controls for reading mode
+        const content = document.getElementById('content');
+        const decreaseFont = document.getElementById('decreaseFont');
+        const increaseFont = document.getElementById('increaseFont');
+        const sizeValue = document.getElementById('sizeValue');
+        
+        let fontSize = 16;
+        
+        decreaseFont.addEventListener('click', () => {
+            if (fontSize > 12) {
+                fontSize--;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        increaseFont.addEventListener('click', () => {
+            if (fontSize < 24) {
+                fontSize++;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        // Font size controls for study mode
+        const studyContent = document.getElementById('study-content');
+        const studyDecreaseFont = document.getElementById('studyDecreaseFont');
+        const studyIncreaseFont = document.getElementById('studyIncreaseFont');
+        const studySizeValue = document.getElementById('studySizeValue');
+        let studyFontSize = 16;
+        
+        studyDecreaseFont.addEventListener('click', () => {
+            if (studyFontSize > 12) {
+                studyFontSize--;
+                studyContent.style.fontSize = studyFontSize + 'px';
+                studySizeValue.textContent = studyFontSize + 'px';
+            }
+        });
+        
+        studyIncreaseFont.addEventListener('click', () => {
+            if (studyFontSize < 24) {
+                studyFontSize++;
+                studyContent.style.fontSize = studyFontSize + 'px';
+                studySizeValue.textContent = studyFontSize + 'px';
+            }
+        });
+        
+        // Music player functionality
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const progressBar = document.getElementById('progressBar');
+        
+        // Set initial state
+        audio.volume = 0.5;
+        
+        // Play button
+        playBtn.addEventListener('click', () => {
+            audio.play();
+        });
+        
+        // Pause button
+        pauseBtn.addEventListener('click', () => {
+            audio.pause();
+        });
+        
+        // Stop button
+        stopBtn.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            progress.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        });
+        
+        // Update progress bar
+        audio.addEventListener('timeupdate', () => {
+            // Calculate progress percentage
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            
+            // Update time displays
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+            if (!isNaN(audio.duration)) {
+                durationEl.textContent = formatTime(audio.duration);
+            }
+        });
+        
+        // Format time from seconds to MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+        // Update duration when metadata is loaded
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+        
+        // Click on progress bar to seek
+        progressBar.addEventListener('click', (e) => {
+            const width = progressBar.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            
+            audio.currentTime = (clickX / width) * duration;
+        });
+        
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to this tab
+                tab.classList.add('active');
+                const tabName = tab.getAttribute('data-tab');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+                
+                // Show/hide translation display
+                const translationDisplay = document.getElementById('translation-display');
+                translationDisplay.style.display = tabName === 'study' ? 'block' : 'none';
+            });
+        });
+        
+        // Word translation functionality
+        const translationDisplay = document.getElementById('translation-display');
+        const wordDisplay = document.querySelector('.word-display');
+        const meaningDisplay = document.querySelector('.meaning-display');
+        const translationCache = {};
+        
+        document.getElementById('study-content')?.addEventListener('click', function(e) {
+            if (e.target.classList.contains('word')) {
+                const word = e.target.dataset.word;
+                
+                // Remove active class from all words
+                document.querySelectorAll('.word.active').forEach(w => w.classList.remove('active'));
+                
+                // Add active to this word
+                e.target.classList.add('active');
+                
+                // Display the word
+                wordDisplay.textContent = word;
+                meaningDisplay.textContent = 'Loading...';
+                
+                // Check cache first
+                if (translationCache[word]) {
+                    meaningDisplay.textContent = translationCache[word];
+                    return;
+                }
+                
+                // Fetch translation using MyMemory API
+                fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|zh`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.responseData && data.responseData.translatedText) {
+                            const translation = data.responseData.translatedText;
+                            
+                            // Cache the translation
+                            translationCache[word] = translation;
+                            
+                            // Display the translation
+                            meaningDisplay.textContent = translation;
+                        } else {
+                            meaningDisplay.textContent = 'Translation not available';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Translation error:', error);
+                        meaningDisplay.textContent = 'Translation error';
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
