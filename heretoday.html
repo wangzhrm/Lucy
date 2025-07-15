@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Here today, gone tomorrow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            padding: 20px;
+            padding-bottom: 100px; /* Space for music player */
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4a69bd;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .font-control {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        .font-control:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+        
+        .font-control:active {
+            transform: translateY(1px);
+        }
+        
+        .size-indicator {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #1a2a6c;
+            border: 2px solid #4a69bd;
+        }
+        
+        .content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            transition: font-size 0.3s ease;
+        }
+        
+        .paragraph {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .paragraph:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .paragraph-letter {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: #e74c3c;
+            color: white;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #1e3c72;
+        }
+        
+        .tab.active {
+            background: #e74c3c;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Translation display */
+        .translation-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e74c3c;
+            color: #333;
+        }
+        
+        .translation-display div {
+            margin-bottom: 5px;
+        }
+        
+        /* Word styling for study mode */
+        .word {
+            cursor: pointer;
+            text-decoration: underline dotted #e74c3c;
+        }
+        
+        .word:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        .word.active {
+            background: rgba(231, 76, 60, 0.2);
+        }
+        
+        /* Music player */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 42, 108, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            border-top: 3px solid #e74c3c;
+        }
+        
+        .player-title {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+        
+        .player-title i {
+            color: #e74c3c;
+        }
+        
+        .player-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .player-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .player-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+        
+        .player-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .progress-container {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #e74c3c;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(231, 76, 60, 0.2), transparent);
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 10px;
+            }
+            
+            .font-control {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+            }
+            
+            .size-indicator {
+                padding: 10px 20px;
+            }
+            
+            .paragraph {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .paragraph-letter {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 0.9rem;
+            }
+            
+            .music-player {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .player-controls {
+                order: -1;
+            }
+            
+            .player-title {
+                font-size: 1rem;
+                text-align: center;
+            }
+            
+            .progress-container {
+                width: 90%;
+            }
+            
+            .player-btn {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+                margin: 5px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                padding-bottom: 120px; /* More space for player on mobile */
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                font-size: 1rem;
+            }
+            
+            .player-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Here today, gone tomorrow</h1>
+            <div class="subtitle">The Arctic and Antarctica are now within reach of the modern tourist, with many going to see these icy wildernesses before it’s too late. Christian Amodeo reports on the growth of polar tourism.</div>
+        </div>
+        
+        <!-- Tabs for reading and study modes -->
+        <div class="tabs">
+            <button class="tab active" data-tab="reading">Reading Mode</button>
+            <button class="tab" data-tab="study">Study Mode</button>
+        </div>
+        
+        <!-- Translation display -->
+        <div id="translation-display" class="translation-display" style="display: none;">
+            <div><strong>Word:</strong> <span class="word-display"></span></div>
+            <div><strong>Meaning:</strong> <span class="meaning-display"></span></div>
+        </div>
+        
+        <!-- Reading Mode -->
+        <div id="reading-tab" class="tab-content active">
+            <div class="controls">
+                <button class="font-control" id="decreaseFont" title="Decrease Font Size">
+                    <i class="fas fa-font"></i>
+                </button>
+                <div class="size-indicator">Font Size: <span id="sizeValue">16px</span></div>
+                <button class="font-control" id="increaseFont" title="Increase Font Size">
+                    <i class="fas fa-text-height"></i>
+                </button>
+            </div>
+            
+            <div class="content" id="content">
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                Travel at the North and South Poles has become an expensive leisure activity, suitable for tourists of all ages. The poles may be inhospitable places, but they are seeing increasing numbers of visitors.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                Annual figures for the Arctic, where tourism has existed since the 19th century, have increased from about a million in the early 1990s to more than 1.5 million today. This is partly because of the lengthening summer season brought about by climate change.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                Most visitors arrive by ship. In 2007, 370,000 cruise passengers visited Norway, twice the number that arrived in 2000. Iceland, a country where tourism is the second-largest industry, has enjoyed an annual growth rate of nine percent since 1990. Meanwhile, Alaska received some 1,029,800 passengers, a rise of 7.3 percent from 2006. Greenland has seen the most rapid growth in marine tourism, with a sharp increase in cruise-ship arrivals of 250 percent since 2004.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                The global economic downturn may have affected the annual 20.6 percent rate of increase in visitors to the Antarctic – last season saw a drop of 17 percent to 38,200 – but there has been a 760 percent rise in land-based tourism there since 1997. More people than ever are landing at fragile sites, with light aircraft, helicopters and all-terrain vehicles increasingly used for greater access, while in the past two seasons, ‘fly–sail’ operations have begun. These deliver tourists by air to ships, so far more groups can enjoy a cruise in a season; large cruise ships capable of carrying up to 800 passengers are not uncommon.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                In addition, it seems that a high number of visitors return to the poles. ‘Looking at six year’ worth of data, of the people who have been to the polar regions, roughly 25 percent go for a second time,’ says Louisa Richardson, a senior marketing executive at tour operator Exodus.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                In the same period that tourism has exploded the ‘health’ of the poles has ‘deteriorated’. ‘The biggest changes taking place in the Antarctic are related to climate change,’ says Rod Downie, Environmental Manager with the British Antarctic Survey (BAS). Large numbers of visitors increase these problems.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">G</span>
+                Although polar tourism is widely accepted, there have been few regulations up until recently. At the meeting of the Antarctic Treaty in Baltimore, the 28 member nations adopted proposals for limits to tourist numbers. These included safety codes for tourist vessels in Antarctic waters, and improved environmental protection for the continent. They agreed to prevent ships with more than 500 passengers from landing in Antarctica, as well as limit the number of passengers going ashore to a maximum of 100 at any one time, with a minimum of one guide for every 20 tourists. ‘Tourism in Antarctica is not without its risks,’ says Downie. ‘After all, Antarctica doesn’t have a coastguard rescue service.’
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">H</span>
+                ‘So far, no surveys confirm that people are going quickly to see polar regions before they change,’ says Frigg Jorgensen, General Secretary of the Association of Arctic Expedition Cruise Operators (AECO). ‘However, Hillary Clinton and many other big names have been to Svalbard in the northernmost part of Norway to see the effects of climate change. The associated media coverage could influence others to do the same.’
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">I</span>
+                These days, rarely a week passes without a negative headline in the newspapers. The suffering polar bear has become a symbol of a warming world, its plight a warning that the clock is ticking. It would seem that this ticking clock is a small but growing factor for some tourists. ‘There’s an element of “do it now”,’ acknowledges Prisca Campbell, Marketing Director of Quark Expeditions, which takes 7,000 People to the poles annually. Leaving the trip until later, it seems, may mean leaving it too late.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">J</span>
+                adapted from Geographical magazine
+            </div>
+                
+            </div>
+        </div>
+        
+        <!-- Study Mode -->
+        <div id="study-tab" class="tab-content">
+            <div class="controls">
+                <button class="font-control" id="studyDecreaseFont" title="Decrease Font Size">
+                    <i class="fas fa-font"></i>
+                </button>
+                <div class="size-indicator">Font Size: <span id="studySizeValue">16px</span></div>
+                <button class="font-control" id="studyIncreaseFont" title="Increase Font Size">
+                    <i class="fas fa-text-height"></i>
+                </button>
+            </div>
+            
+            <div class="content" id="study-content">
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                <span class="word" data-word="Travel">Travel</span> <span class="word" data-word="at">at</span> <span class="word" data-word="the">the</span> <span class="word" data-word="North">North</span> <span class="word" data-word="and">and</span> <span class="word" data-word="South">South</span> <span class="word" data-word="Poles">Poles</span> <span class="word" data-word="has">has</span> <span class="word" data-word="become">become</span> <span class="word" data-word="an">an</span> <span class="word" data-word="expensive">expensive</span> <span class="word" data-word="leisure">leisure</span> <span class="word" data-word="activity,">activity,</span> <span class="word" data-word="suitable">suitable</span> <span class="word" data-word="for">for</span> <span class="word" data-word="tourists">tourists</span> <span class="word" data-word="of">of</span> <span class="word" data-word="all">all</span> <span class="word" data-word="ages.">ages.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="poles">poles</span> <span class="word" data-word="may">may</span> <span class="word" data-word="be">be</span> <span class="word" data-word="inhospitable">inhospitable</span> <span class="word" data-word="places,">places,</span> <span class="word" data-word="but">but</span> <span class="word" data-word="they">they</span> <span class="word" data-word="are">are</span> <span class="word" data-word="seeing">seeing</span> <span class="word" data-word="increasing">increasing</span> <span class="word" data-word="numbers">numbers</span> <span class="word" data-word="of">of</span> <span class="word" data-word="visitors.">visitors.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                <span class="word" data-word="Annual">Annual</span> <span class="word" data-word="figures">figures</span> <span class="word" data-word="for">for</span> <span class="word" data-word="the">the</span> <span class="word" data-word="Arctic,">Arctic,</span> <span class="word" data-word="where">where</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="has">has</span> <span class="word" data-word="existed">existed</span> <span class="word" data-word="since">since</span> <span class="word" data-word="the">the</span> <span class="word" data-word="19th">19th</span> <span class="word" data-word="century,">century,</span> <span class="word" data-word="have">have</span> <span class="word" data-word="increased">increased</span> <span class="word" data-word="from">from</span> <span class="word" data-word="about">about</span> <span class="word" data-word="a">a</span> <span class="word" data-word="million">million</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="early">early</span> <span class="word" data-word="1990s">1990s</span> <span class="word" data-word="to">to</span> <span class="word" data-word="more">more</span> <span class="word" data-word="than">than</span> <span class="word" data-word="1.5">1.5</span> <span class="word" data-word="million">million</span> <span class="word" data-word="today.">today.</span> <span class="word" data-word="This">This</span> <span class="word" data-word="is">is</span> <span class="word" data-word="partly">partly</span> <span class="word" data-word="because">because</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="lengthening">lengthening</span> <span class="word" data-word="summer">summer</span> <span class="word" data-word="season">season</span> <span class="word" data-word="brought">brought</span> <span class="word" data-word="about">about</span> <span class="word" data-word="by">by</span> <span class="word" data-word="climate">climate</span> <span class="word" data-word="change.">change.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                <span class="word" data-word="Most">Most</span> <span class="word" data-word="visitors">visitors</span> <span class="word" data-word="arrive">arrive</span> <span class="word" data-word="by">by</span> <span class="word" data-word="ship.">ship.</span> <span class="word" data-word="In">In</span> <span class="word" data-word="2007,">2007,</span> <span class="word" data-word="370,000">370,000</span> <span class="word" data-word="cruise">cruise</span> <span class="word" data-word="passengers">passengers</span> <span class="word" data-word="visited">visited</span> <span class="word" data-word="Norway,">Norway,</span> <span class="word" data-word="twice">twice</span> <span class="word" data-word="the">the</span> <span class="word" data-word="number">number</span> <span class="word" data-word="that">that</span> <span class="word" data-word="arrived">arrived</span> <span class="word" data-word="in">in</span> <span class="word" data-word="2000.">2000.</span> <span class="word" data-word="Iceland,">Iceland,</span> <span class="word" data-word="a">a</span> <span class="word" data-word="country">country</span> <span class="word" data-word="where">where</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="is">is</span> <span class="word" data-word="the">the</span> <span class="word" data-word="second-largest">second-largest</span> <span class="word" data-word="industry,">industry,</span> <span class="word" data-word="has">has</span> <span class="word" data-word="enjoyed">enjoyed</span> <span class="word" data-word="an">an</span> <span class="word" data-word="annual">annual</span> <span class="word" data-word="growth">growth</span> <span class="word" data-word="rate">rate</span> <span class="word" data-word="of">of</span> <span class="word" data-word="nine">nine</span> <span class="word" data-word="percent">percent</span> <span class="word" data-word="since">since</span> <span class="word" data-word="1990.">1990.</span> <span class="word" data-word="Meanwhile,">Meanwhile,</span> <span class="word" data-word="Alaska">Alaska</span> <span class="word" data-word="received">received</span> <span class="word" data-word="some">some</span> <span class="word" data-word="1,029,800">1,029,800</span> <span class="word" data-word="passengers,">passengers,</span> <span class="word" data-word="a">a</span> <span class="word" data-word="rise">rise</span> <span class="word" data-word="of">of</span> <span class="word" data-word="7.3">7.3</span> <span class="word" data-word="percent">percent</span> <span class="word" data-word="from">from</span> <span class="word" data-word="2006.">2006.</span> <span class="word" data-word="Greenland">Greenland</span> <span class="word" data-word="has">has</span> <span class="word" data-word="seen">seen</span> <span class="word" data-word="the">the</span> <span class="word" data-word="most">most</span> <span class="word" data-word="rapid">rapid</span> <span class="word" data-word="growth">growth</span> <span class="word" data-word="in">in</span> <span class="word" data-word="marine">marine</span> <span class="word" data-word="tourism,">tourism,</span> <span class="word" data-word="with">with</span> <span class="word" data-word="a">a</span> <span class="word" data-word="sharp">sharp</span> <span class="word" data-word="increase">increase</span> <span class="word" data-word="in">in</span> <span class="word" data-word="cruise-ship">cruise-ship</span> <span class="word" data-word="arrivals">arrivals</span> <span class="word" data-word="of">of</span> 250 <span class="word" data-word="percent">percent</span> <span class="word" data-word="since">since</span> <span class="word" data-word="2004.">2004.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                <span class="word" data-word="The">The</span> <span class="word" data-word="global">global</span> <span class="word" data-word="economic">economic</span> <span class="word" data-word="downturn">downturn</span> <span class="word" data-word="may">may</span> <span class="word" data-word="have">have</span> <span class="word" data-word="affected">affected</span> <span class="word" data-word="the">the</span> <span class="word" data-word="annual">annual</span> <span class="word" data-word="20.6">20.6</span> <span class="word" data-word="percent">percent</span> <span class="word" data-word="rate">rate</span> <span class="word" data-word="of">of</span> <span class="word" data-word="increase">increase</span> <span class="word" data-word="in">in</span> <span class="word" data-word="visitors">visitors</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="Antarctic">Antarctic</span> – <span class="word" data-word="last">last</span> <span class="word" data-word="season">season</span> <span class="word" data-word="saw">saw</span> <span class="word" data-word="a">a</span> <span class="word" data-word="drop">drop</span> <span class="word" data-word="of">of</span> 17 <span class="word" data-word="percent">percent</span> <span class="word" data-word="to">to</span> <span class="word" data-word="38,200">38,200</span> – <span class="word" data-word="but">but</span> <span class="word" data-word="there">there</span> <span class="word" data-word="has">has</span> <span class="word" data-word="been">been</span> <span class="word" data-word="a">a</span> 760 <span class="word" data-word="percent">percent</span> <span class="word" data-word="rise">rise</span> <span class="word" data-word="in">in</span> <span class="word" data-word="land-based">land-based</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="there">there</span> <span class="word" data-word="since">since</span> <span class="word" data-word="1997.">1997.</span> <span class="word" data-word="More">More</span> <span class="word" data-word="people">people</span> <span class="word" data-word="than">than</span> <span class="word" data-word="ever">ever</span> <span class="word" data-word="are">are</span> <span class="word" data-word="landing">landing</span> <span class="word" data-word="at">at</span> <span class="word" data-word="fragile">fragile</span> <span class="word" data-word="sites,">sites,</span> <span class="word" data-word="with">with</span> <span class="word" data-word="light">light</span> <span class="word" data-word="aircraft,">aircraft,</span> <span class="word" data-word="helicopters">helicopters</span> <span class="word" data-word="and">and</span> <span class="word" data-word="all-terrain">all-terrain</span> <span class="word" data-word="vehicles">vehicles</span> <span class="word" data-word="increasingly">increasingly</span> <span class="word" data-word="used">used</span> <span class="word" data-word="for">for</span> <span class="word" data-word="greater">greater</span> <span class="word" data-word="access,">access,</span> <span class="word" data-word="while">while</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="past">past</span> <span class="word" data-word="two">two</span> <span class="word" data-word="seasons,">seasons,</span> <span class="word" data-word="‘fly–sail’">‘fly–sail’</span> <span class="word" data-word="operations">operations</span> <span class="word" data-word="have">have</span> <span class="word" data-word="begun.">begun.</span> <span class="word" data-word="These">These</span> <span class="word" data-word="deliver">deliver</span> <span class="word" data-word="tourists">tourists</span> <span class="word" data-word="by">by</span> <span class="word" data-word="air">air</span> <span class="word" data-word="to">to</span> <span class="word" data-word="ships,">ships,</span> <span class="word" data-word="so">so</span> <span class="word" data-word="far">far</span> <span class="word" data-word="more">more</span> <span class="word" data-word="groups">groups</span> <span class="word" data-word="can">can</span> <span class="word" data-word="enjoy">enjoy</span> <span class="word" data-word="a">a</span> <span class="word" data-word="cruise">cruise</span> <span class="word" data-word="in">in</span> <span class="word" data-word="a">a</span> <span class="word" data-word="season;">season;</span> <span class="word" data-word="large">large</span> <span class="word" data-word="cruise">cruise</span> <span class="word" data-word="ships">ships</span> <span class="word" data-word="capable">capable</span> <span class="word" data-word="of">of</span> <span class="word" data-word="carrying">carrying</span> <span class="word" data-word="up">up</span> <span class="word" data-word="to">to</span> 800 <span class="word" data-word="passengers">passengers</span> <span class="word" data-word="are">are</span> <span class="word" data-word="not">not</span> <span class="word" data-word="uncommon.">uncommon.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                <span class="word" data-word="In">In</span> <span class="word" data-word="addition,">addition,</span> <span class="word" data-word="it">it</span> <span class="word" data-word="seems">seems</span> <span class="word" data-word="that">that</span> <span class="word" data-word="a">a</span> <span class="word" data-word="high">high</span> <span class="word" data-word="number">number</span> <span class="word" data-word="of">of</span> <span class="word" data-word="visitors">visitors</span> <span class="word" data-word="return">return</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="poles.">poles.</span> <span class="word" data-word="‘Looking">‘Looking</span> <span class="word" data-word="at">at</span> <span class="word" data-word="six">six</span> <span class="word" data-word="year’">year’</span> <span class="word" data-word="worth">worth</span> <span class="word" data-word="of">of</span> <span class="word" data-word="data,">data,</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="people">people</span> <span class="word" data-word="who">who</span> <span class="word" data-word="have">have</span> <span class="word" data-word="been">been</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="polar">polar</span> <span class="word" data-word="regions,">regions,</span> <span class="word" data-word="roughly">roughly</span> 25 <span class="word" data-word="percent">percent</span> <span class="word" data-word="go">go</span> <span class="word" data-word="for">for</span> <span class="word" data-word="a">a</span> <span class="word" data-word="second">second</span> <span class="word" data-word="time,’">time,’</span> <span class="word" data-word="says">says</span> <span class="word" data-word="Louisa">Louisa</span> <span class="word" data-word="Richardson,">Richardson,</span> <span class="word" data-word="a">a</span> <span class="word" data-word="senior">senior</span> <span class="word" data-word="marketing">marketing</span> <span class="word" data-word="executive">executive</span> <span class="word" data-word="at">at</span> <span class="word" data-word="tour">tour</span> <span class="word" data-word="operator">operator</span> <span class="word" data-word="Exodus.">Exodus.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                <span class="word" data-word="In">In</span> <span class="word" data-word="the">the</span> <span class="word" data-word="same">same</span> <span class="word" data-word="period">period</span> <span class="word" data-word="that">that</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="has">has</span> <span class="word" data-word="exploded">exploded</span> <span class="word" data-word="the">the</span> <span class="word" data-word="‘health’">‘health’</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="poles">poles</span> <span class="word" data-word="has">has</span> <span class="word" data-word="‘deteriorated’.">‘deteriorated’.</span> <span class="word" data-word="‘The">‘The</span> <span class="word" data-word="biggest">biggest</span> <span class="word" data-word="changes">changes</span> <span class="word" data-word="taking">taking</span> <span class="word" data-word="place">place</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="Antarctic">Antarctic</span> <span class="word" data-word="are">are</span> <span class="word" data-word="related">related</span> <span class="word" data-word="to">to</span> <span class="word" data-word="climate">climate</span> <span class="word" data-word="change,’">change,’</span> <span class="word" data-word="says">says</span> <span class="word" data-word="Rod">Rod</span> <span class="word" data-word="Downie,">Downie,</span> <span class="word" data-word="Environmental">Environmental</span> <span class="word" data-word="Manager">Manager</span> <span class="word" data-word="with">with</span> <span class="word" data-word="the">the</span> <span class="word" data-word="British">British</span> <span class="word" data-word="Antarctic">Antarctic</span> <span class="word" data-word="Survey">Survey</span> <span class="word" data-word="(BAS).">(BAS).</span> <span class="word" data-word="Large">Large</span> <span class="word" data-word="numbers">numbers</span> <span class="word" data-word="of">of</span> <span class="word" data-word="visitors">visitors</span> <span class="word" data-word="increase">increase</span> <span class="word" data-word="these">these</span> <span class="word" data-word="problems.">problems.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">G</span>
+                <span class="word" data-word="Although">Although</span> <span class="word" data-word="polar">polar</span> <span class="word" data-word="tourism">tourism</span> <span class="word" data-word="is">is</span> <span class="word" data-word="widely">widely</span> <span class="word" data-word="accepted,">accepted,</span> <span class="word" data-word="there">there</span> <span class="word" data-word="have">have</span> <span class="word" data-word="been">been</span> <span class="word" data-word="few">few</span> <span class="word" data-word="regulations">regulations</span> <span class="word" data-word="up">up</span> <span class="word" data-word="until">until</span> <span class="word" data-word="recently.">recently.</span> <span class="word" data-word="At">At</span> <span class="word" data-word="the">the</span> <span class="word" data-word="meeting">meeting</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="Antarctic">Antarctic</span> <span class="word" data-word="Treaty">Treaty</span> <span class="word" data-word="in">in</span> <span class="word" data-word="Baltimore,">Baltimore,</span> <span class="word" data-word="the">the</span> 28 <span class="word" data-word="member">member</span> <span class="word" data-word="nations">nations</span> <span class="word" data-word="adopted">adopted</span> <span class="word" data-word="proposals">proposals</span> <span class="word" data-word="for">for</span> <span class="word" data-word="limits">limits</span> <span class="word" data-word="to">to</span> <span class="word" data-word="tourist">tourist</span> <span class="word" data-word="numbers.">numbers.</span> <span class="word" data-word="These">These</span> <span class="word" data-word="included">included</span> <span class="word" data-word="safety">safety</span> <span class="word" data-word="codes">codes</span> <span class="word" data-word="for">for</span> <span class="word" data-word="tourist">tourist</span> <span class="word" data-word="vessels">vessels</span> <span class="word" data-word="in">in</span> <span class="word" data-word="Antarctic">Antarctic</span> <span class="word" data-word="waters,">waters,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="improved">improved</span> <span class="word" data-word="environmental">environmental</span> <span class="word" data-word="protection">protection</span> <span class="word" data-word="for">for</span> <span class="word" data-word="the">the</span> <span class="word" data-word="continent.">continent.</span> <span class="word" data-word="They">They</span> <span class="word" data-word="agreed">agreed</span> <span class="word" data-word="to">to</span> <span class="word" data-word="prevent">prevent</span> <span class="word" data-word="ships">ships</span> <span class="word" data-word="with">with</span> <span class="word" data-word="more">more</span> <span class="word" data-word="than">than</span> 500 <span class="word" data-word="passengers">passengers</span> <span class="word" data-word="from">from</span> <span class="word" data-word="landing">landing</span> <span class="word" data-word="in">in</span> <span class="word" data-word="Antarctica,">Antarctica,</span> <span class="word" data-word="as">as</span> <span class="word" data-word="well">well</span> <span class="word" data-word="as">as</span> <span class="word" data-word="limit">limit</span> <span class="word" data-word="the">the</span> <span class="word" data-word="number">number</span> <span class="word" data-word="of">of</span> <span class="word" data-word="passengers">passengers</span> <span class="word" data-word="going">going</span> <span class="word" data-word="ashore">ashore</span> <span class="word" data-word="to">to</span> <span class="word" data-word="a">a</span> <span class="word" data-word="maximum">maximum</span> <span class="word" data-word="of">of</span> 100 <span class="word" data-word="at">at</span> <span class="word" data-word="any">any</span> <span class="word" data-word="one">one</span> <span class="word" data-word="time,">time,</span> <span class="word" data-word="with">with</span> <span class="word" data-word="a">a</span> <span class="word" data-word="minimum">minimum</span> <span class="word" data-word="of">of</span> <span class="word" data-word="one">one</span> <span class="word" data-word="guide">guide</span> <span class="word" data-word="for">for</span> <span class="word" data-word="every">every</span> 20 <span class="word" data-word="tourists.">tourists.</span> <span class="word" data-word="‘Tourism">‘Tourism</span> <span class="word" data-word="in">in</span> <span class="word" data-word="Antarctica">Antarctica</span> <span class="word" data-word="is">is</span> <span class="word" data-word="not">not</span> <span class="word" data-word="without">without</span> <span class="word" data-word="its">its</span> <span class="word" data-word="risks,’">risks,’</span> <span class="word" data-word="says">says</span> <span class="word" data-word="Downie.">Downie.</span> <span class="word" data-word="‘After">‘After</span> <span class="word" data-word="all,">all,</span> <span class="word" data-word="Antarctica">Antarctica</span> <span class="word" data-word="doesn’t">doesn’t</span> <span class="word" data-word="have">have</span> <span class="word" data-word="a">a</span> <span class="word" data-word="coastguard">coastguard</span> <span class="word" data-word="rescue">rescue</span> <span class="word" data-word="service.’">service.’</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">H</span>
+                <span class="word" data-word="‘So">‘So</span> <span class="word" data-word="far,">far,</span> <span class="word" data-word="no">no</span> <span class="word" data-word="surveys">surveys</span> <span class="word" data-word="confirm">confirm</span> <span class="word" data-word="that">that</span> <span class="word" data-word="people">people</span> <span class="word" data-word="are">are</span> <span class="word" data-word="going">going</span> <span class="word" data-word="quickly">quickly</span> <span class="word" data-word="to">to</span> <span class="word" data-word="see">see</span> <span class="word" data-word="polar">polar</span> <span class="word" data-word="regions">regions</span> <span class="word" data-word="before">before</span> <span class="word" data-word="they">they</span> <span class="word" data-word="change,’">change,’</span> <span class="word" data-word="says">says</span> <span class="word" data-word="Frigg">Frigg</span> <span class="word" data-word="Jorgensen,">Jorgensen,</span> <span class="word" data-word="General">General</span> <span class="word" data-word="Secretary">Secretary</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="Association">Association</span> <span class="word" data-word="of">of</span> <span class="word" data-word="Arctic">Arctic</span> <span class="word" data-word="Expedition">Expedition</span> <span class="word" data-word="Cruise">Cruise</span> <span class="word" data-word="Operators">Operators</span> <span class="word" data-word="(AECO).">(AECO).</span> <span class="word" data-word="‘However,">‘However,</span> <span class="word" data-word="Hillary">Hillary</span> <span class="word" data-word="Clinton">Clinton</span> <span class="word" data-word="and">and</span> <span class="word" data-word="many">many</span> <span class="word" data-word="other">other</span> <span class="word" data-word="big">big</span> <span class="word" data-word="names">names</span> <span class="word" data-word="have">have</span> <span class="word" data-word="been">been</span> <span class="word" data-word="to">to</span> <span class="word" data-word="Svalbard">Svalbard</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="northernmost">northernmost</span> <span class="word" data-word="part">part</span> <span class="word" data-word="of">of</span> <span class="word" data-word="Norway">Norway</span> <span class="word" data-word="to">to</span> <span class="word" data-word="see">see</span> <span class="word" data-word="the">the</span> <span class="word" data-word="effects">effects</span> <span class="word" data-word="of">of</span> <span class="word" data-word="climate">climate</span> <span class="word" data-word="change.">change.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="associated">associated</span> <span class="word" data-word="media">media</span> <span class="word" data-word="coverage">coverage</span> <span class="word" data-word="could">could</span> <span class="word" data-word="influence">influence</span> <span class="word" data-word="others">others</span> <span class="word" data-word="to">to</span> <span class="word" data-word="do">do</span> <span class="word" data-word="the">the</span> <span class="word" data-word="same.’">same.’</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">I</span>
+                <span class="word" data-word="These">These</span> <span class="word" data-word="days,">days,</span> <span class="word" data-word="rarely">rarely</span> <span class="word" data-word="a">a</span> <span class="word" data-word="week">week</span> <span class="word" data-word="passes">passes</span> <span class="word" data-word="without">without</span> <span class="word" data-word="a">a</span> <span class="word" data-word="negative">negative</span> <span class="word" data-word="headline">headline</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="newspapers.">newspapers.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="suffering">suffering</span> <span class="word" data-word="polar">polar</span> <span class="word" data-word="bear">bear</span> <span class="word" data-word="has">has</span> <span class="word" data-word="become">become</span> <span class="word" data-word="a">a</span> <span class="word" data-word="symbol">symbol</span> <span class="word" data-word="of">of</span> <span class="word" data-word="a">a</span> <span class="word" data-word="warming">warming</span> <span class="word" data-word="world,">world,</span> <span class="word" data-word="its">its</span> <span class="word" data-word="plight">plight</span> <span class="word" data-word="a">a</span> <span class="word" data-word="warning">warning</span> <span class="word" data-word="that">that</span> <span class="word" data-word="the">the</span> <span class="word" data-word="clock">clock</span> <span class="word" data-word="is">is</span> <span class="word" data-word="ticking.">ticking.</span> <span class="word" data-word="It">It</span> <span class="word" data-word="would">would</span> <span class="word" data-word="seem">seem</span> <span class="word" data-word="that">that</span> <span class="word" data-word="this">this</span> <span class="word" data-word="ticking">ticking</span> <span class="word" data-word="clock">clock</span> <span class="word" data-word="is">is</span> <span class="word" data-word="a">a</span> <span class="word" data-word="small">small</span> <span class="word" data-word="but">but</span> <span class="word" data-word="growing">growing</span> <span class="word" data-word="factor">factor</span> <span class="word" data-word="for">for</span> <span class="word" data-word="some">some</span> <span class="word" data-word="tourists.">tourists.</span> <span class="word" data-word="‘There’s">‘There’s</span> <span class="word" data-word="an">an</span> <span class="word" data-word="element">element</span> <span class="word" data-word="of">of</span> <span class="word" data-word="“do">“do</span> <span class="word" data-word="it">it</span> <span class="word" data-word="now”,’">now”,’</span> <span class="word" data-word="acknowledges">acknowledges</span> <span class="word" data-word="Prisca">Prisca</span> <span class="word" data-word="Campbell,">Campbell,</span> <span class="word" data-word="Marketing">Marketing</span> <span class="word" data-word="Director">Director</span> <span class="word" data-word="of">of</span> <span class="word" data-word="Quark">Quark</span> <span class="word" data-word="Expeditions,">Expeditions,</span> <span class="word" data-word="which">which</span> <span class="word" data-word="takes">takes</span> <span class="word" data-word="7,000">7,000</span> <span class="word" data-word="People">People</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="poles">poles</span> <span class="word" data-word="annually.">annually.</span> <span class="word" data-word="Leaving">Leaving</span> <span class="word" data-word="the">the</span> <span class="word" data-word="trip">trip</span> <span class="word" data-word="until">until</span> <span class="word" data-word="later,">later,</span> <span class="word" data-word="it">it</span> <span class="word" data-word="seems,">seems,</span> <span class="word" data-word="may">may</span> <span class="word" data-word="mean">mean</span> <span class="word" data-word="leaving">leaving</span> <span class="word" data-word="it">it</span> <span class="word" data-word="too">too</span> <span class="word" data-word="late.">late.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">J</span>
+                <span class="word" data-word="adapted">adapted</span> <span class="word" data-word="from">from</span> <span class="word" data-word="Geographical">Geographical</span> <span class="word" data-word="magazine">magazine</span>
+            </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="player-title">
+            <i class="fas fa-music"></i> here today, gone tomorrow
+        </div>
+        
+        <div class="player-controls">
+            <button class="player-btn" id="playBtn" title="Play">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="player-btn" id="pauseBtn" title="Pause">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button class="player-btn" id="stopBtn" title="Stop">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer">
+        <source src="https://github.com/wangzhrm/Lucy/blob/main/20250715_111232.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <script>
+        // Font size controls for reading mode
+        const content = document.getElementById('content');
+        const decreaseFont = document.getElementById('decreaseFont');
+        const increaseFont = document.getElementById('increaseFont');
+        const sizeValue = document.getElementById('sizeValue');
+        
+        let fontSize = 16;
+        
+        decreaseFont.addEventListener('click', () => {
+            if (fontSize > 12) {
+                fontSize--;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        increaseFont.addEventListener('click', () => {
+            if (fontSize < 24) {
+                fontSize++;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        // Font size controls for study mode
+        const studyContent = document.getElementById('study-content');
+        const studyDecreaseFont = document.getElementById('studyDecreaseFont');
+        const studyIncreaseFont = document.getElementById('studyIncreaseFont');
+        const studySizeValue = document.getElementById('studySizeValue');
+        let studyFontSize = 16;
+        
+        studyDecreaseFont.addEventListener('click', () => {
+            if (studyFontSize > 12) {
+                studyFontSize--;
+                studyContent.style.fontSize = studyFontSize + 'px';
+                studySizeValue.textContent = studyFontSize + 'px';
+            }
+        });
+        
+        studyIncreaseFont.addEventListener('click', () => {
+            if (studyFontSize < 24) {
+                studyFontSize++;
+                studyContent.style.fontSize = studyFontSize + 'px';
+                studySizeValue.textContent = studyFontSize + 'px';
+            }
+        });
+        
+        // Music player functionality
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const progressBar = document.getElementById('progressBar');
+        
+        // Set initial state
+        audio.volume = 0.5;
+        
+        // Play button
+        playBtn.addEventListener('click', () => {
+            audio.play();
+        });
+        
+        // Pause button
+        pauseBtn.addEventListener('click', () => {
+            audio.pause();
+        });
+        
+        // Stop button
+        stopBtn.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            progress.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        });
+        
+        // Update progress bar
+        audio.addEventListener('timeupdate', () => {
+            // Calculate progress percentage
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            
+            // Update time displays
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+            if (!isNaN(audio.duration)) {
+                durationEl.textContent = formatTime(audio.duration);
+            }
+        });
+        
+        // Format time from seconds to MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+        // Update duration when metadata is loaded
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+        
+        // Click on progress bar to seek
+        progressBar.addEventListener('click', (e) => {
+            const width = progressBar.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            
+            audio.currentTime = (clickX / width) * duration;
+        });
+        
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to this tab
+                tab.classList.add('active');
+                const tabName = tab.getAttribute('data-tab');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+                
+                // Show/hide translation display
+                const translationDisplay = document.getElementById('translation-display');
+                translationDisplay.style.display = tabName === 'study' ? 'block' : 'none';
+            });
+        });
+        
+        // Word translation functionality
+        const translationDisplay = document.getElementById('translation-display');
+        const wordDisplay = document.querySelector('.word-display');
+        const meaningDisplay = document.querySelector('.meaning-display');
+        const translationCache = {};
+        
+        document.getElementById('study-content')?.addEventListener('click', function(e) {
+            if (e.target.classList.contains('word')) {
+                const word = e.target.dataset.word;
+                
+                // Remove active class from all words
+                document.querySelectorAll('.word.active').forEach(w => w.classList.remove('active'));
+                
+                // Add active to this word
+                e.target.classList.add('active');
+                
+                // Display the word
+                wordDisplay.textContent = word;
+                meaningDisplay.textContent = 'Loading...';
+                
+                // Check cache first
+                if (translationCache[word]) {
+                    meaningDisplay.textContent = translationCache[word];
+                    return;
+                }
+                
+                // Fetch translation using MyMemory API
+                fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|zh`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.responseData && data.responseData.translatedText) {
+                            const translation = data.responseData.translatedText;
+                            
+                            // Cache the translation
+                            translationCache[word] = translation;
+                            
+                            // Display the translation
+                            meaningDisplay.textContent = translation;
+                        } else {
+                            meaningDisplay.textContent = 'Translation not available';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Translation error:', error);
+                        meaningDisplay.textContent = 'Translation error';
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
