@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The burden of thirst</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            padding: 20px;
+            padding-bottom: 100px; /* Space for music player */
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #4a69bd;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .font-control {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        
+        .font-control:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+        
+        .font-control:active {
+            transform: translateY(1px);
+        }
+        
+        .size-indicator {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #1a2a6c;
+            border: 2px solid #4a69bd;
+        }
+        
+        .content {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            transition: font-size 0.3s ease;
+        }
+        
+        .paragraph {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .paragraph:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .paragraph-letter {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            background: #e74c3c;
+            color: white;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            background: #4a69bd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .tab:hover {
+            background: #1e3c72;
+        }
+        
+        .tab.active {
+            background: #e74c3c;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Translation display */
+        .translation-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #e74c3c;
+            color: #333;
+        }
+        
+        .translation-display div {
+            margin-bottom: 5px;
+        }
+        
+        /* Word styling for study mode */
+        .word {
+            cursor: pointer;
+            text-decoration: underline dotted #e74c3c;
+        }
+        
+        .word:hover {
+            background: rgba(231, 76, 60, 0.1);
+        }
+        
+        .word.active {
+            background: rgba(231, 76, 60, 0.2);
+        }
+        
+        /* Music player */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 42, 108, 0.95);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            border-top: 3px solid #e74c3c;
+        }
+        
+        .player-title {
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 200px;
+        }
+        
+        .player-title i {
+            color: #e74c3c;
+        }
+        
+        .player-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .player-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .player-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+        
+        .player-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .progress-container {
+            flex-grow: 1;
+            max-width: 400px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #e74c3c;
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(231, 76, 60, 0.2), transparent);
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                border-radius: 15px;
+                padding: 10px;
+            }
+            
+            .font-control {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+            }
+            
+            .size-indicator {
+                padding: 10px 20px;
+            }
+            
+            .paragraph {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .paragraph-letter {
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                font-size: 0.9rem;
+            }
+            
+            .music-player {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .player-controls {
+                order: -1;
+            }
+            
+            .player-title {
+                font-size: 1rem;
+                text-align: center;
+            }
+            
+            .progress-container {
+                width: 90%;
+            }
+            
+            .player-btn {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+                margin: 5px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                padding-bottom: 120px; /* More space for player on mobile */
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                font-size: 1rem;
+            }
+            
+            .player-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>The burden of thirst</h1>
+            <div class="subtitle">Millions of women carry water long distances. If they had a tap by their door, whole societies would be transformed.</div>
+        </div>
+        
+        <!-- Tabs for reading and study modes -->
+        <div class="tabs">
+            <button class="tab active" data-tab="reading">Reading Mode</button>
+            <button class="tab" data-tab="study">Study Mode</button>
+        </div>
+        
+        <!-- Translation display -->
+        <div id="translation-display" class="translation-display" style="display: none;">
+            <div><strong>Word:</strong> <span class="word-display"></span></div>
+            <div><strong>Meaning:</strong> <span class="meaning-display"></span></div>
+        </div>
+        
+        <!-- Reading Mode -->
+        <div id="reading-tab" class="tab-content active">
+            <div class="controls">
+                <button class="font-control" id="decreaseFont" title="Decrease Font Size">
+                    <i class="fas fa-font"></i>
+                </button>
+                <div class="size-indicator">Font Size: <span id="sizeValue">16px</span></div>
+                <button class="font-control" id="increaseFont" title="Increase Font Size">
+                    <i class="fas fa-text-height"></i>
+                </button>
+            </div>
+            
+            <div class="content" id="content">
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                Aylito Binayo’s feet know the mountain. Even at four in the morning, she can run down the rocks to the river by starlight alone and climb the steep mountain back up to her village with a container of water on her back. She has made this journey three times a day since she was a small child. So has every other woman in her village of Foro, in the Konso district of south-western Ethiopia in Africa. Binayo left school when she was eight years old, in part because she had to help her mother fetch water from the Toiro River. The water is unsafe to drink; every year that the drought continues, the river carries less water, and its flow is reduced. But it is the only water Foro has ever had.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                In developed parts of the world, people turn on a tap and out pours abundant, clean water. Yet nearly 900 million people in the world have no access to clean water. Furthermore, 2.5 billion people have no safe way to get rid of human waste. Polluted water and lack of proper hygiene cause disease and kill 3.3 million people around the world annually, most of them children. In southern Ethiopia and in northern Kenya, a lack of rain over the past few years has made even dirty water hard to find. But soon, for the first time, things are going to change.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                Bringing clean water close to villagers’ homes is the key to the problem. Communities where clean water becomes accessible and plentiful are transformed. All the hours previously spent hauling water can be used to cultivate more crops, raise more animals or even start a business. Families spend less time sick or caring for family members who are unwell. Most important, not having to collect water means girls can go to school and get jobs. The need to fetch water for the family, or to take care of younger siblings while their mother goes, usually prevents them ever having this experience.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                But the challenges of bringing water to remote villages like those in Konso are overwhelming. Locating water underground and then reaching it by means of deep wells requires geological expertise and expensive, heavy machines. Abandoned wells and water projects litter the villages of Konso. In similar villages around the developing world, the biggest problem with water schemes is that about half of them break down soon after the groups that built them move on. Sometimes technology is used that can’t be repaired locally, or spare parts are available only in the capital.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                Today, a UK-based international non-profit organisation called WaterAid is tackling the job of bringing water to the most remote villages of Konso. Their approach combines technologies proven to last – such as building a sand dam to capture and filter rainwater that would otherwise drain away. But the real innovation is that WaterAid believes technology is only part of the solution. Just as important is involving the local community in designing, building and maintaining new water projects. Before beginning any project, WaterAid asks the community to create a WASH (water, sanitation, hygiene) committee of seven people. The committee works with WaterAid to plan projects and involve the village in construction. Then it maintains and runs the project.
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                The people of Konso, who grow their crops on terraces they have dug into the sides of mountains, are famous for hard work. In the village of Orbesho, residents even constructed a road themselves so that drilling machinery could come in. Last summer, their pump, installed by the river, was being motorised to push its water to a newly built reservoir on top of a nearby mountain. From there, gravity will carry it down in pipes to villages on the other side of the mountain. Residents of those villages have each given some money to help fund the project. They have made concrete and collected stones for the structures. Now they are digging trenches to lay pipes. If all goes well, Aylito Binayo will have a tap with safe water just a three-minute walk from her front door.
+            </div>
+                
+            </div>
+        </div>
+        
+        <!-- Study Mode -->
+        <div id="study-tab" class="tab-content">
+            <div class="controls">
+                <button class="font-control" id="studyDecreaseFont" title="Decrease Font Size">
+                    <i class="fas fa-font"></i>
+                </button>
+                <div class="size-indicator">Font Size: <span id="studySizeValue">16px</span></div>
+                <button class="font-control" id="studyIncreaseFont" title="Increase Font Size">
+                    <i class="fas fa-text-height"></i>
+                </button>
+            </div>
+            
+            <div class="content" id="study-content">
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">A</span>
+                <span class="word" data-word="Aylito">Aylito</span> <span class="word" data-word="Binayo’s">Binayo’s</span> <span class="word" data-word="feet">feet</span> <span class="word" data-word="know">know</span> <span class="word" data-word="the">the</span> <span class="word" data-word="mountain.">mountain.</span> <span class="word" data-word="Even">Even</span> <span class="word" data-word="at">at</span> <span class="word" data-word="four">four</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="morning,">morning,</span> <span class="word" data-word="she">she</span> <span class="word" data-word="can">can</span> <span class="word" data-word="run">run</span> <span class="word" data-word="down">down</span> <span class="word" data-word="the">the</span> <span class="word" data-word="rocks">rocks</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="river">river</span> <span class="word" data-word="by">by</span> <span class="word" data-word="starlight">starlight</span> <span class="word" data-word="alone">alone</span> <span class="word" data-word="and">and</span> <span class="word" data-word="climb">climb</span> <span class="word" data-word="the">the</span> <span class="word" data-word="steep">steep</span> <span class="word" data-word="mountain">mountain</span> <span class="word" data-word="back">back</span> <span class="word" data-word="up">up</span> <span class="word" data-word="to">to</span> <span class="word" data-word="her">her</span> <span class="word" data-word="village">village</span> <span class="word" data-word="with">with</span> <span class="word" data-word="a">a</span> <span class="word" data-word="container">container</span> <span class="word" data-word="of">of</span> <span class="word" data-word="water">water</span> <span class="word" data-word="on">on</span> <span class="word" data-word="her">her</span> <span class="word" data-word="back.">back.</span> <span class="word" data-word="She">She</span> <span class="word" data-word="has">has</span> <span class="word" data-word="made">made</span> <span class="word" data-word="this">this</span> <span class="word" data-word="journey">journey</span> <span class="word" data-word="three">three</span> <span class="word" data-word="times">times</span> <span class="word" data-word="a">a</span> <span class="word" data-word="day">day</span> <span class="word" data-word="since">since</span> <span class="word" data-word="she">she</span> <span class="word" data-word="was">was</span> <span class="word" data-word="a">a</span> <span class="word" data-word="small">small</span> <span class="word" data-word="child.">child.</span> <span class="word" data-word="So">So</span> <span class="word" data-word="has">has</span> <span class="word" data-word="every">every</span> <span class="word" data-word="other">other</span> <span class="word" data-word="woman">woman</span> <span class="word" data-word="in">in</span> <span class="word" data-word="her">her</span> <span class="word" data-word="village">village</span> <span class="word" data-word="of">of</span> <span class="word" data-word="Foro,">Foro,</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="Konso">Konso</span> <span class="word" data-word="district">district</span> <span class="word" data-word="of">of</span> <span class="word" data-word="south-western">south-western</span> <span class="word" data-word="Ethiopia">Ethiopia</span> <span class="word" data-word="in">in</span> <span class="word" data-word="Africa.">Africa.</span> <span class="word" data-word="Binayo">Binayo</span> <span class="word" data-word="left">left</span> <span class="word" data-word="school">school</span> <span class="word" data-word="when">when</span> <span class="word" data-word="she">she</span> <span class="word" data-word="was">was</span> <span class="word" data-word="eight">eight</span> <span class="word" data-word="years">years</span> <span class="word" data-word="old,">old,</span> <span class="word" data-word="in">in</span> <span class="word" data-word="part">part</span> <span class="word" data-word="because">because</span> <span class="word" data-word="she">she</span> <span class="word" data-word="had">had</span> <span class="word" data-word="to">to</span> <span class="word" data-word="help">help</span> <span class="word" data-word="her">her</span> <span class="word" data-word="mother">mother</span> <span class="word" data-word="fetch">fetch</span> <span class="word" data-word="water">water</span> <span class="word" data-word="from">from</span> <span class="word" data-word="the">the</span> <span class="word" data-word="Toiro">Toiro</span> <span class="word" data-word="River.">River.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="water">water</span> <span class="word" data-word="is">is</span> <span class="word" data-word="unsafe">unsafe</span> <span class="word" data-word="to">to</span> <span class="word" data-word="drink;">drink;</span> <span class="word" data-word="every">every</span> <span class="word" data-word="year">year</span> <span class="word" data-word="that">that</span> <span class="word" data-word="the">the</span> <span class="word" data-word="drought">drought</span> <span class="word" data-word="continues,">continues,</span> <span class="word" data-word="the">the</span> <span class="word" data-word="river">river</span> <span class="word" data-word="carries">carries</span> <span class="word" data-word="less">less</span> <span class="word" data-word="water,">water,</span> <span class="word" data-word="and">and</span> <span class="word" data-word="its">its</span> <span class="word" data-word="flow">flow</span> <span class="word" data-word="is">is</span> <span class="word" data-word="reduced.">reduced.</span> <span class="word" data-word="But">But</span> <span class="word" data-word="it">it</span> <span class="word" data-word="is">is</span> <span class="word" data-word="the">the</span> <span class="word" data-word="only">only</span> <span class="word" data-word="water">water</span> <span class="word" data-word="Foro">Foro</span> <span class="word" data-word="has">has</span> <span class="word" data-word="ever">ever</span> <span class="word" data-word="had.">had.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">B</span>
+                <span class="word" data-word="In">In</span> <span class="word" data-word="developed">developed</span> <span class="word" data-word="parts">parts</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="world,">world,</span> <span class="word" data-word="people">people</span> <span class="word" data-word="turn">turn</span> <span class="word" data-word="on">on</span> <span class="word" data-word="a">a</span> <span class="word" data-word="tap">tap</span> <span class="word" data-word="and">and</span> <span class="word" data-word="out">out</span> <span class="word" data-word="pours">pours</span> <span class="word" data-word="abundant,">abundant,</span> <span class="word" data-word="clean">clean</span> <span class="word" data-word="water.">water.</span> <span class="word" data-word="Yet">Yet</span> <span class="word" data-word="nearly">nearly</span> 900 <span class="word" data-word="million">million</span> <span class="word" data-word="people">people</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="world">world</span> <span class="word" data-word="have">have</span> <span class="word" data-word="no">no</span> <span class="word" data-word="access">access</span> <span class="word" data-word="to">to</span> <span class="word" data-word="clean">clean</span> <span class="word" data-word="water.">water.</span> <span class="word" data-word="Furthermore,">Furthermore,</span> <span class="word" data-word="2.5">2.5</span> <span class="word" data-word="billion">billion</span> <span class="word" data-word="people">people</span> <span class="word" data-word="have">have</span> <span class="word" data-word="no">no</span> <span class="word" data-word="safe">safe</span> <span class="word" data-word="way">way</span> <span class="word" data-word="to">to</span> <span class="word" data-word="get">get</span> <span class="word" data-word="rid">rid</span> <span class="word" data-word="of">of</span> <span class="word" data-word="human">human</span> <span class="word" data-word="waste.">waste.</span> <span class="word" data-word="Polluted">Polluted</span> <span class="word" data-word="water">water</span> <span class="word" data-word="and">and</span> <span class="word" data-word="lack">lack</span> <span class="word" data-word="of">of</span> <span class="word" data-word="proper">proper</span> <span class="word" data-word="hygiene">hygiene</span> <span class="word" data-word="cause">cause</span> <span class="word" data-word="disease">disease</span> <span class="word" data-word="and">and</span> <span class="word" data-word="kill">kill</span> <span class="word" data-word="3.3">3.3</span> <span class="word" data-word="million">million</span> <span class="word" data-word="people">people</span> <span class="word" data-word="around">around</span> <span class="word" data-word="the">the</span> <span class="word" data-word="world">world</span> <span class="word" data-word="annually,">annually,</span> <span class="word" data-word="most">most</span> <span class="word" data-word="of">of</span> <span class="word" data-word="them">them</span> <span class="word" data-word="children.">children.</span> <span class="word" data-word="In">In</span> <span class="word" data-word="southern">southern</span> <span class="word" data-word="Ethiopia">Ethiopia</span> <span class="word" data-word="and">and</span> <span class="word" data-word="in">in</span> <span class="word" data-word="northern">northern</span> <span class="word" data-word="Kenya,">Kenya,</span> <span class="word" data-word="a">a</span> <span class="word" data-word="lack">lack</span> <span class="word" data-word="of">of</span> <span class="word" data-word="rain">rain</span> <span class="word" data-word="over">over</span> <span class="word" data-word="the">the</span> <span class="word" data-word="past">past</span> <span class="word" data-word="few">few</span> <span class="word" data-word="years">years</span> <span class="word" data-word="has">has</span> <span class="word" data-word="made">made</span> <span class="word" data-word="even">even</span> <span class="word" data-word="dirty">dirty</span> <span class="word" data-word="water">water</span> <span class="word" data-word="hard">hard</span> <span class="word" data-word="to">to</span> <span class="word" data-word="find.">find.</span> <span class="word" data-word="But">But</span> <span class="word" data-word="soon,">soon,</span> <span class="word" data-word="for">for</span> <span class="word" data-word="the">the</span> <span class="word" data-word="first">first</span> <span class="word" data-word="time,">time,</span> <span class="word" data-word="things">things</span> <span class="word" data-word="are">are</span> <span class="word" data-word="going">going</span> <span class="word" data-word="to">to</span> <span class="word" data-word="change.">change.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">C</span>
+                <span class="word" data-word="Bringing">Bringing</span> <span class="word" data-word="clean">clean</span> <span class="word" data-word="water">water</span> <span class="word" data-word="close">close</span> <span class="word" data-word="to">to</span> <span class="word" data-word="villagers’">villagers’</span> <span class="word" data-word="homes">homes</span> <span class="word" data-word="is">is</span> <span class="word" data-word="the">the</span> <span class="word" data-word="key">key</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="problem.">problem.</span> <span class="word" data-word="Communities">Communities</span> <span class="word" data-word="where">where</span> <span class="word" data-word="clean">clean</span> <span class="word" data-word="water">water</span> <span class="word" data-word="becomes">becomes</span> <span class="word" data-word="accessible">accessible</span> <span class="word" data-word="and">and</span> <span class="word" data-word="plentiful">plentiful</span> <span class="word" data-word="are">are</span> <span class="word" data-word="transformed.">transformed.</span> <span class="word" data-word="All">All</span> <span class="word" data-word="the">the</span> <span class="word" data-word="hours">hours</span> <span class="word" data-word="previously">previously</span> <span class="word" data-word="spent">spent</span> <span class="word" data-word="hauling">hauling</span> <span class="word" data-word="water">water</span> <span class="word" data-word="can">can</span> <span class="word" data-word="be">be</span> <span class="word" data-word="used">used</span> <span class="word" data-word="to">to</span> <span class="word" data-word="cultivate">cultivate</span> <span class="word" data-word="more">more</span> <span class="word" data-word="crops,">crops,</span> <span class="word" data-word="raise">raise</span> <span class="word" data-word="more">more</span> <span class="word" data-word="animals">animals</span> <span class="word" data-word="or">or</span> <span class="word" data-word="even">even</span> <span class="word" data-word="start">start</span> <span class="word" data-word="a">a</span> <span class="word" data-word="business.">business.</span> <span class="word" data-word="Families">Families</span> <span class="word" data-word="spend">spend</span> <span class="word" data-word="less">less</span> <span class="word" data-word="time">time</span> <span class="word" data-word="sick">sick</span> <span class="word" data-word="or">or</span> <span class="word" data-word="caring">caring</span> <span class="word" data-word="for">for</span> <span class="word" data-word="family">family</span> <span class="word" data-word="members">members</span> <span class="word" data-word="who">who</span> <span class="word" data-word="are">are</span> <span class="word" data-word="unwell.">unwell.</span> <span class="word" data-word="Most">Most</span> <span class="word" data-word="important,">important,</span> <span class="word" data-word="not">not</span> <span class="word" data-word="having">having</span> <span class="word" data-word="to">to</span> <span class="word" data-word="collect">collect</span> <span class="word" data-word="water">water</span> <span class="word" data-word="means">means</span> <span class="word" data-word="girls">girls</span> <span class="word" data-word="can">can</span> <span class="word" data-word="go">go</span> <span class="word" data-word="to">to</span> <span class="word" data-word="school">school</span> <span class="word" data-word="and">and</span> <span class="word" data-word="get">get</span> <span class="word" data-word="jobs.">jobs.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="need">need</span> <span class="word" data-word="to">to</span> <span class="word" data-word="fetch">fetch</span> <span class="word" data-word="water">water</span> <span class="word" data-word="for">for</span> <span class="word" data-word="the">the</span> <span class="word" data-word="family,">family,</span> <span class="word" data-word="or">or</span> <span class="word" data-word="to">to</span> <span class="word" data-word="take">take</span> <span class="word" data-word="care">care</span> <span class="word" data-word="of">of</span> <span class="word" data-word="younger">younger</span> <span class="word" data-word="siblings">siblings</span> <span class="word" data-word="while">while</span> <span class="word" data-word="their">their</span> <span class="word" data-word="mother">mother</span> <span class="word" data-word="goes,">goes,</span> <span class="word" data-word="usually">usually</span> <span class="word" data-word="prevents">prevents</span> <span class="word" data-word="them">them</span> <span class="word" data-word="ever">ever</span> <span class="word" data-word="having">having</span> <span class="word" data-word="this">this</span> <span class="word" data-word="experience.">experience.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">D</span>
+                <span class="word" data-word="But">But</span> <span class="word" data-word="the">the</span> <span class="word" data-word="challenges">challenges</span> <span class="word" data-word="of">of</span> <span class="word" data-word="bringing">bringing</span> <span class="word" data-word="water">water</span> <span class="word" data-word="to">to</span> <span class="word" data-word="remote">remote</span> <span class="word" data-word="villages">villages</span> <span class="word" data-word="like">like</span> <span class="word" data-word="those">those</span> <span class="word" data-word="in">in</span> <span class="word" data-word="Konso">Konso</span> <span class="word" data-word="are">are</span> <span class="word" data-word="overwhelming.">overwhelming.</span> <span class="word" data-word="Locating">Locating</span> <span class="word" data-word="water">water</span> <span class="word" data-word="underground">underground</span> <span class="word" data-word="and">and</span> <span class="word" data-word="then">then</span> <span class="word" data-word="reaching">reaching</span> <span class="word" data-word="it">it</span> <span class="word" data-word="by">by</span> <span class="word" data-word="means">means</span> <span class="word" data-word="of">of</span> <span class="word" data-word="deep">deep</span> <span class="word" data-word="wells">wells</span> <span class="word" data-word="requires">requires</span> <span class="word" data-word="geological">geological</span> <span class="word" data-word="expertise">expertise</span> <span class="word" data-word="and">and</span> <span class="word" data-word="expensive,">expensive,</span> <span class="word" data-word="heavy">heavy</span> <span class="word" data-word="machines.">machines.</span> <span class="word" data-word="Abandoned">Abandoned</span> <span class="word" data-word="wells">wells</span> <span class="word" data-word="and">and</span> <span class="word" data-word="water">water</span> <span class="word" data-word="projects">projects</span> <span class="word" data-word="litter">litter</span> <span class="word" data-word="the">the</span> <span class="word" data-word="villages">villages</span> <span class="word" data-word="of">of</span> <span class="word" data-word="Konso.">Konso.</span> <span class="word" data-word="In">In</span> <span class="word" data-word="similar">similar</span> <span class="word" data-word="villages">villages</span> <span class="word" data-word="around">around</span> <span class="word" data-word="the">the</span> <span class="word" data-word="developing">developing</span> <span class="word" data-word="world,">world,</span> <span class="word" data-word="the">the</span> <span class="word" data-word="biggest">biggest</span> <span class="word" data-word="problem">problem</span> <span class="word" data-word="with">with</span> <span class="word" data-word="water">water</span> <span class="word" data-word="schemes">schemes</span> <span class="word" data-word="is">is</span> <span class="word" data-word="that">that</span> <span class="word" data-word="about">about</span> <span class="word" data-word="half">half</span> <span class="word" data-word="of">of</span> <span class="word" data-word="them">them</span> <span class="word" data-word="break">break</span> <span class="word" data-word="down">down</span> <span class="word" data-word="soon">soon</span> <span class="word" data-word="after">after</span> <span class="word" data-word="the">the</span> <span class="word" data-word="groups">groups</span> <span class="word" data-word="that">that</span> <span class="word" data-word="built">built</span> <span class="word" data-word="them">them</span> <span class="word" data-word="move">move</span> <span class="word" data-word="on.">on.</span> <span class="word" data-word="Sometimes">Sometimes</span> <span class="word" data-word="technology">technology</span> <span class="word" data-word="is">is</span> <span class="word" data-word="used">used</span> <span class="word" data-word="that">that</span> <span class="word" data-word="can’t">can’t</span> <span class="word" data-word="be">be</span> <span class="word" data-word="repaired">repaired</span> <span class="word" data-word="locally,">locally,</span> <span class="word" data-word="or">or</span> <span class="word" data-word="spare">spare</span> <span class="word" data-word="parts">parts</span> <span class="word" data-word="are">are</span> <span class="word" data-word="available">available</span> <span class="word" data-word="only">only</span> <span class="word" data-word="in">in</span> <span class="word" data-word="the">the</span> <span class="word" data-word="capital.">capital.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">E</span>
+                <span class="word" data-word="Today,">Today,</span> <span class="word" data-word="a">a</span> <span class="word" data-word="UK-based">UK-based</span> <span class="word" data-word="international">international</span> <span class="word" data-word="non-profit">non-profit</span> <span class="word" data-word="organisation">organisation</span> <span class="word" data-word="called">called</span> <span class="word" data-word="WaterAid">WaterAid</span> <span class="word" data-word="is">is</span> <span class="word" data-word="tackling">tackling</span> <span class="word" data-word="the">the</span> <span class="word" data-word="job">job</span> <span class="word" data-word="of">of</span> <span class="word" data-word="bringing">bringing</span> <span class="word" data-word="water">water</span> <span class="word" data-word="to">to</span> <span class="word" data-word="the">the</span> <span class="word" data-word="most">most</span> <span class="word" data-word="remote">remote</span> <span class="word" data-word="villages">villages</span> <span class="word" data-word="of">of</span> <span class="word" data-word="Konso.">Konso.</span> <span class="word" data-word="Their">Their</span> <span class="word" data-word="approach">approach</span> <span class="word" data-word="combines">combines</span> <span class="word" data-word="technologies">technologies</span> <span class="word" data-word="proven">proven</span> <span class="word" data-word="to">to</span> <span class="word" data-word="last">last</span> – <span class="word" data-word="such">such</span> <span class="word" data-word="as">as</span> <span class="word" data-word="building">building</span> <span class="word" data-word="a">a</span> <span class="word" data-word="sand">sand</span> <span class="word" data-word="dam">dam</span> <span class="word" data-word="to">to</span> <span class="word" data-word="capture">capture</span> <span class="word" data-word="and">and</span> <span class="word" data-word="filter">filter</span> <span class="word" data-word="rainwater">rainwater</span> <span class="word" data-word="that">that</span> <span class="word" data-word="would">would</span> <span class="word" data-word="otherwise">otherwise</span> <span class="word" data-word="drain">drain</span> <span class="word" data-word="away.">away.</span> <span class="word" data-word="But">But</span> <span class="word" data-word="the">the</span> <span class="word" data-word="real">real</span> <span class="word" data-word="innovation">innovation</span> <span class="word" data-word="is">is</span> <span class="word" data-word="that">that</span> <span class="word" data-word="WaterAid">WaterAid</span> <span class="word" data-word="believes">believes</span> <span class="word" data-word="technology">technology</span> <span class="word" data-word="is">is</span> <span class="word" data-word="only">only</span> <span class="word" data-word="part">part</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="solution.">solution.</span> <span class="word" data-word="Just">Just</span> <span class="word" data-word="as">as</span> <span class="word" data-word="important">important</span> <span class="word" data-word="is">is</span> <span class="word" data-word="involving">involving</span> <span class="word" data-word="the">the</span> <span class="word" data-word="local">local</span> <span class="word" data-word="community">community</span> <span class="word" data-word="in">in</span> <span class="word" data-word="designing,">designing,</span> <span class="word" data-word="building">building</span> <span class="word" data-word="and">and</span> <span class="word" data-word="maintaining">maintaining</span> <span class="word" data-word="new">new</span> <span class="word" data-word="water">water</span> <span class="word" data-word="projects.">projects.</span> <span class="word" data-word="Before">Before</span> <span class="word" data-word="beginning">beginning</span> <span class="word" data-word="any">any</span> <span class="word" data-word="project,">project,</span> <span class="word" data-word="WaterAid">WaterAid</span> <span class="word" data-word="asks">asks</span> <span class="word" data-word="the">the</span> <span class="word" data-word="community">community</span> <span class="word" data-word="to">to</span> <span class="word" data-word="create">create</span> <span class="word" data-word="a">a</span> <span class="word" data-word="WASH">WASH</span> <span class="word" data-word="(water,">(water,</span> <span class="word" data-word="sanitation,">sanitation,</span> <span class="word" data-word="hygiene)">hygiene)</span> <span class="word" data-word="committee">committee</span> <span class="word" data-word="of">of</span> <span class="word" data-word="seven">seven</span> <span class="word" data-word="people.">people.</span> <span class="word" data-word="The">The</span> <span class="word" data-word="committee">committee</span> <span class="word" data-word="works">works</span> <span class="word" data-word="with">with</span> <span class="word" data-word="WaterAid">WaterAid</span> <span class="word" data-word="to">to</span> <span class="word" data-word="plan">plan</span> <span class="word" data-word="projects">projects</span> <span class="word" data-word="and">and</span> <span class="word" data-word="involve">involve</span> <span class="word" data-word="the">the</span> <span class="word" data-word="village">village</span> <span class="word" data-word="in">in</span> <span class="word" data-word="construction.">construction.</span> <span class="word" data-word="Then">Then</span> <span class="word" data-word="it">it</span> <span class="word" data-word="maintains">maintains</span> <span class="word" data-word="and">and</span> <span class="word" data-word="runs">runs</span> <span class="word" data-word="the">the</span> <span class="word" data-word="project.">project.</span>
+            </div>
+                
+            <div class="paragraph">
+                <span class="paragraph-letter">F</span>
+                <span class="word" data-word="The">The</span> <span class="word" data-word="people">people</span> <span class="word" data-word="of">of</span> <span class="word" data-word="Konso,">Konso,</span> <span class="word" data-word="who">who</span> <span class="word" data-word="grow">grow</span> <span class="word" data-word="their">their</span> <span class="word" data-word="crops">crops</span> <span class="word" data-word="on">on</span> <span class="word" data-word="terraces">terraces</span> <span class="word" data-word="they">they</span> <span class="word" data-word="have">have</span> <span class="word" data-word="dug">dug</span> <span class="word" data-word="into">into</span> <span class="word" data-word="the">the</span> <span class="word" data-word="sides">sides</span> <span class="word" data-word="of">of</span> <span class="word" data-word="mountains,">mountains,</span> <span class="word" data-word="are">are</span> <span class="word" data-word="famous">famous</span> <span class="word" data-word="for">for</span> <span class="word" data-word="hard">hard</span> <span class="word" data-word="work.">work.</span> <span class="word" data-word="In">In</span> <span class="word" data-word="the">the</span> <span class="word" data-word="village">village</span> <span class="word" data-word="of">of</span> <span class="word" data-word="Orbesho,">Orbesho,</span> <span class="word" data-word="residents">residents</span> <span class="word" data-word="even">even</span> <span class="word" data-word="constructed">constructed</span> <span class="word" data-word="a">a</span> <span class="word" data-word="road">road</span> <span class="word" data-word="themselves">themselves</span> <span class="word" data-word="so">so</span> <span class="word" data-word="that">that</span> <span class="word" data-word="drilling">drilling</span> <span class="word" data-word="machinery">machinery</span> <span class="word" data-word="could">could</span> <span class="word" data-word="come">come</span> <span class="word" data-word="in.">in.</span> <span class="word" data-word="Last">Last</span> <span class="word" data-word="summer,">summer,</span> <span class="word" data-word="their">their</span> <span class="word" data-word="pump,">pump,</span> <span class="word" data-word="installed">installed</span> <span class="word" data-word="by">by</span> <span class="word" data-word="the">the</span> <span class="word" data-word="river,">river,</span> <span class="word" data-word="was">was</span> <span class="word" data-word="being">being</span> <span class="word" data-word="motorised">motorised</span> <span class="word" data-word="to">to</span> <span class="word" data-word="push">push</span> <span class="word" data-word="its">its</span> <span class="word" data-word="water">water</span> <span class="word" data-word="to">to</span> <span class="word" data-word="a">a</span> <span class="word" data-word="newly">newly</span> <span class="word" data-word="built">built</span> <span class="word" data-word="reservoir">reservoir</span> <span class="word" data-word="on">on</span> <span class="word" data-word="top">top</span> <span class="word" data-word="of">of</span> <span class="word" data-word="a">a</span> <span class="word" data-word="nearby">nearby</span> <span class="word" data-word="mountain.">mountain.</span> <span class="word" data-word="From">From</span> <span class="word" data-word="there,">there,</span> <span class="word" data-word="gravity">gravity</span> <span class="word" data-word="will">will</span> <span class="word" data-word="carry">carry</span> <span class="word" data-word="it">it</span> <span class="word" data-word="down">down</span> <span class="word" data-word="in">in</span> <span class="word" data-word="pipes">pipes</span> <span class="word" data-word="to">to</span> <span class="word" data-word="villages">villages</span> <span class="word" data-word="on">on</span> <span class="word" data-word="the">the</span> <span class="word" data-word="other">other</span> <span class="word" data-word="side">side</span> <span class="word" data-word="of">of</span> <span class="word" data-word="the">the</span> <span class="word" data-word="mountain.">mountain.</span> <span class="word" data-word="Residents">Residents</span> <span class="word" data-word="of">of</span> <span class="word" data-word="those">those</span> <span class="word" data-word="villages">villages</span> <span class="word" data-word="have">have</span> <span class="word" data-word="each">each</span> <span class="word" data-word="given">given</span> <span class="word" data-word="some">some</span> <span class="word" data-word="money">money</span> <span class="word" data-word="to">to</span> <span class="word" data-word="help">help</span> <span class="word" data-word="fund">fund</span> <span class="word" data-word="the">the</span> <span class="word" data-word="project.">project.</span> <span class="word" data-word="They">They</span> <span class="word" data-word="have">have</span> <span class="word" data-word="made">made</span> <span class="word" data-word="concrete">concrete</span> <span class="word" data-word="and">and</span> <span class="word" data-word="collected">collected</span> <span class="word" data-word="stones">stones</span> <span class="word" data-word="for">for</span> <span class="word" data-word="the">the</span> <span class="word" data-word="structures.">structures.</span> <span class="word" data-word="Now">Now</span> <span class="word" data-word="they">they</span> <span class="word" data-word="are">are</span> <span class="word" data-word="digging">digging</span> <span class="word" data-word="trenches">trenches</span> <span class="word" data-word="to">to</span> <span class="word" data-word="lay">lay</span> <span class="word" data-word="pipes.">pipes.</span> <span class="word" data-word="If">If</span> <span class="word" data-word="all">all</span> <span class="word" data-word="goes">goes</span> <span class="word" data-word="well,">well,</span> <span class="word" data-word="Aylito">Aylito</span> <span class="word" data-word="Binayo">Binayo</span> <span class="word" data-word="will">will</span> <span class="word" data-word="have">have</span> <span class="word" data-word="a">a</span> <span class="word" data-word="tap">tap</span> <span class="word" data-word="with">with</span> <span class="word" data-word="safe">safe</span> <span class="word" data-word="water">water</span> <span class="word" data-word="just">just</span> <span class="word" data-word="a">a</span> <span class="word" data-word="three-minute">three-minute</span> <span class="word" data-word="walk">walk</span> <span class="word" data-word="from">from</span> <span class="word" data-word="her">her</span> <span class="word" data-word="front">front</span> <span class="word" data-word="door.">door.</span>
+            </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="player-title">
+            <i class="fas fa-music"></i> audio player
+        </div>
+        
+        <div class="player-controls">
+            <button class="player-btn" id="playBtn" title="Play">
+                <i class="fas fa-play"></i>
+            </button>
+            <button class="player-btn" id="pauseBtn" title="Pause">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button class="player-btn" id="stopBtn" title="Stop">
+                <i class="fas fa-stop"></i>
+            </button>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer">
+        <source src="https://raw.githubusercontent.com/wangzhrm/Lucy/main/20250807_103744.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <script>
+        // Font size controls for reading mode
+        const content = document.getElementById('content');
+        const decreaseFont = document.getElementById('decreaseFont');
+        const increaseFont = document.getElementById('increaseFont');
+        const sizeValue = document.getElementById('sizeValue');
+        
+        let fontSize = 16;
+        
+        decreaseFont.addEventListener('click', () => {
+            if (fontSize > 12) {
+                fontSize--;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        increaseFont.addEventListener('click', () => {
+            if (fontSize < 24) {
+                fontSize++;
+                content.style.fontSize = fontSize + 'px';
+                sizeValue.textContent = fontSize + 'px';
+            }
+        });
+        
+        // Font size controls for study mode
+        const studyContent = document.getElementById('study-content');
+        const studyDecreaseFont = document.getElementById('studyDecreaseFont');
+        const studyIncreaseFont = document.getElementById('studyIncreaseFont');
+        const studySizeValue = document.getElementById('studySizeValue');
+        let studyFontSize = 16;
+        
+        studyDecreaseFont.addEventListener('click', () => {
+            if (studyFontSize > 12) {
+                studyFontSize--;
+                studyContent.style.fontSize = studyFontSize + 'px';
+                studySizeValue.textContent = studyFontSize + 'px';
+            }
+        });
+        
+        studyIncreaseFont.addEventListener('click', () => {
+            if (studyFontSize < 24) {
+                studyFontSize++;
+                studyContent.style.fontSize = studyFontSize + 'px';
+                studySizeValue.textContent = studyFontSize + 'px';
+            }
+        });
+        
+        // Music player functionality
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const progressBar = document.getElementById('progressBar');
+        
+        // Set initial state
+        audio.volume = 0.5;
+        
+        // Play button
+        playBtn.addEventListener('click', () => {
+            audio.play();
+        });
+        
+        // Pause button
+        pauseBtn.addEventListener('click', () => {
+            audio.pause();
+        });
+        
+        // Stop button
+        stopBtn.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            progress.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        });
+        
+        // Update progress bar
+        audio.addEventListener('timeupdate', () => {
+            // Calculate progress percentage
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            
+            // Update time displays
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+            if (!isNaN(audio.duration)) {
+                durationEl.textContent = formatTime(audio.duration);
+            }
+        });
+        
+        // Format time from seconds to MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+        
+        // Update duration when metadata is loaded
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+        
+        // Click on progress bar to seek
+        progressBar.addEventListener('click', (e) => {
+            const width = progressBar.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            
+            audio.currentTime = (clickX / width) * duration;
+        });
+        
+        // Tab switching functionality
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Add active to this tab
+                tab.classList.add('active');
+                const tabName = tab.getAttribute('data-tab');
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+                
+                // Show/hide translation display
+                const translationDisplay = document.getElementById('translation-display');
+                translationDisplay.style.display = tabName === 'study' ? 'block' : 'none';
+            });
+        });
+        
+        // Word translation functionality
+        const translationDisplay = document.getElementById('translation-display');
+        const wordDisplay = document.querySelector('.word-display');
+        const meaningDisplay = document.querySelector('.meaning-display');
+        const translationCache = {};
+        
+        document.getElementById('study-content')?.addEventListener('click', function(e) {
+            if (e.target.classList.contains('word')) {
+                const word = e.target.dataset.word;
+                
+                // Remove active class from all words
+                document.querySelectorAll('.word.active').forEach(w => w.classList.remove('active'));
+                
+                // Add active to this word
+                e.target.classList.add('active');
+                
+                // Display the word
+                wordDisplay.textContent = word;
+                meaningDisplay.textContent = 'Loading...';
+                
+                // Check cache first
+                if (translationCache[word]) {
+                    meaningDisplay.textContent = translationCache[word];
+                    return;
+                }
+                
+                // Fetch translation using MyMemory API
+                fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|zh`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.responseData && data.responseData.translatedText) {
+                            const translation = data.responseData.translatedText;
+                            
+                            // Cache the translation
+                            translationCache[word] = translation;
+                            
+                            // Display the translation
+                            meaningDisplay.textContent = translation;
+                        } else {
+                            meaningDisplay.textContent = 'Translation not available';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Translation error:', error);
+                        meaningDisplay.textContent = 'Translation error';
+                    });
+            }
+        });
+    </script>
+</body>
+</html>
