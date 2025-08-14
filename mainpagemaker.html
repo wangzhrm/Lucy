@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Sharing Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --border: #dee2e6;
+            --date-bg: #e7f5ff;
+            --date-color: #1864ab;
+            --import: #4caf50;
+            --export: #ff9800;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0;
+        }
+        
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background-color: var(--light);
+            border-right: 1px solid var(--border);
+        }
+        
+        .preview-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        button i {
+            margin-right: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .btn-block {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn-export {
+            background: linear-gradient(135deg, #4cc9f0, #3a86ff);
+        }
+        
+        .btn-reset {
+            background: linear-gradient(135deg, #e63946, #d00000);
+        }
+        
+        .btn-import {
+            background: linear-gradient(135deg, var(--import), #2e7d32);
+        }
+        
+        .btn-export-data {
+            background: linear-gradient(135deg, var(--export), #e65100);
+        }
+        
+        .document-list {
+            list-style-type: none;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .document-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .document-item:last-child {
+            border-bottom: none;
+        }
+        
+        .document-item:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .document-info {
+            flex: 1;
+        }
+        
+        .document-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .document-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .document-date {
+            color: var(--date-color);
+            font-weight: 500;
+        }
+        
+        .delete-btn {
+            background-color: #e63946;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-left: 10px;
+        }
+        
+        .delete-btn:hover {
+            background-color: #d00000;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .export-box {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            background-color: #f8f9fa;
+        }
+        
+        .instructions {
+            background-color: #e7f5ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .date-header {
+            background-color: var(--date-bg);
+            color: var(--date-color);
+            padding: 12px 20px;
+            margin: 15px -10px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .date-header i {
+            margin-right: 10px;
+        }
+        
+        .data-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .data-actions button {
+            flex: 1;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .form-section {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+            
+            .data-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-file-alt"></i> Document Sharing Platform</h1>
+            <p class="subtitle">Create, manage, and export documents with advanced features</p>
+        </header>
+        
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> How to Use This Tool</h3>
+            <ol>
+                <li>Set your page title and banner image (optional)</li>
+                <li>Add documents with names, links, and dates</li>
+                <li>All data is saved in your browser's storage</li>
+                <li>Export your data as JSON to save/transfer your work</li>
+                <li>Click "Export HTML" to generate the HTML code</li>
+                <li>Copy the code and host it on GitHub Pages</li>
+            </ol>
+        </div>
+        
+        <div class="app-container">
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-cog"></i> Page Settings</h2>
+                
+                <div class="form-group">
+                    <label for="pageTitle">Page Title</label>
+                    <input type="text" id="pageTitle" placeholder="Enter page title" value="Shared Documents">
+                </div>
+                
+                <div class="form-group">
+                    <label for="bannerUrl">Banner Image URL</label>
+                    <input type="url" id="bannerUrl" placeholder="https://example.com/banner.jpg" value="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400&q=80">
+                </div>
+                
+                <div class="data-actions">
+                    <div class="file-input-wrapper">
+                        <button class="btn-import btn-block">
+                            <i class="fas fa-file-import"></i> Import Data
+                        </button>
+                        <input type="file" id="importFile" accept=".json">
+                    </div>
+                    <button class="btn-export-data btn-block" id="exportDataBtn">
+                        <i class="fas fa-file-export"></i> Export Data
+                    </button>
+                </div>
+                
+                <h2 class="section-title" style="margin-top: 30px;"><i class="fas fa-plus-circle"></i> Add New Document</h2>
+                
+                <div class="form-group">
+                    <label for="documentName">Document Name</label>
+                    <input type="text" id="documentName" placeholder="Enter document name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="documentUrl">Document URL</label>
+                    <input type="url" id="documentUrl" placeholder="https://example.com/document.pdf">
+                </div>
+                
+                <div class="form-group">
+                    <label for="documentDate">Document Date</label>
+                    <input type="date" id="documentDate">
+                </div>
+                
+                <button id="addDocumentBtn">
+                    <i class="fas fa-plus"></i> Add Document
+                </button>
+                
+                <h2 class="section-title" style="margin-top: 30px;"><i class="fas fa-list"></i> Current Documents</h2>
+                <div id="documentsContainer">
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>No documents added yet</p>
+                    </div>
+                </div>
+                
+                <button class="btn-block btn-reset" id="resetBtn">
+                    <i class="fas fa-trash-alt"></i> Reset All Documents
+                </button>
+            </div>
+            
+            <div class="preview-section">
+                <h2 class="section-title"><i class="fas fa-code"></i> Export HTML</h2>
+                <p>Click the button below to generate the HTML code for your document list.</p>
+                
+                <button class="btn-block btn-export" id="exportHtmlBtn">
+                    <i class="fas fa-file-export"></i> Export HTML
+                </button>
+                
+                <div class="export-box">
+                    <label for="htmlOutput">Generated HTML Code:</label>
+                    <textarea id="htmlOutput" readonly placeholder="Your HTML code will appear here..."></textarea>
+                </div>
+                
+                <div class="instructions">
+                    <h3><i class="fas fa-cloud-upload-alt"></i> GitHub Publishing Instructions</h3>
+                    <ol>
+                        <li>Create a new repository on GitHub</li>
+                        <li>Create a new file named "index.html"</li>
+                        <li>Paste the generated HTML code into this file</li>
+                        <li>Commit the file to your repository</li>
+                        <li>Go to repository Settings → Pages</li>
+                        <li>Set source to "Deploy from a branch" and select your main branch</li>
+                        <li>Your document list will be live at: https://[your-username].github.io/[repository-name]</li>
+                        <li><strong>Pro Tip:</strong> Save your configuration using "Export Data" to edit later!</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const pageTitleInput = document.getElementById('pageTitle');
+            const bannerUrlInput = document.getElementById('bannerUrl');
+            const documentNameInput = document.getElementById('documentName');
+            const documentUrlInput = document.getElementById('documentUrl');
+            const documentDateInput = document.getElementById('documentDate');
+            const addDocumentBtn = document.getElementById('addDocumentBtn');
+            const documentsContainer = document.getElementById('documentsContainer');
+            const exportHtmlBtn = document.getElementById('exportHtmlBtn');
+            const exportDataBtn = document.getElementById('exportDataBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const htmlOutput = document.getElementById('htmlOutput');
+            const importFileInput = document.getElementById('importFile');
+            
+            // Set today's date as default
+            const today = new Date();
+            documentDateInput.value = today.toISOString().split('T')[0];
+            
+            // Load documents from localStorage
+            let documents = JSON.parse(localStorage.getItem('documents')) || [];
+            let pageSettings = JSON.parse(localStorage.getItem('pageSettings')) || {
+                title: "Shared Documents",
+                bannerUrl: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400&q=80"
+            };
+            
+            // Set initial values
+            pageTitleInput.value = pageSettings.title;
+            bannerUrlInput.value = pageSettings.bannerUrl;
+            
+            // Save page settings
+            function savePageSettings() {
+                pageSettings = {
+                    title: pageTitleInput.value,
+                    bannerUrl: bannerUrlInput.value
+                };
+                localStorage.setItem('pageSettings', JSON.stringify(pageSettings));
+            }
+            
+            pageTitleInput.addEventListener('change', savePageSettings);
+            bannerUrlInput.addEventListener('change', savePageSettings);
+            
+            // Render documents
+            function renderDocuments() {
+                if (documents.length === 0) {
+                    documentsContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-folder-open"></i>
+                            <p>No documents added yet</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Sort documents by date (newest first)
+                const sortedDocs = [...documents].sort((a, b) => {
+                    return new Date(b.date) - new Date(a.date);
+                });
+                
+                documentsContainer.innerHTML = '<ul class="document-list"></ul>';
+                const list = documentsContainer.querySelector('ul');
+                
+                let currentDate = null;
+                
+                sortedDocs.forEach((doc, index) => {
+                    const docDate = new Date(doc.date);
+                    const formattedDate = docDate.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                    
+                    // Add date header if needed
+                    if (formattedDate !== currentDate) {
+                        currentDate = formattedDate;
+                        const dateHeader = document.createElement('li');
+                        dateHeader.className = 'date-header';
+                        dateHeader.innerHTML = `
+                            <i class="fas fa-calendar-alt"></i> ${formattedDate}
+                        `;
+                        list.appendChild(dateHeader);
+                    }
+                    
+                    const docItem = document.createElement('li');
+                    docItem.className = 'document-item';
+                    docItem.innerHTML = `
+                        <div class="document-info">
+                            <div class="document-name">${doc.name}</div>
+                            <div class="document-meta">
+                                <div class="document-date">${formattedDate}</div>
+                                <div class="document-url">${truncateUrl(doc.url, 30)}</div>
+                            </div>
+                        </div>
+                        <button class="delete-btn" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    list.appendChild(docItem);
+                });
+                
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        deleteDocument(index);
+                    });
+                });
+            }
+            
+            function truncateUrl(url, maxLength) {
+                if (url.length <= maxLength) return url;
+                return url.substring(0, maxLength - 3) + '...';
+            }
+            
+            // Add a new document
+            function addDocument() {
+                const name = documentNameInput.value.trim();
+                const url = documentUrlInput.value.trim();
+                const date = documentDateInput.value;
+                
+                if (!name || !url || !date) {
+                    alert('Please fill all fields');
+                    return;
+                }
+                
+                // Simple URL validation
+                try {
+                    new URL(url);
+                } catch (e) {
+                    alert('Please enter a valid URL');
+                    return;
+                }
+                
+                documents.push({ name, url, date });
+                localStorage.setItem('documents', JSON.stringify(documents));
+                
+                documentNameInput.value = '';
+                documentUrlInput.value = '';
+                documentNameInput.focus();
+                
+                renderDocuments();
+            }
+            
+            // Delete a document
+            function deleteDocument(index) {
+                documents.splice(index, 1);
+                localStorage.setItem('documents', JSON.stringify(documents));
+                renderDocuments();
+            }
+            
+            // Reset all documents
+            resetBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to delete all documents?')) {
+                    documents = [];
+                    localStorage.removeItem('documents');
+                    renderDocuments();
+                }
+            });
+            
+            // Export to HTML
+            function exportToHtml() {
+                // Format date for display
+                function formatDate(dateString) {
+                    const date = new Date(dateString);
+                    return date.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                }
+                
+                // Group documents by date
+                const groupedDocs = {};
+                documents.forEach(doc => {
+                    const formattedDate = formatDate(doc.date);
+                    if (!groupedDocs[formattedDate]) {
+                        groupedDocs[formattedDate] = [];
+                    }
+                    groupedDocs[formattedDate].push(doc);
+                });
+                
+                // Sort dates (newest first)
+                const sortedDates = Object.keys(groupedDocs).sort((a, b) => {
+                    return new Date(b) - new Date(a);
+                });
+                
+                let documentsHtml = '';
+                
+                if (sortedDates.length === 0) {
+                    documentsHtml = `
+                        <div class="empty-state">
+                            <i class="fas fa-folder-open"></i>
+                            <p>No documents added yet</p>
+                        </div>
+                    `;
+                } else {
+                    sortedDates.forEach(date => {
+                        documentsHtml += `
+                            <div class="date-section">
+                                <h3 class="date-header">${date}</h3>
+                                <ul class="document-list">
+                        `;
+                        
+                        groupedDocs[date].forEach(doc => {
+                            documentsHtml += `
+                                <li class="document-item">
+                                    <a href="${doc.url}" target="_blank">
+                                        <i class="fas fa-file-alt"></i> ${doc.name}
+                                    </a>
+                                </li>
+                            `;
+                        });
+                        
+                        documentsHtml += `
+                                </ul>
+                            </div>
+                        `;
+                    });
+                }
+                
+                const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${pageSettings.title}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #212529;
+            background: #f8f9fa;
+            padding: 0;
+        }
+        
+        .banner-container {
+            max-width: 800px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+        
+        .banner {
+            width: 100%;
+            height: 120px;
+            background-image: url('${pageSettings.bannerUrl}');
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .banner-title {
+            color: white;
+            font-size: 2rem;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            padding: 0 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .date-section {
+            margin-bottom: 40px;
+        }
+        
+        .date-header {
+            background-color: #e7f5ff;
+            color: #1864ab;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1.3rem;
+            border-left: 5px solid #1864ab;
+            margin-bottom: 15px;
+            border-radius: 0 6px 6px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .date-header i {
+            margin-right: 10px;
+        }
+        
+        .document-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .document-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .document-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .document-item a {
+            text-decoration: none;
+            color: #4361ee;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .document-item a:hover {
+            color: #3a0ca3;
+        }
+        
+        .document-item i {
+            margin-right: 12px;
+            font-size: 1.3rem;
+            color: #4cc9f0;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        @media (max-width: 768px) {
+            .banner {
+                height: 100px;
+            }
+            
+            .banner-title {
+                font-size: 1.6rem;
+            }
+            
+            .date-header {
+                font-size: 1.1rem;
+                padding: 12px 15px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .document-item {
+                padding: 12px;
+            }
+            
+            .document-item a {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .banner {
+                height: 80px;
+            }
+            
+            .banner-title {
+                font-size: 1.3rem;
+            }
+            
+            .date-header {
+                font-size: 1rem;
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container">
+        <div class="banner">
+            <div class="banner-overlay">
+                <h1 class="banner-title">${pageSettings.title}</h1>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="date-sections">
+            ${documentsHtml}
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Created with Document Sharing Platform | ${new Date().getFullYear()}</p>
+    </div>
+</body>
+</html>`;
+                
+                htmlOutput.value = html;
+            }
+            
+            // Export data as JSON
+            function exportData() {
+                const data = {
+                    pageSettings,
+                    documents
+                };
+                
+                const dataStr = JSON.stringify(data, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'document-platform-data.json';
+                document.body.appendChild(a);
+                a.click();
+                
+                // Clean up
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            }
+            
+            // Import data from JSON
+            function importData(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        // Validate structure
+                        if (!data.pageSettings || !data.documents) {
+                            throw new Error('Invalid file format');
+                        }
+                        
+                        // Update settings
+                        pageSettings = data.pageSettings;
+                        documents = data.documents;
+                        
+                        // Save to localStorage
+                        localStorage.setItem('pageSettings', JSON.stringify(pageSettings));
+                        localStorage.setItem('documents', JSON.stringify(documents));
+                        
+                        // Update UI
+                        pageTitleInput.value = pageSettings.title;
+                        bannerUrlInput.value = pageSettings.bannerUrl;
+                        renderDocuments();
+                        
+                        alert('Data imported successfully!');
+                    } catch (error) {
+                        console.error('Error importing data:', error);
+                        alert('Error importing data. Please check the file format.');
+                    }
+                    
+                    // Reset file input
+                    importFileInput.value = '';
+                };
+                
+                reader.readAsText(file);
+            }
+            
+            // Event listeners
+            addDocumentBtn.addEventListener('click', addDocument);
+            
+            documentNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addDocument();
+            });
+            
+            documentUrlInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addDocument();
+            });
+            
+            exportHtmlBtn.addEventListener('click', exportToHtml);
+            exportDataBtn.addEventListener('click', exportData);
+            importFileInput.addEventListener('change', importData);
+            
+            // Initial render
+            renderDocuments();
+        });
+    </script>
+</body>
+</html>
