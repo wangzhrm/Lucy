@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Sharing Platform</title>
+    <title>Document Sharing Platform with Import/Export</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #4361ee;
             --secondary: #3f37c9;
             --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #e63946;
             --light: #f8f9fa;
             --dark: #212529;
             --gray: #6c757d;
             --border: #dee2e6;
             --date-bg: #e7f5ff;
             --date-color: #1864ab;
-            --import: #4caf50;
-            --export: #ff9800;
+            --import-bg: #e6f7ff;
         }
         
         * {
@@ -36,7 +37,7 @@
         }
         
         .container {
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
             background-color: white;
             border-radius: 12px;
@@ -106,16 +107,17 @@
             color: var(--gray);
         }
         
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid var(--border);
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
+            font-family: inherit;
         }
         
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
@@ -158,16 +160,12 @@
             background: linear-gradient(135deg, #4cc9f0, #3a86ff);
         }
         
+        .btn-import {
+            background: linear-gradient(135deg, #38b000, #2d6a4f);
+        }
+        
         .btn-reset {
             background: linear-gradient(135deg, #e63946, #d00000);
-        }
-        
-        .btn-import {
-            background: linear-gradient(135deg, var(--import), #2e7d32);
-        }
-        
-        .btn-export-data {
-            background: linear-gradient(135deg, var(--export), #e65100);
         }
         
         .document-list {
@@ -242,6 +240,14 @@
             margin-top: 20px;
         }
         
+        .import-box {
+            background-color: var(--import-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+        }
+        
         textarea {
             width: 100%;
             height: 200px;
@@ -303,31 +309,22 @@
             margin-right: 10px;
         }
         
-        .data-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4cc9f0, #3a86ff);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease-out;
         }
         
-        .data-actions button {
-            flex: 1;
-        }
-        
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
+        .notification.show {
+            transform: translateX(0);
         }
         
         @media (max-width: 768px) {
@@ -347,19 +344,18 @@
             .section-title {
                 font-size: 1.3rem;
             }
-            
-            .data-actions {
-                flex-direction: column;
-                gap: 8px;
-            }
         }
     </style>
 </head>
 <body>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> <span id="notificationText">Operation completed successfully!</span>
+    </div>
+    
     <div class="container">
         <header>
-            <h1><i class="fas fa-file-alt"></i> Document Sharing Platform</h1>
-            <p class="subtitle">Create, manage, and export documents with advanced features</p>
+            <h1><i class="fas fa-file-import"></i> Document Sharing Platform</h1>
+            <p class="subtitle">Create, import, and share documents with date grouping and easy export</p>
         </header>
         
         <div class="instructions">
@@ -367,15 +363,28 @@
             <ol>
                 <li>Set your page title and banner image (optional)</li>
                 <li>Add documents with names, links, and dates</li>
-                <li>All data is saved in your browser's storage</li>
-                <li>Export your data as JSON to save/transfer your work</li>
+                <li>Documents are saved in your browser's storage</li>
                 <li>Click "Export HTML" to generate the HTML code</li>
                 <li>Copy the code and host it on GitHub Pages</li>
+                <li><strong>NEW:</strong> Import existing HTML to update your document list</li>
             </ol>
         </div>
         
         <div class="app-container">
             <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-file-import"></i> Import Existing Page</h2>
+                
+                <div class="import-box">
+                    <div class="form-group">
+                        <label for="importHtml">Paste your existing HTML code:</label>
+                        <textarea id="importHtml" placeholder="Paste the HTML code of your existing document page here..."></textarea>
+                    </div>
+                    
+                    <button class="btn-block btn-import" id="importBtn">
+                        <i class="fas fa-file-import"></i> Import HTML
+                    </button>
+                </div>
+                
                 <h2 class="section-title"><i class="fas fa-cog"></i> Page Settings</h2>
                 
                 <div class="form-group">
@@ -385,19 +394,7 @@
                 
                 <div class="form-group">
                     <label for="bannerUrl">Banner Image URL</label>
-                    <input type="url" id="bannerUrl" placeholder="https://example.com/banner.jpg" value="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400&q=80">
-                </div>
-                
-                <div class="data-actions">
-                    <div class="file-input-wrapper">
-                        <button class="btn-import btn-block">
-                            <i class="fas fa-file-import"></i> Import Data
-                        </button>
-                        <input type="file" id="importFile" accept=".json">
-                    </div>
-                    <button class="btn-export-data btn-block" id="exportDataBtn">
-                        <i class="fas fa-file-export"></i> Export Data
-                    </button>
+                    <input type="url" id="bannerUrl" placeholder="https://example.com/banner.jpg" value="https://tonysew.wordpress.com/wp-content/uploads/2025/07/65f184bef6ff0c132cc9c1e0482569f5.png">
                 </div>
                 
                 <h2 class="section-title" style="margin-top: 30px;"><i class="fas fa-plus-circle"></i> Add New Document</h2>
@@ -457,7 +454,6 @@
                         <li>Go to repository Settings → Pages</li>
                         <li>Set source to "Deploy from a branch" and select your main branch</li>
                         <li>Your document list will be live at: https://[your-username].github.io/[repository-name]</li>
-                        <li><strong>Pro Tip:</strong> Save your configuration using "Export Data" to edit later!</li>
                     </ol>
                 </div>
             </div>
@@ -475,10 +471,25 @@
             const addDocumentBtn = document.getElementById('addDocumentBtn');
             const documentsContainer = document.getElementById('documentsContainer');
             const exportHtmlBtn = document.getElementById('exportHtmlBtn');
-            const exportDataBtn = document.getElementById('exportDataBtn');
             const resetBtn = document.getElementById('resetBtn');
             const htmlOutput = document.getElementById('htmlOutput');
-            const importFileInput = document.getElementById('importFile');
+            const importHtmlInput = document.getElementById('importHtml');
+            const importBtn = document.getElementById('importBtn');
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            // Show notification function
+            function showNotification(message, isSuccess = true) {
+                notificationText.textContent = message;
+                notification.style.background = isSuccess 
+                    ? 'linear-gradient(135deg, #4cc9f0, #3a86ff)' 
+                    : 'linear-gradient(135deg, #e63946, #d00000)';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
             
             // Set today's date as default
             const today = new Date();
@@ -488,7 +499,7 @@
             let documents = JSON.parse(localStorage.getItem('documents')) || [];
             let pageSettings = JSON.parse(localStorage.getItem('pageSettings')) || {
                 title: "Shared Documents",
-                bannerUrl: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=400&q=80"
+                bannerUrl: "https://tonysew.wordpress.com/wp-content/uploads/2025/07/65f184bef6ff0c132cc9c1e0482569f5.png"
             };
             
             // Set initial values
@@ -555,7 +566,7 @@
                             <div class="document-name">${doc.name}</div>
                             <div class="document-meta">
                                 <div class="document-date">${formattedDate}</div>
-                                <div class="document-url">${truncateUrl(doc.url, 30)}</div>
+                                <div class="document-link">${truncateUrl(doc.url)}</div>
                             </div>
                         </div>
                         <button class="delete-btn" data-index="${index}">
@@ -574,9 +585,10 @@
                 });
             }
             
-            function truncateUrl(url, maxLength) {
+            // Helper to truncate URLs for display
+            function truncateUrl(url, maxLength = 30) {
                 if (url.length <= maxLength) return url;
-                return url.substring(0, maxLength - 3) + '...';
+                return url.substring(0, maxLength) + '...';
             }
             
             // Add a new document
@@ -586,7 +598,7 @@
                 const date = documentDateInput.value;
                 
                 if (!name || !url || !date) {
-                    alert('Please fill all fields');
+                    showNotification('Please fill all fields', false);
                     return;
                 }
                 
@@ -594,7 +606,7 @@
                 try {
                     new URL(url);
                 } catch (e) {
-                    alert('Please enter a valid URL');
+                    showNotification('Please enter a valid URL', false);
                     return;
                 }
                 
@@ -606,6 +618,7 @@
                 documentNameInput.focus();
                 
                 renderDocuments();
+                showNotification('Document added successfully!');
             }
             
             // Delete a document
@@ -613,6 +626,7 @@
                 documents.splice(index, 1);
                 localStorage.setItem('documents', JSON.stringify(documents));
                 renderDocuments();
+                showNotification('Document removed');
             }
             
             // Reset all documents
@@ -621,6 +635,7 @@
                     documents = [];
                     localStorage.removeItem('documents');
                     renderDocuments();
+                    showNotification('All documents have been reset');
                 }
             });
             
@@ -716,7 +731,7 @@
         
         .banner {
             width: 100%;
-            height: 120px;
+            height: 120px; /* Reduced height */
             background-image: url('${pageSettings.bannerUrl}');
             background-size: cover;
             background-position: center;
@@ -885,71 +900,112 @@
 </html>`;
                 
                 htmlOutput.value = html;
+                showNotification('HTML exported successfully!');
             }
             
-            // Export data as JSON
-            function exportData() {
-                const data = {
-                    pageSettings,
-                    documents
+            // Custom date parser to avoid timezone issues
+            function parseFormattedDate(dateStr) {
+                const months = {
+                    "January": "01", "February": "02", "March": "03", "April": "04",
+                    "May": "05", "June": "06", "July": "07", "August": "08",
+                    "September": "09", "October": "10", "November": "11", "December": "12"
                 };
                 
-                const dataStr = JSON.stringify(data, null, 2);
-                const dataBlob = new Blob([dataStr], {type: 'application/json'});
-                const url = URL.createObjectURL(dataBlob);
+                // Remove any icon text and trim
+                const cleanStr = dateStr.replace(/[^\w\s,]/g, '').trim();
                 
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'document-platform-data.json';
-                document.body.appendChild(a);
-                a.click();
+                // Split into parts: Month Day, Year
+                const parts = cleanStr.split(' ');
+                if (parts.length < 3) return null;
                 
-                // Clean up
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }, 100);
+                const monthName = parts[0];
+                const day = parts[1].replace(',', '').padStart(2, '0');
+                const year = parts[2];
+                
+                if (!months[monthName]) return null;
+                
+                return `${year}-${months[monthName]}-${day}`;
             }
             
-            // Import data from JSON
-            function importData(event) {
-                const file = event.target.files[0];
-                if (!file) return;
+            // Import HTML function
+            function importHtml() {
+                const html = importHtmlInput.value.trim();
+                if (!html) {
+                    showNotification('Please paste HTML code to import', false);
+                    return;
+                }
                 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        
-                        // Validate structure
-                        if (!data.pageSettings || !data.documents) {
-                            throw new Error('Invalid file format');
-                        }
-                        
-                        // Update settings
-                        pageSettings = data.pageSettings;
-                        documents = data.documents;
-                        
-                        // Save to localStorage
-                        localStorage.setItem('pageSettings', JSON.stringify(pageSettings));
-                        localStorage.setItem('documents', JSON.stringify(documents));
-                        
-                        // Update UI
-                        pageTitleInput.value = pageSettings.title;
-                        bannerUrlInput.value = pageSettings.bannerUrl;
-                        renderDocuments();
-                        
-                        alert('Data imported successfully!');
-                    } catch (error) {
-                        console.error('Error importing data:', error);
-                        alert('Error importing data. Please check the file format.');
+                try {
+                    // Create a temporary parser
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Extract title
+                    const titleElement = doc.querySelector('title');
+                    if (titleElement) {
+                        pageTitleInput.value = titleElement.textContent;
                     }
                     
-                    // Reset file input
-                    importFileInput.value = '';
-                };
-                
-                reader.readAsText(file);
+                    // Extract banner URL
+                    const bannerElement = doc.querySelector('.banner');
+                    if (bannerElement) {
+                        const style = bannerElement.style.backgroundImage;
+                        const urlMatch = style.match(/url\(["']?([^"']+)["']?\)/);
+                        if (urlMatch && urlMatch[1]) {
+                            bannerUrlInput.value = urlMatch[1];
+                        }
+                    }
+                    
+                    // Extract documents
+                    const newDocuments = [];
+                    const dateSections = doc.querySelectorAll('.date-section');
+                    
+                    dateSections.forEach(section => {
+                        const dateHeader = section.querySelector('.date-header');
+                        if (!dateHeader) return;
+                        
+                        // Get date text without icons
+                        const dateText = dateHeader.textContent.trim();
+                        
+                        // Parse date using our custom function
+                        const dateStr = parseFormattedDate(dateText);
+                        if (!dateStr) return;
+                        
+                        const docItems = section.querySelectorAll('.document-item');
+                        
+                        docItems.forEach(item => {
+                            const link = item.querySelector('a');
+                            if (!link) return;
+                            
+                            // Remove icon from name
+                            const name = link.textContent.replace('', '').trim(); 
+                            const url = link.href;
+                            
+                            newDocuments.push({
+                                name: name,
+                                url: url,
+                                date: dateStr
+                            });
+                        });
+                    });
+                    
+                    // Update documents
+                    documents = [...newDocuments];
+                    localStorage.setItem('documents', JSON.stringify(documents));
+                    
+                    // Save settings
+                    savePageSettings();
+                    
+                    // Re-render
+                    renderDocuments();
+                    
+                    showNotification(`Successfully imported ${newDocuments.length} documents!`);
+                    importHtmlInput.value = '';
+                    
+                } catch (error) {
+                    console.error('Import error:', error);
+                    showNotification('Error importing HTML. Please check the format.', false);
+                }
             }
             
             // Event listeners
@@ -964,8 +1020,7 @@
             });
             
             exportHtmlBtn.addEventListener('click', exportToHtml);
-            exportDataBtn.addEventListener('click', exportData);
-            importFileInput.addEventListener('change', importData);
+            importBtn.addEventListener('click', importHtml);
             
             // Initial render
             renderDocuments();
