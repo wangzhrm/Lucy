@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Complex Sentence Practice</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .intro {
+            background: #f0f5ff;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 40px;
+            border-left: 5px solid #4e54c8;
+        }
+        
+        .intro h2 {
+            color: #1a2a6c;
+            margin-bottom: 15px;
+        }
+        
+        .intro p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .sentence-container {
+            margin-bottom: 50px;
+        }
+        
+        .sentence-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+            border-top: 3px solid #4e54c8;
+            transition: transform 0.3s ease;
+        }
+        
+        .sentence-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #e0e5ff;
+        }
+        
+        .card-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a2a6c;
+            background: #e0e5ff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            color: #1a2a6c;
+        }
+        
+        .example-sentence {
+            font-size: 1.25rem;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f9faff;
+            border-radius: 8px;
+            border-left: 4px solid #4e54c8;
+            position: relative;
+        }
+        
+        .example-sentence::before {
+            content: "Example";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #4e54c8;
+            color: white;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+        
+        .practice-sentence {
+            padding: 20px;
+            background: #f0f8ff;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            position: relative;
+            border-left: 3px solid #1a936f;
+        }
+        
+        .practice-sentence::before {
+            content: "Practice";
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: #1a936f;
+            color: white;
+            font-size: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 4px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(255,255,200,0.5), rgba(255,255,200,0.5));
+            padding: 0 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .structure-hint {
+            background: #e8f4f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: #1a936f;
+            border-left: 3px solid #1a936f;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #1a2a6c;
+            color: white;
+        }
+        
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .tips {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tip {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            width: 180px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+            }
+            
+            header {
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+            
+            .example-sentence {
+                font-size: 1.1rem;
+            }
+            
+            .stats {
+                gap: 15px;
+            }
+            
+            .stat-card {
+                min-width: 120px;
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-book-open"></i> IELTS Complex Sentence Practice</h1>
+            <p class="subtitle">Master 20 complex sentence structures frequently seen in IELTS writing and speaking tests</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value">20</div>
+                    <div class="stat-label">Sentence Structures</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">40</div>
+                    <div class="stat-label">Practice Sentences</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Essential Tips</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="intro">
+                <h2>Master Complex Sentences for Higher Band Scores</h2>
+                <p>This resource provides 20 complex sentence structures frequently seen in high-scoring IELTS responses. Each example is followed by two practice sentences with similar grammatical structures.</p>
+                <p>To improve your writing: <span class="highlight">Study the examples</span>, analyze the structure, then practice creating your own sentences using the patterns shown.</p>
+            </div>
+            
+            <div class="sentence-container">
+                <!-- Sentence 1 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">1</div>
+                        <div class="card-title">Conditional + Concession</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">Although renewable energy sources are becoming increasingly affordable</span>, 
+                        many countries continue to rely on fossil fuels, <span class="highlight">which suggests that</span> 
+                        economic factors alone do not determine energy policies.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Although electric vehicles offer significant environmental benefits, many consumers still prefer traditional cars, which indicates that other factors like charging infrastructure influence purchasing decisions.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        While remote work has gained popularity during the pandemic, many companies insist on office-based work, which demonstrates that organizational culture plays a crucial role in work arrangements.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: Although + [subject + verb], [main clause] + which + [verb] + that + [clause]
+                    </div>
+                </div>
+                
+                <!-- Sentence 2 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">2</div>
+                        <div class="card-title">Causal Relationship</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        The rapid urbanization witnessed in developing nations <span class="highlight">has resulted in</span> 
+                        unprecedented pressure on infrastructure, <span class="highlight">thereby creating</span> challenges 
+                        that require innovative solutions from urban planners.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        The widespread adoption of social media has transformed communication patterns, thereby altering how people form and maintain relationships.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Increased international tourism has boosted local economies in many regions, thereby creating employment opportunities that benefit entire communities.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: [Subject] + has resulted in + [effect], thereby + [gerund] + [complement]
+                    </div>
+                </div>
+                
+                <!-- Sentence 3 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">3</div>
+                        <div class="card-title">Comparative + Result</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">The more governments invest</span> in preventative healthcare measures, 
+                        <span class="highlight">the less burden</span> there will be on acute care services, 
+                        <span class="highlight">a situation that</span> would benefit both patients and healthcare systems.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        The more time students dedicate to practical applications of theory, the better their understanding becomes, an outcome that enhances long-term knowledge retention.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        The earlier children are exposed to multiple languages, the more naturally they acquire them, an advantage that can persist throughout their lives.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: The more + [subject + verb], the less/more + [noun] + [clause], a situation/outcome that + [clause]
+                    </div>
+                </div>
+                
+                <!-- Sentence 4 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">4</div>
+                        <div class="card-title">Passive Voice + Relative Clause</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        Cultural heritage sites <span class="highlight">are often preserved</span> through international cooperation, 
+                        <span class="highlight">a practice which</span> not only safeguards history but also promotes mutual understanding between nations.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Endangered species are frequently protected by cross-border agreements, an approach that requires coordination between multiple governments and conservation groups.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Technological innovations are increasingly developed through global collaboration, a process that accelerates progress by combining expertise from different regions.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: [Subject] + are often + [past participle] + [prepositional phrase], a practice/approach which + [clause]
+                    </div>
+                </div>
+                
+                <!-- Sentence 5 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">5</div>
+                        <div class="card-title">Not only... but also...</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">Not only does</span> globalization facilitate the exchange of goods and services, 
+                        <span class="highlight">but it also enables</span> the dissemination of ideas across cultural boundaries, 
+                        thereby enriching societies worldwide.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Not only does regular exercise improve physical health, but it also enhances mental well-being by reducing stress and anxiety levels.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Not only has digital technology transformed how we work, but it has also revolutionized how we socialize and form relationships.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: Not only + [inverted auxiliary + subject] + [verb], but it also + [verb] + [complement]
+                    </div>
+                </div>
+                
+                <!-- Sentence 6 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">6</div>
+                        <div class="card-title">Despite + Gerund</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">Despite having</span> access to unprecedented technological resources, 
+                        many students struggle with basic research skills, <span class="highlight">a paradox that</span> 
+                        educators are working to resolve.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Despite receiving extensive training, many employees find it challenging to adapt to new software systems, a difficulty that often requires additional support.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Despite living in an information-rich society, many people lack critical media literacy skills, a deficiency that makes them vulnerable to misinformation.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: Despite + [gerund phrase], [main clause], a paradox/difficulty that + [clause]
+                    </div>
+                </div>
+                
+                <!-- Sentence 7 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">7</div>
+                        <div class="card-title">Such... that...</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        Climate change presents <span class="highlight">such an existential threat</span> to coastal communities 
+                        <span class="highlight">that</span> comprehensive adaptation strategies must be developed with urgency.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Artificial intelligence has developed such sophisticated capabilities that ethical guidelines for its use have become increasingly necessary.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        The pandemic caused such significant disruptions to education systems that innovative approaches to learning had to be rapidly implemented.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: Such + [adjective + noun] + that + [consequence clause]
+                    </div>
+                </div>
+                
+                <!-- Sentence 8 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">8</div>
+                        <div class="card-title">It is... that... (Emphasis)</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">It is precisely this adaptability</span> to changing circumstances 
+                        <span class="highlight">that distinguishes</span> successful organizations from those that fail to evolve.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        It is the ability to learn from failure that often determines long-term success in entrepreneurial ventures.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        It is the preservation of indigenous languages that maintains cultural diversity in an increasingly globalized world.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: It is + [emphasized element] + that + [verb] + [complement]
+                    </div>
+                </div>
+                
+                <!-- Sentence 9 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">9</div>
+                        <div class="card-title">Rather than + Gerund</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">Rather than focusing</span> exclusively on economic indicators, 
+                        policymakers should consider holistic measures of national progress, 
+                        <span class="highlight">including but not limited to</span> environmental sustainability and social well-being.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Rather than relying solely on examinations, educators should employ diverse assessment methods that capture different learning styles.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Rather than banning new technologies outright, regulators should develop frameworks that maximize benefits while minimizing risks.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: Rather than + [gerund], [subject] + should + [verb] + [object], including but not limited to + [examples]
+                    </div>
+                </div>
+                
+                <!-- Sentence 10 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">10</div>
+                        <div class="card-title">So as to + Infinitive</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        Urban planning must incorporate green spaces <span class="highlight">so as to mitigate</span> 
+                        the urban heat island effect, <span class="highlight">a phenomenon whereby</span> cities experience 
+                        higher temperatures than surrounding rural areas.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Companies should invest in employee training programs so as to enhance workforce skills, an approach that ultimately boosts productivity and innovation.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Governments need to implement early warning systems so as to reduce disaster-related casualties, a strategy that has proven effective in numerous countries.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: [Subject] + must + [verb] + [object] + so as to + [purpose], a phenomenon/approach whereby + [explanation]
+                    </div>
+                </div>
+                
+                <!-- Sentence 11 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">11</div>
+                        <div class="card-title">Provided that + Condition</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        Technological advancement will continue to benefit humanity 
+                        <span class="highlight">provided that</span> ethical considerations are prioritized, 
+                        <span class="highlight">without which</span> innovation may cause unintended harm.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Economic globalization can be advantageous provided that fair trade practices are established, without which wealth disparities may worsen.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Artificial intelligence systems will gain public trust provided that transparency in decision-making is ensured, without which adoption may be limited.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: [Subject] + will + [verb] + provided that + [condition], without which + [negative consequence]
+                    </div>
+                </div>
+                
+                <!-- Sentence 12 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">12</div>
+                        <div class="card-title">What + Clause + Is...</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">What distinguishes</span> effective leaders from merely competent managers 
+                        <span class="highlight">is</span> the ability to inspire others toward a shared vision, 
+                        a quality that cannot be reduced to technical skills alone.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        What makes a city truly livable is not just its infrastructure but the sense of community among its residents, an intangible yet crucial factor.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        What determines the success of educational reforms is often teacher engagement rather than policy design, a reality that policymakers sometimes overlook.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: What + [verb] + [subject] + is + [complement], a quality/factor that + [clause]
+                    </div>
+                </div>
+                
+                <!-- Sentence 13 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">13</div>
+                        <div class="card-title">In order for... to...</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">In order for</span> sustainable development goals to be achieved, 
+                        <span class="highlight">it is imperative that</span> governments, businesses, and civil society 
+                        collaborate in unprecedented ways.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        In order for renewable energy to replace fossil fuels, it is essential that substantial investments be made in storage technology and grid infrastructure.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        In order for telemedicine to reach its full potential, it is crucial that digital literacy and internet access be improved in underserved communities.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: In order for + [noun] + to + [verb], it is imperative that + [subject] + [verb] + [complement]
+                    </div>
+                </div>
+                
+                <!-- Sentence 14 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">14</div>
+                        <div class="card-title">Not... until...</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        The true implications of automation on employment patterns may 
+                        <span class="highlight">not</span> be fully understood 
+                        <span class="highlight">until</span> several decades have passed, 
+                        by which time workforce transitions may prove challenging to manage.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        The benefits of early childhood education may not become apparent until children reach adolescence, at which point the foundation has already been established.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        The ecological impact of certain chemicals may not be evident until they accumulate in the food chain, a process that can take years to manifest.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: [Subject] + may not + [verb] + until + [time clause], by which time + [consequence]
+                    </div>
+                </div>
+                
+                <!-- Sentence 15 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">15</div>
+                        <div class="card-title">As... as... Comparison</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        Urbanization is <span class="highlight">as much</span> an opportunity for sustainable development 
+                        <span class="highlight">as it is</span> a challenge, requiring careful planning to maximize benefits 
+                        while minimizing negative impacts.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Artificial intelligence is as much a tool for enhancing human capabilities as it is a potential disruptor, necessitating thoughtful integration into society.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Globalization is as much a cultural phenomenon as it is an economic process, influencing values and lifestyles worldwide.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: [Subject] + is as much + [noun1] + as it is + [noun2], [gerund] + to + [purpose]
+                    </div>
+                </div>
+                
+                <!-- Sentence 16 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">16</div>
+                        <div class="card-title">Whether... or... Contrast</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">Whether</span> through government regulation 
+                        <span class="highlight">or</span> industry self-policing, 
+                        data privacy standards must be strengthened to protect consumers in the digital age.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Whether by implementing carbon taxes or subsidizing green technology, nations must take decisive action to address climate change.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Whether through formal education or workplace training, continuous skill development has become essential in today's rapidly changing job market.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: Whether + [prepositional phrase 1] or [prepositional phrase 2], [subject] + must + [verb] + [complement]
+                    </div>
+                </div>
+                
+                <!-- Sentence 17 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">17</div>
+                        <div class="card-title">So... that... Result</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        The pace of technological change has become 
+                        <span class="highlight">so rapid that</span> traditional educational models struggle to keep pace, 
+                        necessitating more adaptive approaches to curriculum development.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Microplastic pollution has become so pervasive that it has been detected in the most remote ecosystems, raising concerns about long-term environmental health.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Urban housing costs have risen so dramatically that key workers are increasingly priced out of city centers, creating workforce challenges for essential services.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: [Subject] + has become so + [adjective] + that + [result clause], [gerund] + [complement]
+                    </div>
+                </div>
+                
+                <!-- Sentence 18 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">18</div>
+                        <div class="card-title">The fact that... Demonstrates</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">The fact that</span> biodiversity continues to decline at alarming rates 
+                        <span class="highlight">demonstrates</span> the inadequacy of current conservation efforts, 
+                        highlighting the need for more radical approaches.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        The fact that income inequality persists despite economic growth demonstrates that wealth does not automatically trickle down, challenging conventional economic theories.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        The fact that mental health issues are increasing in affluent societies demonstrates that material prosperity alone does not ensure well-being, pointing to more complex determinants of health.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: The fact that + [subject] + [verb] + demonstrates + [conclusion], [gerund] + [complement]
+                    </div>
+                </div>
+                
+                <!-- Sentence 19 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">19</div>
+                        <div class="card-title">Inasmuch as + Qualification</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        Economic sanctions can be effective policy tools 
+                        <span class="highlight">inasmuch as</span> they pressure regimes without resorting to military force; 
+                        <span class="highlight">nevertheless</span>, their humanitarian consequences must be carefully weighed.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Standardized testing provides useful benchmarks inasmuch as it offers comparable data across institutions; however, it often fails to capture important aspects of learning.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Automation increases productivity inasmuch as it performs routine tasks efficiently; nonetheless, it creates challenges for workforce adaptation that require policy responses.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: [Subject] + can be + [adjective] + inasmuch as + [qualification]; nevertheless, + [counterpoint]
+                    </div>
+                </div>
+                
+                <!-- Sentence 20 -->
+                <div class="sentence-card">
+                    <div class="card-header">
+                        <div class="card-number">20</div>
+                        <div class="card-title">Were... to... Conditional</div>
+                    </div>
+                    <div class="example-sentence">
+                        <i class="fas fa-quote-left" style="opacity:0.3; margin-right:5px;"></i>
+                        <span class="highlight">Were governments to invest</span> substantially in renewable energy infrastructure, 
+                        not only would carbon emissions decrease, but new employment opportunities would emerge in green technologies.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Were educational institutions to prioritize critical thinking over rote memorization, students would develop more adaptable skills for an uncertain future.
+                    </div>
+                    
+                    <div class="practice-sentence">
+                        <i class="fas fa-pencil-alt" style="margin-right:8px; color:#1a936f;"></i>
+                        Were companies to adopt more flexible work arrangements, both employee satisfaction and productivity would likely increase, benefiting all stakeholders.
+                    </div>
+                    
+                    <div class="structure-hint">
+                        <i class="fas fa-lightbulb" style="margin-right:8px;"></i>
+                        Structure: Were + [subject] + to + [verb], not only would + [result1], but + [result2] + would + [verb]
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="footer-content">
+                <h3>IELTS Writing Tips</h3>
+                <p>Practice these structures to improve your grammatical range and accuracy score</p>
+                
+                <div class="tips">
+                    <div class="tip">
+                        <i class="fas fa-check-circle"></i>
+                        Vary your sentence structures
+                    </div>
+                    <div class="tip">
+                        <i class="fas fa-check-circle"></i>
+                        Use complex sentences appropriately
+                    </div>
+                    <div class="tip">
+                        <i class="fas fa-check-circle"></i>
+                        Ensure clauses connect logically
+                    </div>
+                    <div class="tip">
+                        <i class="fas fa-check-circle"></i>
+                        Maintain academic vocabulary
+                    </div>
+                    <div class="tip">
+                        <i class="fas fa-check-circle"></i>
+                        Practice error-free writing
+                    </div>
+                </div>
+                
+                <p style="margin-top: 25px; font-size: 0.9rem; opacity: 0.8;">
+                    &copy; 2023 IELTS Preparation Resources | Practice daily for best results
+                </p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
