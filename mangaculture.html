@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading Practice: Manga Culture in China</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f4ff 0%, #e8f0ff 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="none" stroke="%23e0d6ff" stroke-width="0.5" opacity="0.2" x="0" y="0" width="100" height="100"/></svg>');
+            z-index: -1;
+        }
+        
+        .manga-corner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+        }
+        
+        .manga-corner:before {
+            content: "";
+            position: absolute;
+            top: -75px;
+            right: -75px;
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            transform: rotate(45deg);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            border: 2px dashed #fff;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        header:after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53, #ff6b6b);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .timer-container {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 15px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .passage-container {
+            flex: 2;
+            min-width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            border: 1px solid #eee;
+        }
+        
+        .instructions {
+            background: linear-gradient(to right, #e3f2fd, #f0f7ff);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #2196f3;
+            position: relative;
+        }
+        
+        .instructions h3 {
+            color: #0d47a1;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .instructions li:before {
+            content: "•";
+            color: #2196f3;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .passage-section {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .section-number {
+            position: absolute;
+            top: 0;
+            left: -40px;
+            width: 30px;
+            height: 30px;
+            background: #b21f1f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .passage-section h3 {
+            color: #b71c1c;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #ffcdd2;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .passage-section p {
+            margin-bottom: 15px;
+            text-align: justify;
+            line-height: 1.7;
+        }
+        
+        .highlight {
+            background: linear-gradient(to right, rgba(255, 235, 59, 0.3), rgba(255, 235, 59, 0.3));
+            padding: 0 3px;
+            border-radius: 3px;
+        }
+        
+        .questions-container {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+        }
+        
+        .questions-container h2 {
+            color: #1a237e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8eaf6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .question:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, #1a237e, #283593);
+        }
+        
+        .question:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+            border-color: #bbdefb;
+        }
+        
+        .question p {
+            margin-bottom: 15px;
+            font-weight: 500;
+            padding-left: 10px;
+        }
+        
+        .blank {
+            display: inline-block;
+            min-width: 100px;
+            border-bottom: 2px dashed #2196f3;
+            position: relative;
+            margin: 0 5px;
+            text-align: center;
+            font-weight: bold;
+            color: #1a237e;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #bbdefb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f8fdff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2196f3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2), inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        button {
+            background: linear-gradient(90deg, #1a237e, #283593);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(26, 35, 126, 0.4);
+            background: linear-gradient(90deg, #283593, #1a237e);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        #reset-btn {
+            background: linear-gradient(90deg, #b71c1c, #d32f2f);
+        }
+        
+        #reset-btn:hover {
+            background: linear-gradient(90deg, #d32f2f, #b71c1c);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+            display: none;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+        }
+        
+        .success {
+            background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+            color: #2e7d32;
+            border-color: #c8e6c9;
+        }
+        
+        .score {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 15px 0;
+            color: #1a237e;
+        }
+        
+        .score-value {
+            font-size: 42px;
+            display: inline-block;
+            margin: 0 5px;
+            color: #b21f1f;
+        }
+        
+        .answers {
+            margin-top: 20px;
+            text-align: left;
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            border: 1px solid #dcedc8;
+        }
+        
+        .answers h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        
+        .answer-item {
+            padding: 12px;
+            border-bottom: 1px solid #dcedc8;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .answer-item:last-child {
+            border-bottom: none;
+        }
+        
+        .answer-number {
+            background: #2e7d32;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .manga-art {
+            text-align: center;
+            margin: 40px 0 20px;
+            position: relative;
+            padding: 20px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffecb3 100%);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ffe082;
+        }
+        
+        .manga-art img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border: 1px solid #ffcc80;
+        }
+        
+        .caption {
+            font-style: italic;
+            color: #5d4037;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 25px;
+            color: #666;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.7);
+            border-radius: 10px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        
+        .difficulty {
+            display: inline-block;
+            background: #e3f2fd;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #0d47a1;
+            border: 1px solid #bbdefb;
+        }
+        
+        .bubble {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(178, 31, 31, 0.1);
+            animation: float 6s infinite ease-in-out;
+            z-index: -1;
+        }
+        
+        .bubble:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            width: 30px;
+            height: 30px;
+            animation-delay: 0s;
+        }
+        
+        .bubble:nth-child(2) {
+            top: 20%;
+            right: 8%;
+            width: 50px;
+            height: 50px;
+            animation-delay: -1s;
+        }
+        
+        .bubble:nth-child(3) {
+            bottom: 15%;
+            left: 7%;
+            width: 40px;
+            height: 40px;
+            animation-delay: -2s;
+        }
+        
+        .bubble:nth-child(4) {
+            bottom: 25%;
+            right: 10%;
+            width: 35px;
+            height: 35px;
+            animation-delay: -3s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(0) translateX(20px); }
+            75% { transform: translateY(20px) translateX(10px); }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-number {
+                left: -30px;
+            }
+            
+            .btn-container {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    
+    <div class="manga-corner"></div>
+    
+    <header>
+        <h1>IELTS Reading Practice</h1>
+        <p class="subtitle">Manga Culture in China - Fill in the Blanks Exercise</p>
+        <div class="timer-container">
+            <div class="timer">
+                <i class="fas fa-clock"></i>
+                <span id="minutes">20</span>:<span id="seconds">00</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="passage-container">
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> Reading Instructions</h3>
+                <ul>
+                    <li>Read the passage carefully before attempting the questions</li>
+                    <li>You should spend about 20 minutes on this section</li>
+                    <li>Complete the questions using <strong>ONE WORD OR A NUMBER</strong> from the passage for each blank</li>
+                    <li>Answers are case-insensitive but must be spelled correctly</li>
+                    <li>Questions are paraphrased to test your comprehension skills</li>
+                </ul>
+                <div class="difficulty">
+                    Difficulty: Intermediate
+                </div>
+            </div>
+            
+            <div class="passage-section">
+                <div class="section-number">1</div>
+                <h3><i class="fas fa-book-open"></i> Manga Culture in China</h3>
+                <p>Manga culture, once regarded as a niche interest in China, has evolved into a significant and highly visible part of the country's youth and entertainment landscape. Although the term "manga" is Japanese, referring to a particular style of illustrated storytelling, its influence in China has been profound, shaping creative industries, popular culture, and even social discourse. This cultural phenomenon is the result of decades of gradual exposure, adaptation, and localisation, during which Chinese audiences have engaged with, transformed, and, in many ways, redefined what manga represents.</p>
+            </div>
+            
+            <div class="passage-section">
+                <div class="section-number">2</div>
+                <h3><i class="fas fa-history"></i> Early Roots and Influences</h3>
+                <p>China's own tradition of illustrated storytelling stretches back centuries, from the vivid pictorial scrolls of the Tang and Song dynasties to the lianhuanhua—small, inexpensive picture books that were immensely popular during the mid-20th century. However, the modern form of comics that captured the imagination of millions came from Japan in the late 20th century. In the 1980s, as China began to open its markets and cultural exchanges expanded, Japanese manga began to appear in limited quantities in urban bookstores. The earliest works arrived in translated form, often imported from Hong Kong or Taiwan, and were targeted at a small but enthusiastic readership.</p>
+                <p>The true turning point occurred in the 1990s, when Japanese animated series, or anime, began to air on Chinese television. Titles such as Doraemon, Dragon Ball, and Slam Dunk attracted enormous viewership among schoolchildren and teenagers. These series served as gateways to the original manga, which were often more detailed and mature in their storytelling. For many young Chinese, this was their first encounter with narratives that combined dynamic visual styles, complex character development, and imaginative world-building, differing sharply from the more moralistic and politically themed domestic comics of the time.</p>
+            </div>
+            
+            <div class="passage-section">
+                <div class="section-number">3</div>
+                <h3><i class="fas fa-users"></i> Internet Age and Fan Communities</h3>
+                <p>The arrival of the internet in the early 2000s revolutionised the spread of manga culture. Online forums, fan sites, and later social media platforms allowed readers to share scanned and translated versions of manga at unprecedented speed. Fan translation groups, often working voluntarily, brought thousands of titles into the Chinese language within days or weeks of their original release in Japan. This digital circulation helped cultivate a passionate and informed fan base, many of whom began to engage creatively by producing fan art, writing derivative stories, or cosplaying their favourite characters.</p>
+                <p>The rise of fan communities also facilitated the emergence of guoman, or "national comics," a term used to describe Chinese-produced works that adopted elements of Japanese manga style while incorporating Chinese themes, history, and mythology. Series such as The King's Avatar and Mo Dao Zu Shi demonstrated that local creators could compete in quality and popularity while offering culturally resonant content. In doing so, they challenged the dominance of Japanese imports and sparked discussions about cultural authenticity and innovation.</p>
+            </div>
+            
+            <div class="passage-section">
+                <div class="section-number">4</div>
+                <h3><i class="fas fa-chart-line"></i> Commercial Growth and Industry Expansion</h3>
+                <p>By the 2010s, manga culture in China had become a multi-billion-yuan industry. Major cities like Beijing, Shanghai, and Guangzhou began hosting large-scale comic conventions, attracting tens of thousands of attendees. At these events, fans dressed in elaborate cosplay costumes, attended panel discussions with artists, and purchased exclusive merchandise. Companies invested heavily in related industries, such as mobile games, films, and collectibles, further extending the commercial reach of manga-inspired content.</p>
+                <p>Online reading platforms also transformed the business model. Apps such as Bilibili Comics and Tencent Animation offered official, licensed translations, providing readers with high-quality digital versions while supporting creators. This shift was partly driven by government crackdowns on piracy, which had long undermined revenue streams for both Japanese publishers and their Chinese partners. As legal access became easier, the stigma of reading "foreign" comics diminished, and manga consumption became increasingly mainstream.</p>
+            </div>
+            
+            <div class="passage-section">
+                <div class="section-number">5</div>
+                <h3><i class="fas fa-balance-scale"></i> Regulation and Cultural Considerations</h3>
+                <p>Despite its popularity, manga culture in China exists within a tightly regulated media environment. Imported manga and anime are subject to government review to ensure compliance with cultural and moral standards. Works containing excessive violence, sexual content, or themes deemed contrary to public values are either modified or banned from distribution. This regulatory approach has sparked debates between fans, who often seek unaltered versions of their favourite series, and authorities, who argue that such measures protect young audiences from harmful influences.</p>
+                <p>Some restrictions have led to creative adaptations. For example, certain storylines are altered in official translations, and controversial scenes may be replaced with less explicit imagery. While critics view this as censorship that compromises artistic integrity, others see it as a necessary step in aligning foreign media with domestic cultural expectations. The broader question—how to balance cultural openness with national identity—remains an ongoing point of discussion in Chinese society.</p>
+            </div>
+            
+            <div class="passage-section">
+                <div class="section-number">6</div>
+                <h3><i class="fas fa-comments"></i> Social Impact and Controversy</h3>
+                <p>The social impact of manga culture is multifaceted. Supporters argue that it fosters creativity, visual literacy, and cross-cultural understanding. Many Chinese artists cite Japanese manga as a key inspiration for pursuing careers in illustration, animation, or game design. Educational institutions have even introduced courses on manga drawing techniques, reflecting the art form's acceptance as a legitimate cultural industry.</p>
+                <p>However, detractors voice concerns about its potential downsides. Some parents worry that excessive engagement with manga and anime may distract students from academic studies, promote unrealistic fantasies, or introduce values that conflict with traditional Chinese norms. Additionally, the portrayal of gender roles and relationships in certain works has drawn criticism from educators and social commentators, who fear it may influence young readers in undesirable ways.</p>
+                <p>Another point of contention lies in the "escapism" associated with manga fandom. For devoted fans, the immersive worlds of manga offer comfort, community, and a sense of identity. Yet critics suggest that this immersion can lead to social withdrawal, particularly among adolescents who find it easier to interact within fictional universes than in real-life situations.</p>
+            </div>
+            
+            <div class="passage-section">
+                <div class="section-number">7</div>
+                <h3><i class="fas fa-crystal-ball"></i> The Future of Manga Culture in China</h3>
+                <p>Looking ahead, manga culture in China appears poised for further growth and transformation. Domestic creators are increasingly experimenting with hybrid styles, blending manga-inspired aesthetics with influences from Chinese ink painting, Western graphic novels, and digital art. The expansion of streaming services and global co-productions may also create opportunities for Chinese manga to reach international audiences, much as Japanese manga did decades earlier.</p>
+                <p>At the same time, ongoing questions about regulation, cultural preservation, and the balance between domestic and foreign influences will shape the industry's development. Whether manga in China continues to flourish as an imported cultural form or evolves into something uniquely Chinese will depend on the interplay between market forces, creative innovation, and social values.</p>
+                <p>For now, the popularity of manga in China is undeniable. It represents not only a form of entertainment but also a case study in how cultural products can cross borders, adapt to local contexts, and influence the identities of new generations. In a globalised world where media flows are constant and diverse, manga culture stands as a vivid example of cultural exchange—one that continues to captivate, inspire, and provoke debate among millions of Chinese readers.</p>
+            </div>
+        </div>
+        
+        <div class="questions-container">
+            <h2><i class="fas fa-pencil-alt"></i> Fill in the Blanks</h2>
+            <p>Complete the sentences below. Write <strong>ONE WORD OR A NUMBER</strong> for each answer.</p>
+            
+            <div class="question">
+                <p>1. During the initial phase of cultural exchange in the 1980s, translated Japanese comics became available in city-based <span class="blank"></span>.</p>
+                <input type="text" id="q1" placeholder="Type your answer here">
+            </div>
+            
+            <div class="question">
+                <p>2. The pivotal moment for manga's expansion in China came during the <span class="blank"></span>.</p>
+                <input type="text" id="q2" placeholder="Type your answer here">
+            </div>
+            
+            <div class="question">
+                <p>3. "Guoman" describes domestically created comics that integrate Chinese cultural elements, including historical narratives and <span class="blank"></span>.</p>
+                <input type="text" id="q3" placeholder="Type your answer here">
+            </div>
+            
+            <div class="question">
+                <p>4. During the 2010s, China's manga-related industry reached a value of multiple <span class="blank"></span> yuan.</p>
+                <input type="text" id="q4" placeholder="Type your answer here">
+            </div>
+            
+            <div class="question">
+                <p>5. Parental concerns include the potential introduction of values inconsistent with established Chinese <span class="blank"></span>.</p>
+                <input type="text" id="q5" placeholder="Type your answer here">
+            </div>
+            
+            <div class="btn-container">
+                <button id="check-btn"><i class="fas fa-check-circle"></i> Check Answers</button>
+                <button id="reset-btn"><i class="fas fa-redo-alt"></i> Reset</button>
+            </div>
+            
+            <div id="result" class="result"></div>
+            
+            <div id="answers" class="answers">
+                <h3>Correct Answers:</h3>
+                <div class="answer-item">
+                    <div class="answer-number">1</div>
+                    <div class="answer-text">bookstores</div>
+                </div>
+                <div class="answer-item">
+                    <div class="answer-number">2</div>
+                    <div class="answer-text">1990s</div>
+                </div>
+                <div class="answer-item">
+                    <div class="answer-number">3</div>
+                    <div class="answer-text">mythology</div>
+                </div>
+                <div class="answer-item">
+                    <div class="answer-number">4</div>
+                    <div class="answer-text">billion</div>
+                </div>
+                <div class="answer-item">
+                    <div class="answer-number">5</div>
+                    <div class="answer-text">norms</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="manga-art">
+        <img src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='300' viewBox='0 0 800 300'%3E%3Crect fill='%23FFEBEE' width='800' height='300'/%3E%3Cg fill='%23F44336' fill-opacity='0.4'%3E%3Cpath d='M150 50 Q 200 30, 250 50 T 350 50 Q 400 30, 450 50 T 550 50 Q 600 30, 650 50' stroke='%23E91E63' stroke-width='2' fill='none'/%3E%3Ccircle cx='100' cy='100' r='40'/%3E%3Ccircle cx='700' cy='100' r='40'/%3E%3Cpath d='M200 200 Q 300 180, 400 200 T 600 200' stroke='%23E91E63' stroke-width='2' fill='none'/%3E%3Cpath d='M200 250 L 600 250' stroke='%23E91E63' stroke-width='2' stroke-dasharray='5,5'/%3E%3C/g%3E%3Ctext x='400' y='150' font-family='Arial' font-size='28' fill='%23B71C1C' text-anchor='middle'%3EManga Art Style Illustration%3C/text%3E%3Ctext x='400' y='280' font-family='Arial' font-size='20' fill='%235D4037' text-anchor='middle'%3EChinese manga blending traditional and modern styles%3C/text%3E%3C/svg%3E" alt="Manga art style illustration">
+        <p class="caption">Traditional manga art blended with Chinese artistic elements</p>
+    </div>
+    
+    <footer>
+        <p>IELTS Academic Reading Practice | Manga Culture in China</p>
+        <p>Note: This practice exercise features paraphrased questions to test comprehension skills.</p>
+    </footer>
+    
+    <script>
+        // Timer functionality
+        let minutes = 20;
+        let seconds = 0;
+        let timerInterval;
+        
+        function updateTimer() {
+            const minutesElem = document.getElementById('minutes');
+            const secondsElem = document.getElementById('seconds');
+            
+            minutesElem.textContent = minutes.toString().padStart(2, '0');
+            secondsElem.textContent = seconds.toString().padStart(2, '0');
+            
+            if (minutes === 0 && seconds === 0) {
+                clearInterval(timerInterval);
+                document.getElementById('check-btn').click();
+                return;
+            }
+            
+            if (seconds === 0) {
+                minutes--;
+                seconds = 59;
+            } else {
+                seconds--;
+            }
+        }
+        
+        // Start the timer
+        timerInterval = setInterval(updateTimer, 1000);
+        
+        // Check answers function
+        document.getElementById('check-btn').addEventListener('click', function() {
+            // Stop the timer when answers are checked
+            clearInterval(timerInterval);
+            
+            // Correct answers
+            const correctAnswers = {
+                q1: "bookstores",
+                q2: "1990s",
+                q3: "mythology",
+                q4: "billion",
+                q5: "norms"
+            };
+            
+            let score = 0;
+            const userAnswers = {};
+            
+            // Check each answer
+            for (let i = 1; i <= 5; i++) {
+                const answerId = `q${i}`;
+                const inputElement = document.getElementById(answerId);
+                let userAnswer = inputElement.value.trim().toLowerCase();
+                
+                // Remove trailing period if any
+                if (userAnswer.endsWith('.')) {
+                    userAnswer = userAnswer.slice(0, -1);
+                }
+                
+                userAnswers[answerId] = userAnswer;
+                
+                if (userAnswer === correctAnswers[answerId]) {
+                    score++;
+                    inputElement.style.borderColor = "#4CAF50";
+                    inputElement.style.backgroundColor = "#E8F5E9";
+                } else {
+                    inputElement.style.borderColor = "#F44336";
+                    inputElement.style.backgroundColor = "#FFEBEE";
+                }
+            }
+            
+            // Display result
+            const resultDiv = document.getElementById('result');
+            let message = "";
+            
+            if (score === 5) {
+                message = "Perfect score! Excellent comprehension skills! 🎉";
+            } else if (score >= 4) {
+                message = "Great job! You have a good understanding of the text. 👍";
+            } else if (score >= 3) {
+                message = "Good effort! Review the passage to improve. 💪";
+            } else {
+                message = "Keep practicing! Try reading the passage more carefully. 📚";
+            }
+            
+            resultDiv.innerHTML = `
+                <div class="score">Your Score: <span class="score-value">${score}</span>/5</div>
+                <p>${message}</p>
+            `;
+            resultDiv.className = 'result success';
+            resultDiv.style.display = 'block';
+            
+            // Show correct answers after submission
+            document.getElementById('answers').style.display = 'block';
+            
+            // Scroll to results
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Reset button functionality
+        document.getElementById('reset-btn').addEventListener('click', function() {
+            // Reset inputs
+            for (let i = 1; i <= 5; i++) {
+                const inputElement = document.getElementById(`q${i}`);
+                inputElement.value = "";
+                inputElement.style.borderColor = "#bbdefb";
+                inputElement.style.backgroundColor = "#f8fdff";
+            }
+            
+            // Hide results and answers
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('answers').style.display = 'none';
+            
+            // Reset timer
+            clearInterval(timerInterval);
+            minutes = 20;
+            seconds = 0;
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        });
+    </script>
+</body>
+</html>
