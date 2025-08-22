@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>英语表达与写作技巧测验</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .quiz-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            font-size: 1.2em;
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .question-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .options {
+            margin-left: 15px;
+        }
+        .option {
+            margin: 8px 0;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .answer {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+            background-color: #e8f4fc;
+            border-left: 4px solid #3498db;
+        }
+        .correct-answer {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <h1>英语表达与写作技巧测验</h1>
+    
+    <div class="quiz-container">
+        <div class="section-title">第一部分：中译英练习</div>
+        
+        <div class="question">
+            <div class="question-title">1. 快速增长</div>
+            <input type="text" id="q1" placeholder="请输入英文表达">
+            <div class="answer" id="a1">正确答案: <span class="correct-answer">rocket/grow rapidly/grow quickly</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">2. 增长</div>
+            <input type="text" id="q2" placeholder="请输入英文表达">
+            <div class="answer" id="a2">正确答案: <span class="correct-answer">increase/grow/rise</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">3. 稳定增长</div>
+            <input type="text" id="q3" placeholder="请输入英文表达">
+            <div class="answer" id="a3">正确答案: <span class="correct-answer">grow steadily</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">4. 保持平稳</div>
+            <input type="text" id="q4" placeholder="请输入英文表达">
+            <div class="answer" id="a4">正确答案: <span class="correct-answer">remain stable</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">5. 下降</div>
+            <input type="text" id="q5" placeholder="请输入英文表达">
+            <div class="answer" id="a5">正确答案: <span class="correct-answer">decrease/drop/decline</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">6. 缓慢下降</div>
+            <input type="text" id="q6" placeholder="请输入英文表达">
+            <div class="answer" id="a6">正确答案: <span class="correct-answer">decrease slowly</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">7. 暴跌</div>
+            <input type="text" id="q7" placeholder="请输入英文表达">
+            <div class="answer" id="a7">正确答案: <span class="correct-answer">plunge</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">8. 波动</div>
+            <input type="text" id="q8" placeholder="请输入英文表达">
+            <div class="answer" id="a8">正确答案: <span class="correct-answer">fluctuate</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">9. 增长了n%</div>
+            <input type="text" id="q9" placeholder="请输入英文表达">
+            <div class="answer" id="a9">正确答案: <span class="correct-answer">grow by n%</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">10. 从m%增长到了n%</div>
+            <input type="text" id="q10" placeholder="请输入英文表达">
+            <div class="answer" id="a10">正确答案: <span class="correct-answer">grow from m% to n%</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">11. A 只占 B的50%</div>
+            <input type="text" id="q11" placeholder="请输入英文表达">
+            <div class="answer" id="a11">正确答案: <span class="correct-answer">A is 50% of B</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">12. A的工资只有B的工资的50%</div>
+            <input type="text" id="q12" placeholder="请输入英文表达">
+            <div class="answer" id="a12">正确答案: <span class="correct-answer">A's salary is only 50% of that of B</span></div>
+        </div>
+        
+        <div class="section-title">第二部分：选择题</div>
+        
+        <div class="question">
+            <div class="question-title">13. 不管是小作文，还是argumentative essay, 还是discussive essay，第一段的第一句话都是：</div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q13" value="a"> a) 直接提出自己的观点</div>
+                <div class="option"><input type="radio" name="q13" value="b"> b) 给出一个具体的例子</div>
+                <div class="option"><input type="radio" name="q13" value="c"> c) Paraphrase题目要求中提供背景信息的一句话</div>
+            </div>
+            <div class="answer" id="a13">正确答案: <span class="correct-answer">c) Paraphrase题目要求中提供背景信息的一句话</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">14. argumentative essay和discussive essay的第一段的第二句话都是写什么？</div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q14" value="a"> a) 列举反对的观点</div>
+                <div class="option"><input type="radio" name="q14" value="b"> b) 说明当下争论的话题是什么（There is a wide debate over...）</div>
+                <div class="option"><input type="radio" name="q14" value="c"> c) 提供统计数据</div>
+            </div>
+            <div class="answer" id="a14">正确答案: <span class="correct-answer">b) 说明当下争论的话题是什么（There is a wide debate over...）</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">15. argumentative essay的第一段的最后一句话应该写什么？</div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q15" value="a"> a) 总结正文段落的主要内容</div>
+                <div class="option"><input type="radio" name="q15" value="b"> b) 说明我在这个争议话题上的观点</div>
+                <div class="option"><input type="radio" name="q15" value="c"> c) 提出一个问题</div>
+            </div>
+            <div class="answer" id="a15">正确答案: <span class="correct-answer">b) 说明我在这个争议话题上的观点</span></div>
+        </div>
+        
+        <div class="question">
+            <div class="question-title">16. discussive essay的第一段的最后一句话应该写什么？</div>
+            <div class="options">
+                <div class="option"><input type="radio" name="q16" value="a"> a) 说明文章将要讨论这个争议话题的两面（This essay discusses both the advantages and disadvantages of ...）</div>
+                <div class="option"><input type="radio" name="q16" value="b"> b) 强调一方的优势</div>
+                <div class="option"><input type="radio" name="q16" value="c"> c) 呼吁采取行动</div>
+            </div>
+            <div class="answer" id="a16">正确答案: <span class="correct-answer">a) 说明文章将要讨论这个争议话题的两面（This essay discusses both the advantages and disadvantages of ...）</span></div>
+        </div>
+        
+        <button onclick="showAnswers()">提交答案</button>
+    </div>
+
+    <script>
+        function showAnswers() {
+            // 显示所有答案
+            for (let i = 1; i <= 16; i++) {
+                document.getElementById('a' + i).style.display = 'block';
+            }
+            
+            // 滚动到顶部以便查看所有答案
+            window.scrollTo(0, 0);
+            
+            // 禁用提交按钮
+            document.querySelector('button').disabled = true;
+            document.querySelector('button').textContent = '已提交';
+            document.querySelector('button').style.backgroundColor = '#95a5a6';
+        }
+    </script>
+</body>
+</html>
